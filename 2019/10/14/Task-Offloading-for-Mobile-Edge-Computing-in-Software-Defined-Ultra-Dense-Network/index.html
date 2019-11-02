@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="边缘计算,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="软件超密集网络中移动边缘计算的任务卸载   Hessian matrix 黑塞矩阵黑塞矩阵是由一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率，常用于牛顿法解决优化问题，利用黑塞矩阵可判定多元函数的极值问题。 线性与非线性线性表示两个变量之间是一次函数的关系，线性关系中的量是成比例的非线性即除了两个变量是一次函数关系之外的关系 Karush-Kuhn-Tucker conditionsK">
+<meta name="keywords" content="边缘计算">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network">
+<meta property="og:url" content="http://yoursite.com/2019/10/14/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/index.html">
+<meta property="og:site_name" content="SYJ BLOG">
+<meta property="og:description" content="软件超密集网络中移动边缘计算的任务卸载   Hessian matrix 黑塞矩阵黑塞矩阵是由一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率，常用于牛顿法解决优化问题，利用黑塞矩阵可判定多元函数的极值问题。 线性与非线性线性表示两个变量之间是一次函数的关系，线性关系中的量是成比例的非线性即除了两个变量是一次函数关系之外的关系 Karush-Kuhn-Tucker conditionsK">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://i.loli.net/2019/10/15/8s79DruGAmHlM2g.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/17/PahxnFsLBrHq27S.png">
+<meta property="og:updated_time" content="2019-11-02T15:05:53.920Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network">
+<meta name="twitter:description" content="软件超密集网络中移动边缘计算的任务卸载   Hessian matrix 黑塞矩阵黑塞矩阵是由一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率，常用于牛顿法解决优化问题，利用黑塞矩阵可判定多元函数的极值问题。 线性与非线性线性表示两个变量之间是一次函数的关系，线性关系中的量是成比例的非线性即除了两个变量是一次函数关系之外的关系 Karush-Kuhn-Tucker conditionsK">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/15/8s79DruGAmHlM2g.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/14/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/">
+
+
+
+
+
+  <title>Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network | SYJ BLOG</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SYJ BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">War never changes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="syj">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SYJ BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-14T19:34:42+08:00">
+                2019-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article</span>
+                
+                <span title="Words count in article">
+                  1.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time</span>
+                
+                <span title="Reading time">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p><strong>软件超密集网络中移动边缘计算的任务卸载</strong></p>
+</blockquote>
+<ul>
+<li>Hessian matrix 黑塞矩阵<br>黑塞矩阵是由一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率，常用于牛顿法解决优化问题，利用黑塞矩阵可判定多元函数的极值问题。</li>
+<li>线性与非线性<br>线性表示两个变量之间是一次函数的关系，线性关系中的量是成比例的<br>非线性即除了两个变量是一次函数关系之外的关系</li>
+<li>Karush-Kuhn-Tucker conditions<br>KKT 条件是在满足一些有规则的条件下，一个非线性规划问题能有最优解的充要条件</li>
+</ul>
+<h2 id="移动边缘计算主要展现了两个优点"><a href="#移动边缘计算主要展现了两个优点" class="headerlink" title="移动边缘计算主要展现了两个优点"></a>移动边缘计算主要展现了两个优点</h2><ol>
+<li><p>减少了任务持续时间</p>
+<ul>
+<li>任务上传到云端的时间</li>
+<li>在云端执行的时间</li>
+<li>云端返回结果的时间</li>
+</ul>
+</li>
+<li><p>减少了移动设备的能量消耗</p>
+<ul>
+<li>延迟敏感性计算应该放在边缘端执行，没有延迟要求的计算可以放在云计算中心执行</li>
+<li>大体量但是仅需少量的计算资源的任务应放在用户设备执行</li>
+</ul>
+</li>
+</ol>
+<h2 id="software-defined-ultra-dense-network-SD-UDN"><a href="#software-defined-ultra-dense-network-SD-UDN" class="headerlink" title="software defined ultra dense network(SD-UDN)"></a>software defined ultra dense network(SD-UDN)</h2><p><strong>软件定义的超密集网络</strong><br>核心思想是分离控制层和数据层（通过虚拟化技术）<br>在未来的通信网络中，边缘节点将被部署在超密集网络中为用户提供计算卸载服务</p>
+<h3 id="software-defined-network-SDN-软件定义网络"><a href="#software-defined-network-SDN-软件定义网络" class="headerlink" title="software defined network(SDN) 软件定义网络"></a>software defined network(SDN) 软件定义网络</h3><p>利用OpenFlow协议将路由器的控制平面从数据平面中分离出来，改用软件的方式实现。该架构可使网络管理员在不变动硬件设备的前提下，以中央控制方式用程序重新规划网络。</p>
+<h3 id="移动边缘计算在软件超密集网络中的有效应用将会面临的挑战"><a href="#移动边缘计算在软件超密集网络中的有效应用将会面临的挑战" class="headerlink" title="移动边缘计算在软件超密集网络中的有效应用将会面临的挑战"></a>移动边缘计算在软件超密集网络中的有效应用将会面临的挑战</h3><h4 id="1-如何控制和分配少量的分布式资源"><a href="#1-如何控制和分配少量的分布式资源" class="headerlink" title="1. 如何控制和分配少量的分布式资源"></a>1. 如何控制和分配少量的分布式资源</h4><ul>
+<li>小蜂窝基站的密集部署增加了网络环境的复杂性</li>
+<li>边缘端的计算资源是有限的</li>
+</ul>
+<h4 id="2-如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端"><a href="#2-如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端" class="headerlink" title="2. 如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端"></a>2. 如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端</h4><ul>
+<li>用户对他们加入的无线网络只有很少的信息，不知道一些关键信息例如——网络的流量负荷和边缘端的计算负荷等信息</li>
+</ul>
+<h2 id="移动边缘计算主要有两个研究点"><a href="#移动边缘计算主要有两个研究点" class="headerlink" title="移动边缘计算主要有两个研究点"></a>移动边缘计算主要有两个研究点</h2><ol>
+<li>任务卸载策略</li>
+<li>资源分配策略</li>
+</ol>
+<blockquote>
+<p>先给引理，再给证明，最后证明给出算法的敛散性-可得到解</p>
+</blockquote>
+<h2 id="task-placement-problem"><a href="#task-placement-problem" class="headerlink" title="task placement problem"></a>task placement problem</h2><p>给出了任务分配算法, 定义一个连续常量y， y的和 = 1， 通过不停的迭代，得到 y 的 t 次 - y 的 t-1 次的绝对值小于一个给定的阈值，就得到了最优化的y</p>
+<p>证明了该问题是能得出解的凸优化问题</p>
+<h2 id="resource-allocation-problem"><a href="#resource-allocation-problem" class="headerlink" title="resource allocation problem"></a>resource allocation problem</h2><ul>
+<li>引理：该问题是凸优化问题，且该解能够通过求解得到</li>
+</ul>
+<h2 id="创新点"><a href="#创新点" class="headerlink" title="创新点"></a>创新点</h2><h3 id="1-提出了软件定义的超密集网络架构-SD-UDN"><a href="#1-提出了软件定义的超密集网络架构-SD-UDN" class="headerlink" title="1. 提出了软件定义的超密集网络架构(SD-UDN)"></a>1. 提出了软件定义的超密集网络架构(SD-UDN)</h3><blockquote>
+<p>当前一些移动边缘计算的研究一般只考虑单一的移动边缘计算服务</p>
+</blockquote>
+<p>考虑到了多服务器的又没有考虑到超密集网络</p>
+<p><img src="https://i.loli.net/2019/10/15/8s79DruGAmHlM2g.png" alt="WeChatba8ed283865123f166e74e364e969293.png"></p>
+<p>基于控制域和数据域的分离。将controller部署在宏蜂窝基站，根据controller的决策，移动设备可以决定是将计算任务卸载到边缘端执行还是在本地执行。</p>
+<h4 id="A-SD-UDN-包含3层结构"><a href="#A-SD-UDN-包含3层结构" class="headerlink" title="A. SD-UDN 包含3层结构"></a>A. <strong><em>SD-UDN</em></strong> 包含3层结构</h4><ol>
+<li>用户层</li>
+</ol>
+<p><strong>哪些用户需要卸载计算任务</strong><br>用户通过无线网络和小蜂窝基站或者宏蜂窝基站连接<br><strong>本文忽略了移动设备向控制者发送数据时的时延和能耗</strong><br>2. 数据层</p>
+<p><strong>小蜂窝基站和部署在小蜂窝基站附近的边缘节点</strong><br>小蜂窝基站通过高速前沿运输网络和宏蜂窝基站连接<br>3. 控制层</p>
+<p><strong>部署在宏蜂窝基站的controller</strong><br>完成主要的控制功能，如资源分配调度，信息汇总等<br><strong>提出了如下三个模型</strong></p>
+<h4 id="B-网络模型"><a href="#B-网络模型" class="headerlink" title="B. 网络模型"></a>B. 网络模型</h4><p>给出了之后两个模型需要用到的变量的定义<br><font color="#FF0000">聚焦于本地计算和卸载到边缘计算而不考虑卸载到更远的云中心</font></p>
+<h4 id="C-传输模型"><a href="#C-传输模型" class="headerlink" title="C. 传输模型"></a>C. 传输模型</h4><p>给出了<strong>上传数据速率</strong>、<strong>传输延迟</strong>、<strong>传输消耗</strong>的计算公式</p>
+<h4 id="D-任务卸载模型"><a href="#D-任务卸载模型" class="headerlink" title="D. 任务卸载模型"></a>D. 任务卸载模型</h4><p>给出一些公式<br><strong>本地计算</strong><br>本地执行时间 = 任务计算量 / CPU能力<br>本地执行耗能 = 发射功率 x 任务计算量<br><strong>移动边缘计算</strong><br>任务持续时间 = (任务计算量 / (计算资源 x 分配到的计算资源的比例)) + (计算任务的尺寸大小 / 数据上传到边缘端的传输速率)</p>
+<blockquote>
+<p>忽略了边缘端返回计算结果的时延</p>
+</blockquote>
+<h4 id="E-问题公式"><a href="#E-问题公式" class="headerlink" title="E. 问题公式"></a>E. 问题公式</h4><p>给出了给出了任务卸载问题的任务持续总时间的优化公式：<br><img src="https://i.loli.net/2019/10/17/PahxnFsLBrHq27S.png" alt="WeChata84fc8ddc4da252c491536f2a200ff82.png"><br>其中 Xi 是决策0-1变量，决定任务是在本地执行还是边缘端执行，最优化问题的解就是本地执行和边缘执行的所有任务持续时间在约束条件下的最小值，约束条件如下：</p>
+<ol>
+<li><p>本地耗能比电池余量要小</p>
+</li>
+<li><p>任务传输到边缘端的耗能比电池余量要小</p>
+</li>
+<li><p>执行任务的边缘节点是提供服务的节点<br>Yi是分配给任务Qi的边缘节点，A(ui)是提供服务的基站</p>
+</li>
+<li><p>所有计算资源的分配不能超过该节点的计算资源总和</p>
+</li>
+</ol>
+<h3 id="2-软件定义的任务卸载模型-software-defined-task-offloading-SDTO-，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力"><a href="#2-软件定义的任务卸载模型-software-defined-task-offloading-SDTO-，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力" class="headerlink" title="2. 软件定义的任务卸载模型(software defined task offloading-SDTO)，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力"></a>2. 软件定义的任务卸载模型(software defined task offloading-SDTO)，不仅考虑到了如何减少任务持续时间而且考虑到了<em>电池能力</em></h3><h4 id="该模型包含以下两个方面"><a href="#该模型包含以下两个方面" class="headerlink" title="该模型包含以下两个方面"></a>该模型包含以下两个方面</h4><ul>
+<li><p>计算任务在哪里执行——本地或是边缘端，哪个边缘（任务分配问题）<br>将该问题转化为0-1优化问题<br><font color="#FF0000">但是这里没有考虑云计算中心的任务卸载</font>私认为可以将一些计算密集型且非延迟敏感性任务卸载到云计算中心</p>
+</li>
+<li><p>边缘应该给每个任务分配多少资源（资源分配问题）<br>将该模型转化为凸优化问题</p>
+</li>
+<li><p>证明了计算资源分配是是凸优化问题</p>
+</li>
+<li><p>给出了任务分配算法</p>
+</li>
+<li><p>进行了大量的实验证明SDTO模型比随机模型和统一任务计算卸载模型更好</p>
+</li>
+</ul>
+<h4 id="定义该模型为混合整数非线性规划模型且证明是NP难问题"><a href="#定义该模型为混合整数非线性规划模型且证明是NP难问题" class="headerlink" title="定义该模型为混合整数非线性规划模型且证明是NP难问题"></a>定义该模型为混合整数非线性规划模型且证明是NP难问题</h4><p>因为任务卸载是整体的任务卸载，所以是整数规划问题</p>
+<h4 id="该模型的目标是在电量消耗这个条件下最小化任务持续时间"><a href="#该模型的目标是在电量消耗这个条件下最小化任务持续时间" class="headerlink" title="该模型的目标是在电量消耗这个条件下最小化任务持续时间"></a>该模型的目标是在电量消耗这个条件下最小化任务持续时间</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/边缘计算/" rel="tag"># 边缘计算</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/21/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/" rel="next" title="扩散卷积循环神经网络：数据驱动的交通预测">
+                <i class="fa fa-chevron-left"></i> 扩散卷积循环神经网络：数据驱动的交通预测
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/02/ml/linear_regression/" rel="prev" title="Linear Regression">
+                Linear Regression <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="syj">
+          <p class="site-author-name" itemprop="name">syj</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BanBuDu0" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github-square"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/189284975/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/SYJ27783318" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#移动边缘计算主要展现了两个优点"><span class="nav-number">1.</span> <span class="nav-text">移动边缘计算主要展现了两个优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#software-defined-ultra-dense-network-SD-UDN"><span class="nav-number">2.</span> <span class="nav-text">software defined ultra dense network(SD-UDN)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#software-defined-network-SDN-软件定义网络"><span class="nav-number">2.1.</span> <span class="nav-text">software defined network(SDN) 软件定义网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动边缘计算在软件超密集网络中的有效应用将会面临的挑战"><span class="nav-number">2.2.</span> <span class="nav-text">移动边缘计算在软件超密集网络中的有效应用将会面临的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-如何控制和分配少量的分布式资源"><span class="nav-number">2.2.1.</span> <span class="nav-text">1. 如何控制和分配少量的分布式资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端"><span class="nav-number">2.2.2.</span> <span class="nav-text">2. 如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#移动边缘计算主要有两个研究点"><span class="nav-number">3.</span> <span class="nav-text">移动边缘计算主要有两个研究点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#task-placement-problem"><span class="nav-number">4.</span> <span class="nav-text">task placement problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#resource-allocation-problem"><span class="nav-number">5.</span> <span class="nav-text">resource allocation problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创新点"><span class="nav-number">6.</span> <span class="nav-text">创新点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-提出了软件定义的超密集网络架构-SD-UDN"><span class="nav-number">6.1.</span> <span class="nav-text">1. 提出了软件定义的超密集网络架构(SD-UDN)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-SD-UDN-包含3层结构"><span class="nav-number">6.1.1.</span> <span class="nav-text">A. SD-UDN 包含3层结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-网络模型"><span class="nav-number">6.1.2.</span> <span class="nav-text">B. 网络模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-传输模型"><span class="nav-number">6.1.3.</span> <span class="nav-text">C. 传输模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#D-任务卸载模型"><span class="nav-number">6.1.4.</span> <span class="nav-text">D. 任务卸载模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#E-问题公式"><span class="nav-number">6.1.5.</span> <span class="nav-text">E. 问题公式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-软件定义的任务卸载模型-software-defined-task-offloading-SDTO-，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力"><span class="nav-number">6.2.</span> <span class="nav-text">2. 软件定义的任务卸载模型(software defined task offloading-SDTO)，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#该模型包含以下两个方面"><span class="nav-number">6.2.1.</span> <span class="nav-text">该模型包含以下两个方面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义该模型为混合整数非线性规划模型且证明是NP难问题"><span class="nav-number">6.2.2.</span> <span class="nav-text">定义该模型为混合整数非线性规划模型且证明是NP难问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#该模型的目标是在电量消耗这个条件下最小化任务持续时间"><span class="nav-number">6.2.3.</span> <span class="nav-text">该模型的目标是在电量消耗这个条件下最小化任务持续时间</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">syj</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
