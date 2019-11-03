@@ -94,24 +94,21 @@
 
 
 
-<meta name="description" content="参数定义 梯度下降法  := 表示赋值 α表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，θ0先更新了，再更新θ1时使用的是更新之后的代价函数 Feature Scaling - 特征缩放 get every feature into approximately a -1 &amp;lt;= Xi &amp;lt;= 1 range  让 Xi 等于">
+<meta name="description" content="线代知识Matrix 表示所有 4 x 2 矩阵的集合 Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的) 表示一个4维向量的集合 Supervised Learning分类回归线性回归link to linear_regression unsupervised Learning聚类cost function - 代价函数平方误差代价函数多用于回归 最小二乘法">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linear Regression">
-<meta property="og:url" content="http://yoursite.com/2019/11/02/ml/linear_regression/index.html">
+<meta property="og:title" content="Mechine Learning">
+<meta property="og:url" content="http://yoursite.com/2019/11/01/ml/ml/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="参数定义 梯度下降法  := 表示赋值 α表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，θ0先更新了，再更新θ1时使用的是更新之后的代价函数 Feature Scaling - 特征缩放 get every feature into approximately a -1 &amp;lt;= Xi &amp;lt;= 1 range  让 Xi 等于">
+<meta property="og:description" content="线代知识Matrix 表示所有 4 x 2 矩阵的集合 Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的) 表示一个4维向量的集合 Supervised Learning分类回归线性回归link to linear_regression unsupervised Learning聚类cost function - 代价函数平方误差代价函数多用于回归 最小二乘法">
 <meta property="og:locale" content="zh">
-<meta property="og:image" content="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png">
-<meta property="og:image" content="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png">
-<meta property="og:updated_time" content="2019-11-03T04:41:25.766Z">
+<meta property="og:image" content="https://i.loli.net/2019/11/01/dGBarMUENyYA2n5.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/11/01/IeH6qUgCo5bXJuw.jpg">
+<meta property="og:updated_time" content="2019-11-03T04:41:29.598Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linear Regression">
-<meta name="twitter:description" content="参数定义 梯度下降法  := 表示赋值 α表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，θ0先更新了，再更新θ1时使用的是更新之后的代价函数 Feature Scaling - 特征缩放 get every feature into approximately a -1 &amp;lt;= Xi &amp;lt;= 1 range  让 Xi 等于">
-<meta name="twitter:image" content="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png">
+<meta name="twitter:title" content="Mechine Learning">
+<meta name="twitter:description" content="线代知识Matrix 表示所有 4 x 2 矩阵的集合 Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的) 表示一个4维向量的集合 Supervised Learning分类回归线性回归link to linear_regression unsupervised Learning聚类cost function - 代价函数平方误差代价函数多用于回归 最小二乘法">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/01/dGBarMUENyYA2n5.jpg">
 
 
 
@@ -140,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/02/ml/linear_regression/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/01/ml/ml/">
 
 
 
 
 
-  <title>Linear Regression | SYJ BLOG</title>
+  <title>Mechine Learning | SYJ BLOG</title>
   
 
 
@@ -269,7 +266,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/ml/linear_regression/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/01/ml/ml/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -286,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linear Regression</h1>
+          <h1 class="post-title" itemprop="name headline">Mechine Learning</h1>
         
 
         <div class="post-meta">
@@ -298,8 +295,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-02T11:01:32+08:00">
-                2019-11-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-01T13:38:32+08:00">
+                2019-11-01
               </time>
             
 
@@ -354,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  212
+                  129
                 </span>
               
 
@@ -391,21 +388,13 @@
       
 
       
-        <h2 id="参数定义"><a href="#参数定义" class="headerlink" title="参数定义"></a>参数定义</h2><p><img src="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png" alt="1.png"></p>
-<h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p><img src="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg" alt="1.jpg"></p>
-<ul>
-<li>:= 表示赋值</li>
-<li>α表示学习率，控制梯度下降时迈出多大的步子</li>
-</ul>
-<p><img src="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg" alt="2.jpg"></p>
-<p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，θ0先更新了，再更新θ1时使用的是更新之后的代价函数</p>
-<h3 id="Feature-Scaling-特征缩放"><a href="#Feature-Scaling-特征缩放" class="headerlink" title="Feature Scaling - 特征缩放"></a>Feature Scaling - 特征缩放</h3><blockquote>
-<p>get every feature into approximately a -1 &lt;= Xi &lt;= 1 range</p>
-</blockquote>
-<p>让 Xi 等于 Xi 除以 max(Xi)，让 Xi 处于 [-1，1] 之间<br>为了让梯度下降的更快</p>
-<h3 id="Mean-normalization-均值归一化-是特征缩放的一种手段"><a href="#Mean-normalization-均值归一化-是特征缩放的一种手段" class="headerlink" title="Mean normalization - 均值归一化(是特征缩放的一种手段)"></a>Mean normalization - 均值归一化(是特征缩放的一种手段)</h3><p>在特征缩放的时候一般是 Xi 直接除以 max(Xi), 均值归一化的话 Xi 先减去 Xi 的均值再除以 max(Xi)</p>
-<h2 id="Normal-equation-正规方程"><a href="#Normal-equation-正规方程" class="headerlink" title="Normal equation - 正规方程"></a>Normal equation - 正规方程</h2><p><img src="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png" alt="1.png"><br><strong>不用进行特征缩放</strong></p>
-<h2 id="正规方程和梯度下降法的比较"><a href="#正规方程和梯度下降法的比较" class="headerlink" title="正规方程和梯度下降法的比较"></a>正规方程和梯度下降法的比较</h2><p><img src="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png" alt="1.png"></p>
+        <h2 id="线代知识"><a href="#线代知识" class="headerlink" title="线代知识"></a>线代知识</h2><h3 id="Matrix"><a href="#Matrix" class="headerlink" title="Matrix"></a>Matrix</h3><p><img src="https://i.loli.net/2019/11/01/dGBarMUENyYA2n5.jpg" alt="1.jpg"></p>
+<p>表示所有 4 x 2 矩阵的集合</p>
+<h3 id="Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的"><a href="#Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的" class="headerlink" title="Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)"></a>Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)</h3><p><img src="https://i.loli.net/2019/11/01/IeH6qUgCo5bXJuw.jpg" alt="1.png"></p>
+<p>表示一个4维向量的集合</p>
+<h2 id="Supervised-Learning"><a href="#Supervised-Learning" class="headerlink" title="Supervised Learning"></a>Supervised Learning</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><h3 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h3><h4 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h4><p><a href="linear_regression.md">link to linear_regression</a></p>
+<h2 id="unsupervised-Learning"><a href="#unsupervised-Learning" class="headerlink" title="unsupervised Learning"></a>unsupervised Learning</h2><h3 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h3><h2 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h2><p><strong>平方误差代价函数</strong>多用于回归</p>
+<h3 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h3><p>基于均方误差最小化在进行模型求解的方法就是最小二乘法，均方误差是回归任务最常用的性能度量。</p>
 
       
     </div>
@@ -436,8 +425,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/01/ml/ml/" rel="next" title="Mechine Learning">
-                <i class="fa fa-chevron-left"></i> Mechine Learning
+              <a href="/2019/10/14/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/" rel="next" title="Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network">
+                <i class="fa fa-chevron-left"></i> Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network
               </a>
             
           </div>
@@ -445,6 +434,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/02/ml/linear_regression/" rel="prev" title="Linear Regression">
+                Linear Regression <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -611,7 +604,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数定义"><span class="nav-number">1.</span> <span class="nav-text">参数定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度下降法"><span class="nav-number">2.</span> <span class="nav-text">梯度下降法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Feature-Scaling-特征缩放"><span class="nav-number">2.1.</span> <span class="nav-text">Feature Scaling - 特征缩放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mean-normalization-均值归一化-是特征缩放的一种手段"><span class="nav-number">2.2.</span> <span class="nav-text">Mean normalization - 均值归一化(是特征缩放的一种手段)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Normal-equation-正规方程"><span class="nav-number">3.</span> <span class="nav-text">Normal equation - 正规方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正规方程和梯度下降法的比较"><span class="nav-number">4.</span> <span class="nav-text">正规方程和梯度下降法的比较</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线代知识"><span class="nav-number">1.</span> <span class="nav-text">线代知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Matrix"><span class="nav-number">1.1.</span> <span class="nav-text">Matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的"><span class="nav-number">1.2.</span> <span class="nav-text">Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supervised-Learning"><span class="nav-number">2.</span> <span class="nav-text">Supervised Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-number">2.1.</span> <span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回归"><span class="nav-number">2.2.</span> <span class="nav-text">回归</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线性回归"><span class="nav-number">2.2.1.</span> <span class="nav-text">线性回归</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unsupervised-Learning"><span class="nav-number">3.</span> <span class="nav-text">unsupervised Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聚类"><span class="nav-number">3.1.</span> <span class="nav-text">聚类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cost-function-代价函数"><span class="nav-number">4.</span> <span class="nav-text">cost function - 代价函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最小二乘法"><span class="nav-number">4.1.</span> <span class="nav-text">最小二乘法</span></a></li></ol></li></ol></div>
             
 
           </div>
