@@ -347,7 +347,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  0
+                  2
                 </span>
               
 
@@ -386,7 +386,7 @@
       
         
           
-            <h2 id><a href="#" class="headerlink" title></a></h2>
+            <h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2>
           
         
       
@@ -564,15 +564,15 @@
 <h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p><img src="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg" alt="1.jpg"></p>
 <ul>
 <li>:= 表示赋值</li>
-<li>α表示学习率，控制梯度下降时迈出多大的步子</li>
+<li>$\alpha   $表示学习率，控制梯度下降时迈出多大的步子</li>
 </ul>
 <p><img src="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg" alt="2.jpg"></p>
-<p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，θ0先更新了，再更新θ1时使用的是更新之后的代价函数</p>
+<p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数</p>
 <h3 id="Feature-Scaling-特征缩放"><a href="#Feature-Scaling-特征缩放" class="headerlink" title="Feature Scaling - 特征缩放"></a>Feature Scaling - 特征缩放</h3><blockquote>
-<p>get every feature into approximately a -1 &lt;= Xi &lt;= 1 range</p>
+<p>get every feature into approximately a -1 &lt;= $X_i$ &lt;= 1 range</p>
 </blockquote>
-<p>让 Xi 等于 Xi 除以 max(Xi)，让 Xi 处于 [-1，1] 之间<br>为了让梯度下降的更快</p>
-<h3 id="Mean-normalization-均值归一化-是特征缩放的一种手段"><a href="#Mean-normalization-均值归一化-是特征缩放的一种手段" class="headerlink" title="Mean normalization - 均值归一化(是特征缩放的一种手段)"></a>Mean normalization - 均值归一化(是特征缩放的一种手段)</h3><p>在特征缩放的时候一般是 Xi 直接除以 max(Xi), 均值归一化的话 Xi 先减去 Xi 的均值再除以 max(Xi)</p>
+<p>让 $X_i$ 等于 $X_i$ 除以 $\max(X_i)$，让 $X_i$ 处于 [-1，1] 之间<br>为了让梯度下降的更快</p>
+<h3 id="Mean-normalization-均值归一化-是特征缩放的一种手段"><a href="#Mean-normalization-均值归一化-是特征缩放的一种手段" class="headerlink" title="Mean normalization - 均值归一化(是特征缩放的一种手段)"></a>Mean normalization - 均值归一化(是特征缩放的一种手段)</h3><p>在特征缩放的时候一般是 $X_i$ 直接除以 $\max(X_i)$, 均值归一化的话 $X_i$ 先减去 $X_i$ 的均值再除以 $\max(X_i)$</p>
 <h2 id="Normal-equation-正规方程"><a href="#Normal-equation-正规方程" class="headerlink" title="Normal equation - 正规方程"></a>Normal equation - 正规方程</h2><p><img src="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png" alt="1.png"><br><strong>不用进行特征缩放</strong></p>
 <h2 id="正规方程和梯度下降法的比较"><a href="#正规方程和梯度下降法的比较" class="headerlink" title="正规方程和梯度下降法的比较"></a>正规方程和梯度下降法的比较</h2><p><img src="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png" alt="1.png"></p>
 
