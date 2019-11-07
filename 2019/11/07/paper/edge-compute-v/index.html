@@ -104,8 +104,8 @@
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2019/11/07/MBjKrSGyJkpAdnb.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/07/wNTX16hnzoceiJf.png">
-<meta property="og:updated_time" content="2019-11-07T13:41:25.414Z">
+<meta property="og:image" content="https://i.loli.net/2019/11/07/UG7ix5LTeSJnoEf.png">
+<meta property="og:updated_time" content="2019-11-07T13:57:51.343Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于边缘计算的交通信号灯联合控制">
 <meta name="twitter:description" content="问题描述应用场景如上所示，共有三个主要的应用场景。  车速引导 - 单节点 车联网在交叉口向汽车提供路口状态信息，提醒汽车控制车速。 信号灯配时优化 - 多节点 将集中式的控制优化为路口间协调控制，通过交叉口的边缘节点采集数据，并与上下游的相邻节点协调控制 每个交叉口就是一个边缘节点   特殊车辆优先通行 低优先级车辆 - 单节点 低优先级车辆包括公交车等，不需要牺牲普通社会车辆的通行效率 高优先">
@@ -352,7 +352,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  455
+                  661
                 </span>
               
 
@@ -368,7 +368,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -389,7 +389,7 @@
       
 
       
-        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p><img src="https://i.loli.net/2019/11/07/MBjKrSGyJkpAdnb.jpg" alt="1.jpg"><br>如上所示，共有三个主要的应用场景。</p>
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p><strong>应用场景</strong><br><img src="https://i.loli.net/2019/11/07/MBjKrSGyJkpAdnb.jpg" alt="1.jpg"><br>如上所示，共有三个主要的应用场景。</p>
 <ul>
 <li>车速引导 - 单节点<br> 车联网在交叉口向汽车提供路口状态信息，提醒汽车控制车速。</li>
 <li>信号灯配时优化 - 多节点<br> 将集中式的控制优化为路口间协调控制，通过交叉口的边缘节点采集数据，并与上下游的相邻节点协调控制<blockquote>
@@ -408,12 +408,13 @@
 <h3 id="信号灯配时优化"><a href="#信号灯配时优化" class="headerlink" title="信号灯配时优化"></a>信号灯配时优化</h3><blockquote>
 <p>交叉路口处红、绿灯的时间配比称为信号配时</p>
 </blockquote>
+<p>信号灯配时优化有两种类型：</p>
 <ol>
 <li><p>周期式<br><strong>相位结构和相位顺序固定。存在时效性差，配时参数更新有滞后性的问题</strong></p>
 <blockquote>
 <p>一个十字路口的两个方向的直行和左转都完成后所用的时间和过程称之为相位。</p>
 </blockquote>
-<p><img src="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png" alt="无标题.png"><br>如上图，红线所示四种通行方式的车辆可以同时通过这个交叉口，因此这四种同行方式合称一个相位。<br><img src="https://i.loli.net/2019/11/07/wNTX16hnzoceiJf.png" alt="无标题.png"><br>如上图所示为四相位交叉口（途中一种颜色的箭头代表一种相位）</p>
+<p><img src="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png" alt="无标题.png"><br>如上图，红线所示四种通行方式的车辆可以同时通过这个交叉口，因此这四种同行方式合称一个相位。<br><img src="https://i.loli.net/2019/11/07/UG7ix5LTeSJnoEf.png" alt="无标题.png"><br>如上图所示为四相位交叉口（途中一种颜色的箭头代表一种相位）</p>
 </li>
 <li><p>非周期式<br>根据实时的交通流信息即时选择相位并决定相位时长，是一种实时自适应的交通控制方式<br>边缘节点可以将非周期的优化分为两个子模块</p>
 <ul>
@@ -422,7 +423,17 @@
 </ul>
 </li>
 </ol>
-
+<p>信号灯配时优化有两个关注点：</p>
+<ol>
+<li>如何选择合适的交通数据，在基本无需云端干涉的情况下如何独立地完成信号灯配时优化</li>
+<li>边缘节点如何对传统的非周期式配时决策方法做出优化<br>非周期式的交通控制的配时决策方法如模糊控制、神经网络、遗传算法以及强化学习等都不适合边缘计算的加入。<ul>
+<li>模糊控制不能充分适应交通流实时变化的不确定性</li>
+<li>神经网络和遗传算法模型复杂，计算量大</li>
+<li>强化学习先验知识少，容易探索到不合理的配时参数</li>
+</ul>
+</li>
+</ol>
+<h3 id="紧急车辆多节点优先通行"><a href="#紧急车辆多节点优先通行" class="headerlink" title="紧急车辆多节点优先通行"></a>紧急车辆多节点优先通行</h3>
       
     </div>
     
@@ -638,7 +649,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景"><span class="nav-number">1.1.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号灯配时优化"><span class="nav-number">1.2.</span> <span class="nav-text">信号灯配时优化</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信号灯配时优化"><span class="nav-number">1.1.</span> <span class="nav-text">信号灯配时优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#紧急车辆多节点优先通行"><span class="nav-number">1.2.</span> <span class="nav-text">紧急车辆多节点优先通行</span></a></li></ol></li></ol></div>
             
 
           </div>
