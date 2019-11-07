@@ -94,23 +94,23 @@
 
 
 
-<meta name="description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(h">
+<meta name="description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m}">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linear Regression">
 <meta property="og:url" content="http://yoursite.com/2019/11/02/ml/linear_regression/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(h">
+<meta property="og:description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m}">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png">
 <meta property="og:image" content="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png">
 <meta property="og:image" content="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png">
-<meta property="og:updated_time" content="2019-11-05T02:43:22.092Z">
+<meta property="og:updated_time" content="2019-11-07T11:23:26.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linear Regression">
-<meta name="twitter:description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(h">
+<meta name="twitter:description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m}">
 <meta name="twitter:image" content="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png">
 
 
@@ -354,7 +354,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  316
+                  373
                 </span>
               
 
@@ -399,7 +399,7 @@
 </ul>
 <p><img src="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg" alt="2.jpg"></p>
 <p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数</p>
-<h3 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h3><h4 id="平方误差代价函数"><a href="#平方误差代价函数" class="headerlink" title="平方误差代价函数"></a><strong>平方误差代价函数</strong></h4><p>$J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y ^{(i)}) ^ 2$</p>
+<h3 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h3><h4 id="平方误差代价函数"><a href="#平方误差代价函数" class="headerlink" title="平方误差代价函数"></a><strong>平方误差代价函数</strong></h4><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)}) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y ^{(i)}) ^ 2$<br>其中$h_\theta(x^{(i)})$是模型预测的值，$y ^{(i)}$是样本实际值，这两个之差的平方展示了预测值和样本值的偏离度</p>
 <blockquote>
 <p>平方误差代价函数多用于回归</p>
 </blockquote>
@@ -454,8 +454,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/04/ml/classification/" rel="prev" title="Linear Regression">
-                Linear Regression <i class="fa fa-chevron-right"></i>
+              <a href="/2019/11/07/paper/edge-compute-v/" rel="prev" title="基于边缘计算的交通信号灯联合控制">
+                基于边缘计算的交通信号灯联合控制 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -553,7 +553,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/04/ml/classification/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/07/paper/edge-compute-v/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -279,7 +279,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/11/04/ml/classification/" itemprop="url">Linear Regression</a></h1>
+                <a class="post-title-link" href="/2019/11/07/paper/edge-compute-v/" itemprop="url">基于边缘计算的交通信号灯联合控制</a></h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-04T10:12:32+08:00">
-                2019-11-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-07T17:24:32+08:00">
+                2019-11-07
               </time>
             
 
@@ -314,8 +314,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index">
-                    <span itemprop="name">ML</span>
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
                   </a>
                 </span>
 
@@ -347,7 +347,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  2
+                  455
                 </span>
               
 
@@ -386,7 +386,40 @@
       
         
           
-            <h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2>
+            <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p><img src="https://i.loli.net/2019/11/07/MBjKrSGyJkpAdnb.jpg" alt="1.jpg"><br>如上所示，共有三个主要的应用场景。</p>
+<ul>
+<li>车速引导 - 单节点<br> 车联网在交叉口向汽车提供路口状态信息，提醒汽车控制车速。</li>
+<li>信号灯配时优化 - 多节点<br> 将集中式的控制优化为路口间协调控制，通过交叉口的边缘节点采集数据，并与上下游的相邻节点协调控制<blockquote>
+<p>每个交叉口就是一个边缘节点</p>
+</blockquote>
+</li>
+<li>特殊车辆优先通行<ul>
+<li>低优先级车辆 - 单节点<br> 低优先级车辆包括公交车等，不需要牺牲普通社会车辆的通行效率</li>
+<li>高优先级车辆 - 多节点<br> 高优先级车辆包括救护车等，需保证其在最短的时间内到达目的地。<blockquote>
+<p>由云端和边缘协同保障其通行</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="信号灯配时优化"><a href="#信号灯配时优化" class="headerlink" title="信号灯配时优化"></a>信号灯配时优化</h3><blockquote>
+<p>交叉路口处红、绿灯的时间配比称为信号配时</p>
+</blockquote>
+<ol>
+<li><p>周期式<br><strong>相位结构和相位顺序固定。存在时效性差，配时参数更新有滞后性的问题</strong></p>
+<blockquote>
+<p>一个十字路口的两个方向的直行和左转都完成后所用的时间和过程称之为相位。</p>
+</blockquote>
+<p><img src="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png" alt="无标题.png"><br>如上图，红线所示四种通行方式的车辆可以同时通过这个交叉口，因此这四种同行方式合称一个相位。<br><img src="https://i.loli.net/2019/11/07/wNTX16hnzoceiJf.png" alt="无标题.png"><br>如上图所示为四相位交叉口（途中一种颜色的箭头代表一种相位）</p>
+</li>
+<li><p>非周期式<br>根据实时的交通流信息即时选择相位并决定相位时长，是一种实时自适应的交通控制方式<br>边缘节点可以将非周期的优化分为两个子模块</p>
+<ul>
+<li>相位的选择</li>
+<li>相位时长的确定</li>
+</ul>
+</li>
+</ol>
+
           
         
       
@@ -521,7 +554,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  316
+                  373
                 </span>
               
 
@@ -568,7 +601,7 @@
 </ul>
 <p><img src="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg" alt="2.jpg"></p>
 <p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数</p>
-<h3 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h3><h4 id="平方误差代价函数"><a href="#平方误差代价函数" class="headerlink" title="平方误差代价函数"></a><strong>平方误差代价函数</strong></h4><p>$J(\theta) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y ^{(i)}) ^ 2$</p>
+<h3 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h3><h4 id="平方误差代价函数"><a href="#平方误差代价函数" class="headerlink" title="平方误差代价函数"></a><strong>平方误差代价函数</strong></h4><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)}) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y ^{(i)}) ^ 2$<br>其中$h_\theta(x^{(i)})$是模型预测的值，$y ^{(i)}$是样本实际值，这两个之差的平方展示了预测值和样本值的偏离度</p>
 <blockquote>
 <p>平方误差代价函数多用于回归</p>
 </blockquote>
@@ -718,7 +751,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  63
+                  84
                 </span>
               
 
@@ -762,7 +795,8 @@
 <h3 id="Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的"><a href="#Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的" class="headerlink" title="Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)"></a>Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)</h3><p><img src="https://i.loli.net/2019/11/01/IeH6qUgCo5bXJuw.jpg" alt="1.png"></p>
 <p>表示一个4维向量的集合</p>
 <h2 id="Supervised-Learning"><a href="#Supervised-Learning" class="headerlink" title="Supervised Learning"></a>Supervised Learning</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><h3 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h3><h4 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h4><p>link to linear_regression</p>
-<h2 id="unsupervised-Learning"><a href="#unsupervised-Learning" class="headerlink" title="unsupervised Learning"></a>unsupervised Learning</h2><h3 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h3>
+<h2 id="unsupervised-Learning"><a href="#unsupervised-Learning" class="headerlink" title="unsupervised Learning"></a>unsupervised Learning</h2><h3 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h3><h2 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h2><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$</p>
+
           
         
       
@@ -810,7 +844,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/paper/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -829,7 +863,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/14/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/" itemprop="url">Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network</a></h1>
+                <a class="post-title-link" href="/2019/10/14/paper/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/" itemprop="url">Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network</a></h1>
         
 
         <div class="post-meta">
@@ -1070,7 +1104,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/21/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/21/paper/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -1089,7 +1123,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/21/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/" itemprop="url">扩散卷积循环神经网络：数据驱动的交通预测</a></h1>
+                <a class="post-title-link" href="/2019/08/21/paper/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/" itemprop="url">扩散卷积循环神经网络：数据驱动的交通预测</a></h1>
         
 
         <div class="post-meta">
@@ -1898,7 +1932,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
