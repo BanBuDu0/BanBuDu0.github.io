@@ -105,7 +105,9 @@
 <meta property="og:image" content="https://i.loli.net/2019/11/07/MBjKrSGyJkpAdnb.jpg">
 <meta property="og:image" content="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png">
 <meta property="og:image" content="https://i.loli.net/2019/11/07/UG7ix5LTeSJnoEf.png">
-<meta property="og:updated_time" content="2019-11-07T13:57:51.343Z">
+<meta property="og:image" content="https://i.loli.net/2019/11/08/2Rh6MLVIE17uHxC.jpg">
+<meta property="og:image" content="https://i.loli.net/2019/11/10/MePplL8Aacm2XEC.png">
+<meta property="og:updated_time" content="2019-11-10T05:25:59.238Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于边缘计算的交通信号灯联合控制">
 <meta name="twitter:description" content="问题描述应用场景如上所示，共有三个主要的应用场景。  车速引导 - 单节点 车联网在交叉口向汽车提供路口状态信息，提醒汽车控制车速。 信号灯配时优化 - 多节点 将集中式的控制优化为路口间协调控制，通过交叉口的边缘节点采集数据，并与上下游的相邻节点协调控制 每个交叉口就是一个边缘节点   特殊车辆优先通行 低优先级车辆 - 单节点 低优先级车辆包括公交车等，不需要牺牲普通社会车辆的通行效率 高优先">
@@ -352,7 +354,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  661
+                  1k
                 </span>
               
 
@@ -368,7 +370,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  2
+                  3
                 </span>
               
             </div>
@@ -412,7 +414,7 @@
 <ol>
 <li><p>周期式<br><strong>相位结构和相位顺序固定。存在时效性差，配时参数更新有滞后性的问题</strong></p>
 <blockquote>
-<p>一个十字路口的两个方向的直行和左转都完成后所用的时间和过程称之为相位。</p>
+<p>相位指的是使得一组没有冲突的交通流同时获得通行权的信号灯状态。</p>
 </blockquote>
 <p><img src="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png" alt="无标题.png"><br>如上图，红线所示四种通行方式的车辆可以同时通过这个交叉口，因此这四种同行方式合称一个相位。<br><img src="https://i.loli.net/2019/11/07/UG7ix5LTeSJnoEf.png" alt="无标题.png"><br>如上图所示为四相位交叉口（途中一种颜色的箭头代表一种相位）</p>
 </li>
@@ -433,7 +435,33 @@
 </ul>
 </li>
 </ol>
-<h3 id="紧急车辆多节点优先通行"><a href="#紧急车辆多节点优先通行" class="headerlink" title="紧急车辆多节点优先通行"></a>紧急车辆多节点优先通行</h3>
+<h3 id="紧急车辆多节点优先通行"><a href="#紧急车辆多节点优先通行" class="headerlink" title="紧急车辆多节点优先通行"></a>紧急车辆多节点优先通行</h3><p>现有 — 单交叉口紧急通行和最短路径选择，但是没有做到多交叉口的协调控制<br>研究 — 云边协同控制大范围多交叉口</p>
+<h2 id="基于边缘计算的交叉口控制算法"><a href="#基于边缘计算的交叉口控制算法" class="headerlink" title="基于边缘计算的交叉口控制算法"></a>基于边缘计算的交叉口控制算法</h2><h3 id="模糊控制加强化学习"><a href="#模糊控制加强化学习" class="headerlink" title="模糊控制加强化学习"></a>模糊控制加强化学习</h3><p>算法流程如下所示<br><img src="https://i.loli.net/2019/11/08/2Rh6MLVIE17uHxC.jpg" alt="a.jpg"></p>
+<h3 id="相位选择和相位时长的初步确定-–-模糊控制输入优化"><a href="#相位选择和相位时长的初步确定-–-模糊控制输入优化" class="headerlink" title="相位选择和相位时长的初步确定 – 模糊控制输入优化"></a>相位选择和相位时长的初步确定 – 模糊控制输入优化</h3><p>采用相位驶出区和相位驶入区的车辆数的<strong>差</strong>来作为输入</p>
+<ul>
+<li>模糊化：高斯型隶属度曲线</li>
+<li>接模糊化：重心法<blockquote>
+<p>取隶属度函数曲线与横坐标围成面积的重心，作为模糊推理的最终输出值</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="相位时长调整-–-Q学习"><a href="#相位时长调整-–-Q学习" class="headerlink" title="相位时长调整 – Q学习"></a>相位时长调整 – Q学习</h3><ul>
+<li>状态空间<br> 包括交叉口以及周边的交通流信息，也包括交叉口本身的信号灯配时信息</li>
+<li>动作空间<br> 绿灯建议配时的调整量</li>
+<li>奖励函数<br> 平均延误时间</li>
+<li>动作选择方式<br> $\epsilon$-greedy<blockquote>
+<p>在贪心的基础上加入$\epsilon$, 让程序有小概率选择非当前最优，保留当前最优在下一次继续被利用</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="紧急车辆通行的交通控制"><a href="#紧急车辆通行的交通控制" class="headerlink" title="紧急车辆通行的交通控制"></a>紧急车辆通行的交通控制</h2><p>每个交叉口都分为三种状态：</p>
+<ol>
+<li>正常交通控制状态<br>节点未加入任务时的状态</li>
+<li>路径饱和度控制状态<br>节点加入任务且车辆尚未到达时的状态</li>
+<li>节点通行控制状态<br>车辆到达时的状态</li>
+</ol>
+<p>三种状态的交替如下图所示<br><img src="https://i.loli.net/2019/11/10/MePplL8Aacm2XEC.png" alt="1573363084(1).png"></p>
+
       
     </div>
     
@@ -649,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信号灯配时优化"><span class="nav-number">1.1.</span> <span class="nav-text">信号灯配时优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#紧急车辆多节点优先通行"><span class="nav-number">1.2.</span> <span class="nav-text">紧急车辆多节点优先通行</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信号灯配时优化"><span class="nav-number">1.1.</span> <span class="nav-text">信号灯配时优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#紧急车辆多节点优先通行"><span class="nav-number">1.2.</span> <span class="nav-text">紧急车辆多节点优先通行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于边缘计算的交叉口控制算法"><span class="nav-number">2.</span> <span class="nav-text">基于边缘计算的交叉口控制算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊控制加强化学习"><span class="nav-number">2.1.</span> <span class="nav-text">模糊控制加强化学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相位选择和相位时长的初步确定-–-模糊控制输入优化"><span class="nav-number">2.2.</span> <span class="nav-text">相位选择和相位时长的初步确定 – 模糊控制输入优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相位时长调整-–-Q学习"><span class="nav-number">2.3.</span> <span class="nav-text">相位时长调整 – Q学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#紧急车辆通行的交通控制"><span class="nav-number">3.</span> <span class="nav-text">紧急车辆通行的交通控制</span></a></li></ol></div>
             
 
           </div>
