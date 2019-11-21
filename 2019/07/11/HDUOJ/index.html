@@ -391,11 +391,9 @@
 <p>则 (a, b)x[a, b]=ab</p>
 <p>附上求最小公约数代码：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">divisor</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a % b == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> b;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> divisor(b, a % b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="HDUOJ-2035"><a href="#HDUOJ-2035" class="headerlink" title="HDUOJ_2035"></a>HDUOJ_2035</h3><p>求A^B的最后三位数表示的整数。</p>
 <p>A^B % 1000，肯定值回溢出。全部乘起来再模等价于每个模再累乘</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a, b;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b &amp;&amp; (a != <span class="number">0</span> || b != <span class="number">0</span>))&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(b--)&#123;</span><br><span class="line">            res = res * a % <span class="number">1000</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="HDUOJ-2036"><a href="#HDUOJ-2036" class="headerlink" title="HDUOJ_2036"></a>HDUOJ_2036</h3><p>求任意多边形的面积公式：</p>
 <p>S=0.5*abs(x1*y2-y1*x2+x2*y3-y2*x3+…+xn*y1-yn*x1)</p>
 <h3 id="HDUOJ-2038"><a href="#HDUOJ-2038" class="headerlink" title="HDUOJ_2038"></a>HDUOJ_2038</h3><p>区间贪心</p>
@@ -413,7 +411,7 @@
 </ol>
 <p>f[i] = 2 * (f[i – 1] + f[i – 2])</p>
 <h3 id="2050递推思想"><a href="#2050递推思想" class="headerlink" title="2050递推思想"></a>2050递推思想</h3><p>f[n] = =2n^2-n+1</p>
-<h3 id="2058"><a href="#2058" class="headerlink" title="2058"></a>2058</h3><p>等差数列求和公式 <em>Sn = n*a1 + n\</em>(n-1)*d/2*</p>
+<h3 id="2058"><a href="#2058" class="headerlink" title="2058"></a>2058</h3><p>等差数列求和公式 <em>Sn = n\</em>a1 + n*(n-1)*d/2*</p>
 <p>反求a1，a1=(Sn – n*(n-1)/2)/2</p>
 <h3 id="2064"><a href="#2064" class="headerlink" title="2064"></a>2064</h3><p>找规律 把n 个盘子从A 间接(不能把盘子直接从A 移到C )移到C 需要以下五步:</p>
 <ol>
@@ -778,7 +776,7 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
 
 
 
@@ -822,6 +820,43 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
   
 
 
