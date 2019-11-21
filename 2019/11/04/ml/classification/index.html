@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$ and$Cost(h_\theta(x),y) = \begin{cases}-log(h_\theta(x)) &amp;amp; y = 1\-log(1-h_\theta(x)) &amp;amp;">
+<meta name="description" content="Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$ and$Cost(h_\theta(x),y) = $$\begin{cases}-log(h_\theta(x)) &amp;amp; y = 1\-log(1-h_\theta(x)) &amp;am">
 <meta name="keywords" content="ML">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Classification">
 <meta property="og:url" content="http://yoursite.com/2019/11/04/ml/classification/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$ and$Cost(h_\theta(x),y) = \begin{cases}-log(h_\theta(x)) &amp;amp; y = 1\-log(1-h_\theta(x)) &amp;amp;">
+<meta property="og:description" content="Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$ and$Cost(h_\theta(x),y) = $$\begin{cases}-log(h_\theta(x)) &amp;amp; y = 1\-log(1-h_\theta(x)) &amp;am">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-11-20T12:11:44.225Z">
+<meta property="og:updated_time" content="2019-11-21T06:42:15.807Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Classification">
-<meta name="twitter:description" content="Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$ and$Cost(h_\theta(x),y) = \begin{cases}-log(h_\theta(x)) &amp;amp; y = 1\-log(1-h_\theta(x)) &amp;amp;">
+<meta name="twitter:description" content="Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$ and$Cost(h_\theta(x),y) = $$\begin{cases}-log(h_\theta(x)) &amp;amp; y = 1\-log(1-h_\theta(x)) &amp;am">
 
 
 
@@ -386,7 +386,7 @@
 
       
         <h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2><h3 id="cost-function"><a href="#cost-function" class="headerlink" title="cost function"></a>cost function</h3><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$</p>
-<p><strong>and</strong><br>$Cost(h_\theta(x),y) = \begin{cases}<br>-log(h_\theta(x)) &amp; y = 1\<br>-log(1-h_\theta(x)) &amp; y = 0\<br>\end{cases}<br>$</p>
+<p><strong>and</strong><br>$Cost(h_\theta(x),y) = $$\begin{cases}<br>-log(h_\theta(x)) &amp; y = 1\<br>-log(1-h_\theta(x)) &amp; y = 0\<br>\end{cases}$$<br>$</p>
 <p><strong>and</strong><br><strong><em>define</em></strong>: $g(z) = \frac{1}{1 + e ^{-z}}$<br>$h_\theta(x) = g(\theta^Tx) = \frac{1}{1 + e ^{-\theta^Tx}}$</p>
 <h2 id="Regularization-正则化"><a href="#Regularization-正则化" class="headerlink" title="Regularization(正则化)"></a>Regularization(正则化)</h2><h3 id="overfitting-过拟合"><a href="#overfitting-过拟合" class="headerlink" title="overfitting(过拟合)"></a>overfitting(过拟合)</h3><p>解决方法：</p>
 <ol>
