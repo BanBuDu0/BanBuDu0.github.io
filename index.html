@@ -1250,17 +1250,10 @@
 <p><img src="https://i.loli.net/2019/10/15/8s79DruGAmHlM2g.png" alt="WeChatba8ed283865123f166e74e364e969293.png"></p>
 <p>基于控制域和数据域的分离。将controller部署在宏蜂窝基站，根据controller的决策，移动设备可以决定是将计算任务卸载到边缘端执行还是在本地执行。</p>
 <h4 id="A-SD-UDN-包含3层结构"><a href="#A-SD-UDN-包含3层结构" class="headerlink" title="A. SD-UDN 包含3层结构"></a>A. <strong><em>SD-UDN</em></strong> 包含3层结构</h4><ol>
-<li>用户层</li>
+<li>用户层<br><strong>哪些用户需要卸载计算任务</strong><br>用户通过无线网络和小蜂窝基站或者宏蜂窝基站连接<br><strong>本文忽略了移动设备向控制者发送数据时的时延和能耗</strong></li>
+<li>数据层<br><strong>小蜂窝基站和部署在小蜂窝基站附近的边缘节点</strong><br>小蜂窝基站通过高速前沿运输网络和宏蜂窝基站连接</li>
+<li>控制层<br><strong>部署在宏蜂窝基站的controller</strong><br>完成主要的控制功能，如资源分配调度，信息汇总等<br><strong>提出了如下三个模型</strong></li>
 </ol>
-<p><strong>哪些用户需要卸载计算任务</strong><br>用户通过无线网络和小蜂窝基站或者宏蜂窝基站连接<br><strong>本文忽略了移动设备向控制者发送数据时的时延和能耗</strong></p>
-<ol>
-<li>数据层</li>
-</ol>
-<p><strong>小蜂窝基站和部署在小蜂窝基站附近的边缘节点</strong><br>小蜂窝基站通过高速前沿运输网络和宏蜂窝基站连接</p>
-<ol>
-<li>控制层</li>
-</ol>
-<p><strong>部署在宏蜂窝基站的controller</strong><br>完成主要的控制功能，如资源分配调度，信息汇总等<br><strong>提出了如下三个模型</strong></p>
 <h4 id="B-网络模型"><a href="#B-网络模型" class="headerlink" title="B. 网络模型"></a>B. 网络模型</h4><p>给出了之后两个模型需要用到的变量的定义</p>
 <font color="#FF0000">聚焦于本地计算和卸载到边缘计算而不考虑卸载到更远的云中心</font>
 
