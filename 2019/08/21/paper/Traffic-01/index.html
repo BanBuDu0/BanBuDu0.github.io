@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="ML,">
+  <meta name="keywords" content="交通预测,">
 
 
 
@@ -94,24 +94,20 @@
 
 
 
-<meta name="description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m}">
-<meta name="keywords" content="ML">
+<meta name="description" content="方法交通预测问题 将传感器网络表示为带权有向图 G = (V, E,W)，其中 V 是点集， E 是边集， W 是 N * N 的带权邻接矩阵表示节点的邻近度  将在图 G 上观察到的交通流量视为一个 N * P 的图信号矩阵 X ，其中 P 是每个节点上的特征数，特征例如速度、体积等。 X 就是整个路网在某一时刻的状况  用 X(t) 表示 t 时刻观测到的路网状况  交通预测的问题就在于学习一">
+<meta name="keywords" content="交通预测">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linear Regression">
-<meta property="og:url" content="http://yoursite.com/2019/11/02/ml/linear_regression/index.html">
+<meta property="og:title" content="扩散卷积循环神经网络：数据驱动的交通预测">
+<meta property="og:url" content="http://yoursite.com/2019/08/21/paper/Traffic-01/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m}">
+<meta property="og:description" content="方法交通预测问题 将传感器网络表示为带权有向图 G = (V, E,W)，其中 V 是点集， E 是边集， W 是 N * N 的带权邻接矩阵表示节点的邻近度  将在图 G 上观察到的交通流量视为一个 N * P 的图信号矩阵 X ，其中 P 是每个节点上的特征数，特征例如速度、体积等。 X 就是整个路网在某一时刻的状况  用 X(t) 表示 t 时刻观测到的路网状况  交通预测的问题就在于学习一">
 <meta property="og:locale" content="zh">
-<meta property="og:image" content="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png">
-<meta property="og:image" content="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg">
-<meta property="og:image" content="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png">
-<meta property="og:image" content="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png">
-<meta property="og:updated_time" content="2019-11-07T11:23:26.457Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/21/paper/Traffic-01/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/25a6129f9ba1a9ed334f56c45590db0743eabe58.svg">
+<meta property="og:updated_time" content="2019-11-21T12:28:37.572Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linear Regression">
-<meta name="twitter:description" content="参数定义 梯度下降法  := 表示赋值 $\alpha   $表示学习率，控制梯度下降时迈出多大的步子   多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数 cost function - 代价函数平方误差代价函数$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m}">
-<meta name="twitter:image" content="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png">
+<meta name="twitter:title" content="扩散卷积循环神经网络：数据驱动的交通预测">
+<meta name="twitter:description" content="方法交通预测问题 将传感器网络表示为带权有向图 G = (V, E,W)，其中 V 是点集， E 是边集， W 是 N * N 的带权邻接矩阵表示节点的邻近度  将在图 G 上观察到的交通流量视为一个 N * P 的图信号矩阵 X ，其中 P 是每个节点上的特征数，特征例如速度、体积等。 X 就是整个路网在某一时刻的状况  用 X(t) 表示 t 时刻观测到的路网状况  交通预测的问题就在于学习一">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/21/paper/Traffic-01/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/25a6129f9ba1a9ed334f56c45590db0743eabe58.svg">
 
 
 
@@ -140,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/02/ml/linear_regression/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/21/paper/Traffic-01/">
 
 
 
 
 
-  <title>Linear Regression | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>扩散卷积循环神经网络：数据驱动的交通预测 | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -269,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/02/ml/linear_regression/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/21/paper/Traffic-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -286,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linear Regression</h1>
+          <h1 class="post-title" itemprop="name headline">扩散卷积循环神经网络：数据驱动的交通预测</h1>
         
 
         <div class="post-meta">
@@ -298,8 +294,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-02T11:01:32+08:00">
-                2019-11-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-21T11:19:03+08:00">
+                2019-08-21
               </time>
             
 
@@ -321,8 +317,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ML/" itemprop="url" rel="index">
-                    <span itemprop="name">ML</span>
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
                   </a>
                 </span>
 
@@ -354,7 +350,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  373
+                  601
                 </span>
               
 
@@ -370,7 +366,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -391,30 +387,38 @@
       
 
       
-        <h2 id="参数定义"><a href="#参数定义" class="headerlink" title="参数定义"></a>参数定义</h2><p><img src="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png" alt="1.png"></p>
-<h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p><img src="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg" alt="1.jpg"></p>
-<ul>
-<li>:= 表示赋值</li>
-<li>$\alpha   $表示学习率，控制梯度下降时迈出多大的步子</li>
+        <h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="交通预测问题"><a href="#交通预测问题" class="headerlink" title="交通预测问题"></a>交通预测问题</h3><ol>
+<li><p>将传感器网络表示为带权有向图 G = (V, E,W)，其中 V 是点集， E 是边集， W 是 N * N 的带权邻接矩阵表示节点的邻近度</p>
+</li>
+<li><p>将在图 G 上观察到的交通流量视为一个 N * P 的图信号矩阵 X ，其中 P 是每个节点上的特征数，特征例如速度、体积等。 X 就是整个路网在某一时刻的状况</p>
+</li>
+<li><p>用 X(t) 表示 t 时刻观测到的路网状况</p>
+</li>
+<li><p>交通预测的问题就在于学习一个函数 h(.)，通过过去的路网状况矩阵 T’，预测未来 T 时刻的路网状况矩阵。</p>
+</li>
+</ol>
+<h3 id="空间依赖性模型"><a href="#空间依赖性模型" class="headerlink" title="空间依赖性模型"></a>空间依赖性模型</h3><h4 id="将交通流建模为扩散的过程"><a href="#将交通流建模为扩散的过程" class="headerlink" title="将交通流建模为扩散的过程"></a>将交通流建模为扩散的过程</h4><ul>
+<li><p>random walk 随机游走<br>随机游走是指基于过去的表现，无法预测将来的发展步骤和方向<br>一般的随机游走是以马尔可夫链或者马尔可夫过程的形式出现的 </p>
+</li>
+<li><p>马尔可夫性质如下<br><img src="DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/25a6129f9ba1a9ed334f56c45590db0743eabe58.svg" alt="马尔可夫性质"></p>
+</li>
 </ul>
-<p><img src="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg" alt="2.jpg"></p>
-<p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数</p>
-<h3 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h3><h4 id="平方误差代价函数"><a href="#平方误差代价函数" class="headerlink" title="平方误差代价函数"></a><strong>平方误差代价函数</strong></h4><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)}) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y ^{(i)}) ^ 2$<br>其中$h_\theta(x^{(i)})$是模型预测的值，$y ^{(i)}$是样本实际值，这两个之差的平方展示了预测值和样本值的偏离度</p>
-<blockquote>
-<p>平方误差代价函数多用于回归</p>
-</blockquote>
-<h4 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h4><p>基于均方误差最小化在进行模型求解的方法就是最小二乘法，均方误差是回归任务最常用的性能度量。</p>
-<h3 id="Feature-Scaling-特征缩放"><a href="#Feature-Scaling-特征缩放" class="headerlink" title="Feature Scaling - 特征缩放"></a>Feature Scaling - 特征缩放</h3><blockquote>
-<p>get every feature into approximately a $-1 &lt;= X_i &lt;= 1$ range</p>
-</blockquote>
-<p>让 $X_i$ 等于 $X_i$ 除以 $\max(X_i)$，让 $X_i$ 处于 $[-1，1]$ 之间<br>为了让梯度下降的更快</p>
-<h3 id="Mean-normalization-均值归一化-是特征缩放的一种手段"><a href="#Mean-normalization-均值归一化-是特征缩放的一种手段" class="headerlink" title="Mean normalization - 均值归一化(是特征缩放的一种手段)"></a>Mean normalization - 均值归一化(是特征缩放的一种手段)</h3><p>在特征缩放的时候一般是 $X_i$ 直接除以 $\max(X_i)$, 均值归一化的话 $X_i$ 先减去 $X_i$ 的均值再除以 $\max(X_i)$</p>
-<h2 id="Normal-equation-正规方程"><a href="#Normal-equation-正规方程" class="headerlink" title="Normal equation - 正规方程"></a>Normal equation - 正规方程</h2><blockquote>
-<p>不用迭代，一步到位求得最优解</p>
-</blockquote>
-<p><img src="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png" alt="1.png"><br><strong>不用进行特征缩放</strong></p>
-<h2 id="正规方程和梯度下降法的比较"><a href="#正规方程和梯度下降法的比较" class="headerlink" title="正规方程和梯度下降法的比较"></a>正规方程和梯度下降法的比较</h2><p><img src="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png" alt="1.png"></p>
-
+<h4 id="这个扩散过程的特征是在图-G-上重启概率-alpha-在-0-1-之间和包含转移矩阵-D-O-1-W-的随机游走。其中-D-O-是表示图中顶点出度的对角矩阵"><a href="#这个扩散过程的特征是在图-G-上重启概率-alpha-在-0-1-之间和包含转移矩阵-D-O-1-W-的随机游走。其中-D-O-是表示图中顶点出度的对角矩阵" class="headerlink" title="这个扩散过程的特征是在图 G 上重启概率 $\alpha$ 在[0, 1]之间和包含转移矩阵$D_O^{-1}W$的随机游走。其中$D_O$是表示图中顶点出度的对角矩阵"></a>这个扩散过程的特征是在图 G 上重启概率 $\alpha$ 在[0, 1]之间和包含转移矩阵$D_O^{-1}W$的随机游走。其中$D_O$是表示图中顶点出度的对角矩阵</h4><ul>
+<li><p>sequence to sequence architecture 序列到序列模型<br>使用两个循环神经网络，将一个序列直接转换到另一个序列。一般通过Encoder-Decoder（编码-解码）框架实现</p>
+</li>
+<li><p>Autoregressive 自回归<br>从线性回归发展而来，不是用来预测其他变量，而是用来预测自己，所以叫自回归</p>
+</li>
+</ul>
+<h4 id="扩散卷积同时定义在有向图和无向图上"><a href="#扩散卷积同时定义在有向图和无向图上" class="headerlink" title="扩散卷积同时定义在有向图和无向图上"></a>扩散卷积同时定义在有向图和无向图上</h4><ol>
+<li>D 表示Degree matrix, 只有主对角线上有非零元素, $L = D^{-{1\over2}}(D - W)D^{-{1\over2}}$ 是一个归一化的拉普拉斯算子</li>
+</ol>
+<ul>
+<li>spectral graph convolution 谱图卷积</li>
+</ul>
+<h3 id="时间动态性模型"><a href="#时间动态性模型" class="headerlink" title="时间动态性模型"></a>时间动态性模型</h3><h4 id="利用循环神经网络模拟时间依赖性"><a href="#利用循环神经网络模拟时间依赖性" class="headerlink" title="利用循环神经网络模拟时间依赖性"></a>利用循环神经网络模拟时间依赖性</h4><ul>
+<li>LSTM(Long Short-Term Memory) 长短期记忆网络</li>
+</ul>
+<h4 id="用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion-Convolutional-Gated-Recurrent-Unit-DCGRU-扩散卷积门控递归单元"><a href="#用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion-Convolutional-Gated-Recurrent-Unit-DCGRU-扩散卷积门控递归单元" class="headerlink" title="用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion Convolutional Gated Recurrent Unit (DCGRU)-扩散卷积门控递归单元"></a>用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion Convolutional Gated Recurrent Unit (DCGRU)-扩散卷积门控递归单元</h4><h4 id="整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练"><a href="#整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练" class="headerlink" title="整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练"></a>整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练</h4><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN"><a href="#通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN" class="headerlink" title="通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN"></a>通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN</h3>
       
     </div>
     
@@ -431,7 +435,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/ML/" rel="tag"># ML</a>
+            <a href="/tags/交通预测/" rel="tag"># 交通预测</a>
           
         </div>
       
@@ -444,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/01/ml/ml/" rel="next" title="Mechine Learning">
-                <i class="fa fa-chevron-left"></i> Mechine Learning
+              <a href="/2019/07/21/NeuralNetworks/" rel="next" title="神经网络">
+                <i class="fa fa-chevron-left"></i> 神经网络
               </a>
             
           </div>
@@ -454,8 +458,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/11/04/ml/classification/" rel="prev" title="Classification">
-                Classification <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/14/paper/EdgeCompute-01/" rel="prev" title="Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network">
+                Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +638,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参数定义"><span class="nav-number">1.</span> <span class="nav-text">参数定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度下降法"><span class="nav-number">2.</span> <span class="nav-text">梯度下降法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-function-代价函数"><span class="nav-number">2.1.</span> <span class="nav-text">cost function - 代价函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#平方误差代价函数"><span class="nav-number">2.1.1.</span> <span class="nav-text">平方误差代价函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最小二乘法"><span class="nav-number">2.1.2.</span> <span class="nav-text">最小二乘法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Feature-Scaling-特征缩放"><span class="nav-number">2.2.</span> <span class="nav-text">Feature Scaling - 特征缩放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mean-normalization-均值归一化-是特征缩放的一种手段"><span class="nav-number">2.3.</span> <span class="nav-text">Mean normalization - 均值归一化(是特征缩放的一种手段)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Normal-equation-正规方程"><span class="nav-number">3.</span> <span class="nav-text">Normal equation - 正规方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正规方程和梯度下降法的比较"><span class="nav-number">4.</span> <span class="nav-text">正规方程和梯度下降法的比较</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">1.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交通预测问题"><span class="nav-number">1.1.</span> <span class="nav-text">交通预测问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间依赖性模型"><span class="nav-number">1.2.</span> <span class="nav-text">空间依赖性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#将交通流建模为扩散的过程"><span class="nav-number">1.2.1.</span> <span class="nav-text">将交通流建模为扩散的过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#这个扩散过程的特征是在图-G-上重启概率-alpha-在-0-1-之间和包含转移矩阵-D-O-1-W-的随机游走。其中-D-O-是表示图中顶点出度的对角矩阵"><span class="nav-number">1.2.2.</span> <span class="nav-text">这个扩散过程的特征是在图 G 上重启概率 $\alpha$ 在[0, 1]之间和包含转移矩阵$D_O^{-1}W$的随机游走。其中$D_O$是表示图中顶点出度的对角矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩散卷积同时定义在有向图和无向图上"><span class="nav-number">1.2.3.</span> <span class="nav-text">扩散卷积同时定义在有向图和无向图上</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间动态性模型"><span class="nav-number">1.3.</span> <span class="nav-text">时间动态性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#利用循环神经网络模拟时间依赖性"><span class="nav-number">1.3.1.</span> <span class="nav-text">利用循环神经网络模拟时间依赖性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion-Convolutional-Gated-Recurrent-Unit-DCGRU-扩散卷积门控递归单元"><span class="nav-number">1.3.2.</span> <span class="nav-text">用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion Convolutional Gated Recurrent Unit (DCGRU)-扩散卷积门控递归单元</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练"><span class="nav-number">1.3.3.</span> <span class="nav-text">整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">2.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN"><span class="nav-number">2.1.</span> <span class="nav-text">通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN</span></a></li></ol></li></ol></div>
             
 
           </div>

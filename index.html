@@ -260,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/07/paper/edge-compute-v/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/paper/EdgeCompute-03/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -279,7 +279,222 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/11/07/paper/edge-compute-v/" itemprop="url">基于边缘计算的交通信号灯联合控制</a></h1>
+                <a class="post-title-link" href="/2019/11/21/paper/EdgeCompute-03/" itemprop="url">Enhancing the User Experience in Vehicular Edge Computing Networks-An Adaptive Resource Allocation Approach</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-21T20:04:32+08:00">
+                2019-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article</span>
+                
+                <span title="Words count in article">
+                  582
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time</span>
+                
+                <span title="Reading time">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p><strong>增强车辆边缘计算网络中的用户体验：一种自适应资源分配方法</strong></p>
+</blockquote>
+<h2 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h2><ul>
+<li>service reliability (i.e., losing less data)</li>
+<li>freshness (i.e.,as  quickly  as  possible)</li>
+</ul>
+<p>不能共存</p>
+<h3 id="可拓展的计算任务结构-采用了两种计算质量转换"><a href="#可拓展的计算任务结构-采用了两种计算质量转换" class="headerlink" title="可拓展的计算任务结构 - 采用了两种计算质量转换"></a>可拓展的计算任务结构 - 采用了两种计算质量转换</h3><ol>
+<li>configurations substitute<br>使用简单的计算任务代替复杂的计算任务</li>
+<li>data drop allocation<br>丢弃某些冗余任务. 如果通过任务的子集实现了用户指定的准确性, 则应用程序可以选择跳过剩余的任务并尽早终止.</li>
+</ol>
+<p>这样做好像有更多的网络资源去执行任务, 但是这是以计算质量为代价的.<br>加入无线卸载策略(无线资源分配)后这种情况更加复杂.<br>这种情况下应该坚持如下三点:</p>
+<ol>
+<li>计算质量自适应确定每个计算任务的计算配置选择和数据丢失</li>
+<li>无线电资源分配控制无线传输速率，以将数据从车辆卸载到移动边缘计算服务</li>
+<li>任务放置问题根据各种移动边缘计算服务的可用性和负载来决定要放置任务的边缘节点。</li>
+</ol>
+<p>这三点是高度耦合的，应该同时考虑。又因为车辆的动态性，保证长期计算质量的资源分配需要动态适应性。</p>
+<h3 id="提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience"><a href="#提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience" class="headerlink" title="提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)"></a>提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)</h3><p>adaptively adjust the follow allocation problems to minimize the long-term computing quality loss while balancing the queuing delay</p>
+<blockquote>
+<p>延迟敏感型任务在有严格deadline的等待队列等待数据</p>
+</blockquote>
+<ol>
+<li>TP - task placement</li>
+<li>RR - radio resource</li>
+<li>CC - computation configuration</li>
+<li>DD - data drop</li>
+</ol>
+<h2 id="Network-Model-网络模型"><a href="#Network-Model-网络模型" class="headerlink" title="Network Model - 网络模型"></a>Network Model - 网络模型</h2><script type="math/tex; mode=display">
+\begin{array}{c|c| c}
+定义 & 解释\\
+\hline
+\mathcal M = \{1, 2, ..., M \} & 基站编号 \\
+f_m^{max} & 总的计算数据处理能力 \\
+\omega & 所有基站总的无线带宽 \\
+\mathcal K = \{1, 2, ..., K\} & 任务类型 \\
+\mathcal L_k = \{1, 2, ..., L_k\} & 任务K执行时特定的近似配置库 \\
+f_{k;lk} & 任务类型K在质量配置级别l_k下的计算大小 \\
+\mathcal N = \{1, 2, ..., N\} & 车辆编号
+\end{array}</script><p>其中 $l_k \in \mathcal L_k$ 量化任务&amp;K&amp;的精确计算结果的近似最优，以处理运行时产生的不确定性，表示对计算精度损失的最大容忍度。$l_k$ 越低，用户体验越好</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/07/paper/EdgeCompute-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="syj">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SYJ BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/07/paper/EdgeCompute-02/" itemprop="url">基于边缘计算的交通信号灯联合控制</a></h1>
         
 
         <div class="post-meta">
@@ -1073,7 +1288,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/paper/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/paper/EdgeCompute-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -1092,7 +1307,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/14/paper/Task-Offloading-for-Mobile-Edge-Computing-in-Software-Defined-Ultra-Dense-Network/" itemprop="url">Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network</a></h1>
+                <a class="post-title-link" href="/2019/10/14/paper/EdgeCompute-01/" itemprop="url">Task Offloading for Mobile Edge Computing in Software Defined Ultra-Dense Network</a></h1>
         
 
         <div class="post-meta">
@@ -1332,7 +1547,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/21/paper/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/21/paper/Traffic-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -1351,7 +1566,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/21/paper/DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/" itemprop="url">扩散卷积循环神经网络：数据驱动的交通预测</a></h1>
+                <a class="post-title-link" href="/2019/08/21/paper/Traffic-01/" itemprop="url">扩散卷积循环神经网络：数据驱动的交通预测</a></h1>
         
 
         <div class="post-meta">
@@ -2134,7 +2349,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
