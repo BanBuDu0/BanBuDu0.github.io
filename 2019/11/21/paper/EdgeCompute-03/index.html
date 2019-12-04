@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="增强车辆边缘计算网络中的用户体验：一种自适应资源分配方法  现状 service reliability (i.e., losing less data) freshness (i.e.,as  quickly  as  possible)  不能共存 可拓展的计算任务结构 - 采用了两种计算质量转换 configurations substitute使用简单的计算任务代替复杂的计算任务 dat">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-11-23T06:31:03.492Z">
+<meta property="og:updated_time" content="2019-12-03T02:04:38.250Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Enhancing the User Experience in Vehicular Edge Computing Networks-An Adaptive Resource Allocation Approach">
 <meta name="twitter:description" content="增强车辆边缘计算网络中的用户体验：一种自适应资源分配方法  现状 service reliability (i.e., losing less data) freshness (i.e.,as  quickly  as  possible)  不能共存 可拓展的计算任务结构 - 采用了两种计算质量转换 configurations substitute使用简单的计算任务代替复杂的计算任务 dat">
@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  582
+                  1.2k
                 </span>
               
 
@@ -364,7 +364,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  2
+                  4
                 </span>
               
             </div>
@@ -404,18 +404,23 @@
 <li>任务放置问题根据各种移动边缘计算服务的可用性和负载来决定要放置任务的边缘节点。</li>
 </ol>
 <p>这三点是高度耦合的，应该同时考虑。又因为车辆的动态性，保证长期计算质量的资源分配需要动态适应性。</p>
-<h3 id="提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience"><a href="#提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience" class="headerlink" title="提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)"></a>提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)</h3><p>adaptively adjust the follow allocation problems to minimize the long-term computing quality loss while balancing the queuing delay</p>
+<h3 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h3><ul>
+<li>设计了一种自适应资源分配方法</li>
+<li>制定了一种在线算法，将问题分解为一系列的on-slot优化问题</li>
+<li>自适应性实现不需要任何关于未来网络状态信息的先验知识，并且所提出的算法计算复杂度低</li>
+</ul>
+<h3 id="提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience-在线算法"><a href="#提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience-在线算法" class="headerlink" title="提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)在线算法"></a>提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)在线算法</h3><p>adaptively adjust the follow allocation problems to minimize the long-term computing quality loss while balancing the queuing delay</p>
 <blockquote>
 <p>延迟敏感型任务在有严格deadline的等待队列等待数据</p>
 </blockquote>
 <ol>
-<li>TP - task placement</li>
-<li>RR - radio resource</li>
-<li>CC - computation configuration</li>
-<li>DD - data drop</li>
+<li>TP - task placement 任务分配</li>
+<li>RR - radio resource 无线资源</li>
+<li>CC - computation configuration 计算配置</li>
+<li>DD - data drop 数据丢弃</li>
 </ol>
 <h2 id="Network-Model-网络模型"><a href="#Network-Model-网络模型" class="headerlink" title="Network Model - 网络模型"></a>Network Model - 网络模型</h2><script type="math/tex; mode=display">
-\begin{array}{c|c| c}
+\begin{array}{c|c|c}
 定义 & 解释\\
 \hline
 \mathcal M = \{1, 2, ..., M \} & 基站编号 \\
@@ -424,9 +429,40 @@ f_m^{max} & 总的计算数据处理能力 \\
 \mathcal K = \{1, 2, ..., K\} & 任务类型 \\
 \mathcal L_k = \{1, 2, ..., L_k\} & 任务K执行时特定的近似配置库 \\
 f_{k;lk} & 任务类型K在质量配置级别l_k下的计算大小 \\
-\mathcal N = \{1, 2, ..., N\} & 车辆编号
-\end{array}</script><p>其中 $l_k \in \mathcal L_k$ 量化任务&amp;K&amp;的精确计算结果的近似最优，以处理运行时产生的不确定性，表示对计算精度损失的最大容忍度。$l_k$ 越低，用户体验越好</p>
-
+\mathcal N = \{1, 2, ..., N\} & 车辆编号 \\
+CSI & 无线通信策略中的通道状态信息
+\end{array}</script><p>其中 $l_k \in \mathcal L_k$ 量化任务&amp;K&amp;的精确计算结果的近似最优，以处理运行时产生的不确定性，表示对计算精度损失的最大容忍度。$l_k$ 越低，用户体验越好。<br>模型采用了SDN技术，在优化系统中引入了全局网络状态的中心控制器，实现了对分布式边缘节点和移动车辆的逻辑集中控制</p>
+<h3 id="边缘计算模型"><a href="#边缘计算模型" class="headerlink" title="边缘计算模型"></a>边缘计算模型</h3><p>每个车辆的每个任务都有不同的队列缓冲区，队列采用先进先出。并为每个任务定义了QoS（服务质量）对延迟进行约束，如果到达数据超过了延迟边界就将其删除。</p>
+<script type="math/tex; mode=display">
+\begin{array}{c|c|c}
+定义 & 解释\\
+\hline
+Q_n^k(t)  & 车辆n的任务k在t时隙的队列积压 \\
+\end{array}</script><p>所有队列缓冲区都是无限的，并且所有队列在最初时间 $t = 0$ 时都是空的，队列采用FIFO。每种类型的计算任务定义了服务质量（QoS）来约束延迟要求，超过延迟的直接丢弃。</p>
+<h3 id="控制决策"><a href="#控制决策" class="headerlink" title="控制决策"></a>控制决策</h3><script type="math/tex; mode=display">
+\begin{array}{c|c|c}
+定义 & 解释\\
+\hline
+QSI  & 队列状态信息 \\
+\end{array}</script><p>需要对如下4个方面做决策</p>
+<h4 id="TP-Allocation"><a href="#TP-Allocation" class="headerlink" title="TP Allocation"></a>TP Allocation</h4><p>决定能够被服务的任务数量和任务被分配到哪个边缘端执行</p>
+<script type="math/tex; mode=display">
+\begin{array}{c|c|c}
+定义 & 解释\\
+\hline
+d_n^m(t)  & 在t时刻车辆n和基站m的距离 \\
+d_n^{max} & 车辆和基站的最大可通信距离 \\
+\mathcal G(t) = \{\mathcal M,  \epsilon(t)\} &  时变节点连通图，表示当前网络拓扑\\
+\epsilon_n(t) = \{(n,m)|m \in \mathcal M, d_n^m(t) \le d_n^{max}\} & 车辆n在时刻t能通信的基站集合 \\
+y_{n, m}^k(t) \in \{0,1\} \quad \forall m \in \mathcal G(t) & 车辆n在时刻t将任务k卸载给边缘服务器m \\
+\end{array}</script><p>每个任务只能分配给一个基站</p>
+<h4 id="RR-Allocation"><a href="#RR-Allocation" class="headerlink" title="RR Allocation"></a>RR Allocation</h4><script type="math/tex; mode=display">
+\begin{array}{c|c|c}
+定义 & 解释\\
+\hline
+P  & 标准发射功率 \\
+h_n^m & 车辆n与基站m之间的信道功率增益
+\end{array}</script><h4 id="CC-Allocation"><a href="#CC-Allocation" class="headerlink" title="CC Allocation"></a>CC Allocation</h4><h4 id="DD-Allocation"><a href="#DD-Allocation" class="headerlink" title="DD Allocation"></a>DD Allocation</h4>
       
     </div>
     
@@ -467,6 +503,10 @@ f_{k;lk} & 任务类型K在质量配置级别l_k下的计算大小 \\
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/04/应用数学/" rel="prev" title="应用数学">
+                应用数学 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -541,7 +581,7 @@ f_{k;lk} & 任务类型K在质量配置级别l_k下的计算大小 \\
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -552,7 +592,7 @@ f_{k;lk} & 任务类型K在质量配置级别l_k下的计算大小 \\
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -644,7 +684,7 @@ f_{k;lk} & 任务类型K在质量配置级别l_k下的计算大小 \\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#现状"><span class="nav-number">1.</span> <span class="nav-text">现状</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可拓展的计算任务结构-采用了两种计算质量转换"><span class="nav-number">1.1.</span> <span class="nav-text">可拓展的计算任务结构 - 采用了两种计算质量转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience"><span class="nav-number">1.2.</span> <span class="nav-text">提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-Model-网络模型"><span class="nav-number">2.</span> <span class="nav-text">Network Model - 网络模型</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#现状"><span class="nav-number">1.</span> <span class="nav-text">现状</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可拓展的计算任务结构-采用了两种计算质量转换"><span class="nav-number">1.1.</span> <span class="nav-text">可拓展的计算任务结构 - 采用了两种计算质量转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关工作"><span class="nav-number">1.2.</span> <span class="nav-text">相关工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提出了ARAEUE-Adaptive-Resource-Allocation-for-Enhancing-User-Experience-在线算法"><span class="nav-number">1.3.</span> <span class="nav-text">提出了ARAEUE(Adaptive Resource Allocation for Enhancing User Experience)在线算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Network-Model-网络模型"><span class="nav-number">2.</span> <span class="nav-text">Network Model - 网络模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#边缘计算模型"><span class="nav-number">2.1.</span> <span class="nav-text">边缘计算模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#控制决策"><span class="nav-number">2.2.</span> <span class="nav-text">控制决策</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TP-Allocation"><span class="nav-number">2.2.1.</span> <span class="nav-text">TP Allocation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RR-Allocation"><span class="nav-number">2.2.2.</span> <span class="nav-text">RR Allocation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CC-Allocation"><span class="nav-number">2.2.3.</span> <span class="nav-text">CC Allocation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DD-Allocation"><span class="nav-number">2.2.4.</span> <span class="nav-text">DD Allocation</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
