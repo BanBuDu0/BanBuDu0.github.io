@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-12-04T13:53:34.834Z">
+<meta property="og:updated_time" content="2019-12-05T10:30:08.882Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="应用数学">
 <meta name="twitter:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  294
+                  653
                 </span>
               
 
@@ -364,7 +364,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -394,6 +394,7 @@
 <li><script type="math/tex">||w||_{-\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最小值</li>
 </ul>
 </li>
+<li>多元泰勒展开式$f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)TG(x_0)(x-x_0)+ O(x-x_0)^2$</li>
 </ul>
 <h2 id="试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><a href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件" class="headerlink" title="试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件"></a>试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</h2><p><strong>一阶必要条件</strong>： 设 $f(x)$ 在开集 $D$上一阶连续可微，若<script type="math/tex">x^* \in D</script>是$min \; f(x)$的一个局部极小点，则必有<script type="math/tex">g(x^*)  = 0</script><br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
 <script type="math/tex; mode=display">
@@ -401,7 +402,23 @@
 f(x) & =f(x^*) + g(x^*)^T(x-x^*) +\omicron(||x-x^*||) \\
  & =f(x^*)- \alpha g(x^*)^Tg(x^*) + \omicron(\alpha) \\
  & = f(x^*) - \alpha||g(x^*)||^2 + \omicron(\alpha)
-\end{aligned}</script><p><strong>二阶必要条件</strong>： 设 $f(x)$ 在开集 $D$ 上二阶连续可微。若 <script type="math/tex">x^* \in D</script>是 $min \; f(x)$ 的一个局部极小点，则必有 <script type="math/tex">g(x^*)=0</script> 且 <script type="math/tex">G(x^*)</script> 是 <strong><em>半正定矩阵</em></strong>。</p>
+\end{aligned}</script><p>因为<script type="math/tex">f(x^*)</script>是极小值点，所以<script type="math/tex">f(x) > f(x^*)</script>，所以<script type="math/tex">- \alpha||g(x^*)||^2 + \omicron(\alpha) > 0</script><br>即$$||g(x^*)||^2 \le \frac{ \omicron(\alpha)}{ \alpha}</p>
+<script type="math/tex; mode=display">
+令两边 $ \alpha \to 0$得出$$||g(x^*)|| = 0$$, 即 $$g(x^*) = 0</script><p><strong>二阶必要条件</strong>： 设 $f(x)$ 在开集 $D$ 上二阶连续可微。若 <script type="math/tex">x^* \in D</script>是 $min \; f(x)$ 的一个局部极小点，则必有 <script type="math/tex">g(x^*)=0</script> 且 <script type="math/tex">G(x^*)</script> 是 <strong><em>半正定矩阵</em></strong>。<br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
+&\to \quad f(x) - f(x^*) = \frac 12\alpha^2d^TG(x^*)d + O(\alpha^2)\\
+&\to \quad d^TG(x^*)d + \frac{O(2\alpha^2)}{\alpha^2} \ge 0 
+\end{aligned}</script><p>令 $ \alpha \to 0$得，<script type="math/tex">d^TG(x^*)d \ge 0</script>，所以<script type="math/tex">G(x^*)</script>是半正定矩阵</p>
+<p><strong>二阶充分条件</strong>： 设$f(x)$在开集$D$上二阶连续可微. 若<script type="math/tex">x^* \in D</script>满足条件<script type="math/tex">g(x^*) = 0</script>及<script type="math/tex">G(x^*)</script>是正定矩阵，则<script type="math/tex">x^*</script>是$min \; f(x)$的一个局部极小点</p>
+<h2 id="在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><a href="#在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架" class="headerlink" title="在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架"></a>在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</h2><ol>
+<li>给定初始化参数以及初始迭代点 $x_0$. 置 $k:= 0$</li>
+<li>若 $x_k$满足某种终止准则，停止迭代，以$x_k$作为近似极小</li>
+<li>通过求解$x_k$处的某个子问题确定下降方向$d_k$</li>
+<li>通过某种搜索方式确定步长因子$\alpha_k$，使得$f(x_k+\alpha_kd_k) &lt; f(x_k)$</li>
+<li>令$x_{k+1}:=x_k + \alpha_k d_k, k:=k+1$，转2</li>
+</ol>
 
       
     </div>
@@ -618,7 +635,7 @@ f(x) & =f(x^*) + g(x^*)^T(x-x^*) +\omicron(||x-x^*||) \\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><span class="nav-number">2.</span> <span class="nav-text">在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</span></a></li></ol></div>
             
 
           </div>
