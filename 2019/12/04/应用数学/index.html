@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-12-05T10:30:08.882Z">
+<meta property="og:updated_time" content="2019-12-05T11:53:17.997Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="应用数学">
 <meta name="twitter:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  653
+                  767
                 </span>
               
 
@@ -419,7 +419,18 @@ f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
 <li>通过某种搜索方式确定步长因子$\alpha_k$，使得$f(x_k+\alpha_kd_k) &lt; f(x_k)$</li>
 <li>令$x_{k+1}:=x_k + \alpha_k d_k, k:=k+1$，转2</li>
 </ol>
-
+<h2 id="描述求解无约束最优化问题的牛顿法步骤"><a href="#描述求解无约束最优化问题的牛顿法步骤" class="headerlink" title="描述求解无约束最优化问题的牛顿法步骤"></a>描述求解无约束最优化问题的牛顿法步骤</h2><ol>
+<li><p>给定终止误差值$0 \le \epsilon &lt;&lt; 1$，初始点$x_0 \in \mathbb R^n$. 令 $k := 0$.</p>
+</li>
+<li><p>计算 $g_k = \nabla f(x_k)$. 若 $||g_k|| \le \epsilon$，停算，输出 <script type="math/tex">x^* \approx x_k</script>.</p>
+</li>
+<li><p>计算$G_k = \nabla^2f(x_k)$，并求解线性方程组得解 $d_k$，</p>
+<script type="math/tex; mode=display">
+G_kd=-g_k</script></li>
+<li><p>令 $x_{k+1} = x_k + d_k, k := k+1$，转2.</p>
+</li>
+</ol>
+<h2 id="简单一种你所知道的关于单变量最优化问题的线搜索算法"><a href="#简单一种你所知道的关于单变量最优化问题的线搜索算法" class="headerlink" title="简单一种你所知道的关于单变量最优化问题的线搜索算法"></a>简单一种你所知道的关于单变量最优化问题的线搜索算法</h2>
       
     </div>
     
@@ -635,7 +646,7 @@ f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><span class="nav-number">2.</span> <span class="nav-text">在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><span class="nav-number">2.</span> <span class="nav-text">在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述求解无约束最优化问题的牛顿法步骤"><span class="nav-number">3.</span> <span class="nav-text">描述求解无约束最优化问题的牛顿法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单一种你所知道的关于单变量最优化问题的线搜索算法"><span class="nav-number">4.</span> <span class="nav-text">简单一种你所知道的关于单变量最优化问题的线搜索算法</span></a></li></ol></div>
             
 
           </div>
