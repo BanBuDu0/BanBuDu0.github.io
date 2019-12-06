@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-12-05T12:05:41.889Z">
+<meta property="og:updated_time" content="2019-12-06T11:56:08.279Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="应用数学">
 <meta name="twitter:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
@@ -348,7 +348,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  767
+                  1.2k
                 </span>
               
 
@@ -364,7 +364,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  3
+                  5
                 </span>
               
             </div>
@@ -387,14 +387,16 @@
       
         <ul>
 <li>$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $</li>
-<li>范数 <script type="math/tex">|| w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}</script>一般p=2时可以省略不写，常用的<strong>向量范数</strong>如下<ul>
+<li>范数<script type="math/tex; mode=display">
+|| w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}</script>一般p=2时可以省略不写，常用的<strong>向量范数</strong>如下<ul>
 <li>$p = 1$时范数表示向量元素之和</li>
 <li>$p = 2$时范数表示欧几里得距离</li>
 <li><script type="math/tex">||w||_{\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最大值</li>
 <li><script type="math/tex">||w||_{-\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最小值</li>
 </ul>
 </li>
-<li>多元泰勒展开式$f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)TG(x_0)(x-x_0)+ O(x-x_0)^2$</li>
+<li>多元泰勒展开式<script type="math/tex; mode=display">
+ f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)TG(x_0)(x-x_0)+ O(x-x_0)^2</script></li>
 </ul>
 <h2 id="试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><a href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件" class="headerlink" title="试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件"></a>试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</h2><p><strong>一阶必要条件</strong>： 设 $f(x)$ 在开集 $D$上一阶连续可微，若<script type="math/tex">x^* \in D</script>是$min \; f(x)$的一个局部极小点，则必有<script type="math/tex">g(x^*)  = 0</script><br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
 <script type="math/tex; mode=display">
@@ -420,17 +422,47 @@ f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
 <li>令$x_{k+1}:=x_k + \alpha_k d_k, k:=k+1$，转2</li>
 </ol>
 <h2 id="描述求解无约束最优化问题的牛顿法步骤"><a href="#描述求解无约束最优化问题的牛顿法步骤" class="headerlink" title="描述求解无约束最优化问题的牛顿法步骤"></a>描述求解无约束最优化问题的牛顿法步骤</h2><ol>
-<li><p>给定终止误差值$0 \le \epsilon &lt;&lt; 1$，初始点$x_0 \in \mathbb R^n$. 令 $k := 0$.</p>
-</li>
-<li><p>计算 $g_k = \nabla f(x_k)$. 若 $||g_k|| \le \epsilon$，停算，输出 <script type="math/tex">x^* \approx x_k</script>.</p>
-</li>
-<li><p>计算$G_k = \nabla^2f(x_k)$，并求解线性方程组得解 $d_k$，</p>
-<script type="math/tex; mode=display">
+<li>给定终止误差值$0 \le \epsilon &lt;&lt; 1$，初始点$x_0 \in \mathbb R^n$. 令 $k := 0$.</li>
+<li>计算 $g_k = \nabla f(x_k)$. 若 $||g_k|| \le \epsilon$，停算，输出 <script type="math/tex">x^* \approx x_k</script>.</li>
+<li>计算$G_k = \nabla^2f(x_k)$，并求解线性方程组得解 $d_k$，<script type="math/tex; mode=display">
 G_kd=-g_k</script></li>
-<li><p>令 $x_{k+1} = x_k + d_k, k := k+1$，转2.</p>
+<li>令 $x_{k+1} = x_k + d_k, k := k+1$，转2.</li>
+</ol>
+<h2 id="简单一种你所知道的关于单变量最优化问题的线搜索算法"><a href="#简单一种你所知道的关于单变量最优化问题的线搜索算法" class="headerlink" title="简单一种你所知道的关于单变量最优化问题的线搜索算法"></a>简单一种你所知道的关于单变量最优化问题的线搜索算法</h2><p><strong>0.618法</strong></p>
+<ol>
+<li><p>确定初始搜索区间$[a_0, b_0]$和容许误差 $\epsilon &gt; 0$. 计算初始试探点</p>
+<script type="math/tex; mode=display">
+p_0 = a_0 + 0.382(b_0 - a_0), \quad q_0 = a_0 + 0.618(b_0 - a_0)</script><p>及相应的函数值 $\phi(p_0), \phi(q_0)$. 置 $i := 0$</p>
+</li>
+<li><p>若$\phi(p_i) &lt; \phi(q_i)$，转3；否则转4</p>
+</li>
+<li><p>计算左试探点. 若$|q_i - a_i| \le \epsilon$，听算，输出$p_i$；否则，令</p>
+<script type="math/tex; mode=display">
+a_{i+1}:=a_i, \quad b_{i+1} := q_i, \quad \phi(q_{i+1}):=\phi(p_i),\\
+q_{i+1}:=p_i, \quad p_{i+1}:= a_{i+1} + 0.382(b_{i+1} - a_{i+1}).</script><p>计算$\phi(p_{i+1}), i:=i+1$，转2.</p>
+</li>
+<li><p>计算右试探点. 若$|b_i - p_i| \le \epsilon$，听算，输出$q_i$；否则，令</p>
+<script type="math/tex; mode=display">
+a_{i+1}:=p_i, \quad b_{i+1} := b_i, \quad \phi(p_{i+1}):=\phi(q_i),\\
+p_{i+1}:=q_i, \quad q_{i+1}:= a_{i+1} + 0.618(b_{i+1} - a_{i+1}).</script><p>计算$\phi(q_{i+1}), i := i + 1$，转2.</p>
 </li>
 </ol>
-<h2 id="简单一种你所知道的关于单变量最优化问题的线搜索算法"><a href="#简单一种你所知道的关于单变量最优化问题的线搜索算法" class="headerlink" title="简单一种你所知道的关于单变量最优化问题的线搜索算法"></a>简单一种你所知道的关于单变量最优化问题的线搜索算法</h2>
+<h2 id="设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2"><a href="#设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2" class="headerlink" title="设有非线性方程组f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2"></a>设有非线性方程组<script type="math/tex">f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2</script></h2><h3 id="列出求解这个方程组的非线性最小二乘问题的数学模型"><a href="#列出求解这个方程组的非线性最小二乘问题的数学模型" class="headerlink" title="列出求解这个方程组的非线性最小二乘问题的数学模型"></a>列出求解这个方程组的非线性最小二乘问题的数学模型</h3><p>数学模型为：$min((x^3_1 - x^2_2 - 1)^2 +(2x_1 +x_2-2)^2 )$</p>
+<h3 id="写出求解该问题的高斯-牛顿法迭代公式的具体形式"><a href="#写出求解该问题的高斯-牛顿法迭代公式的具体形式" class="headerlink" title="写出求解该问题的高斯-牛顿法迭代公式的具体形式"></a>写出求解该问题的高斯-牛顿法迭代公式的具体形式</h3><p>迭代公式为：$x_{k+1}=x_k - (A_k^TA_k)^{-1}A^T_kf_k$</p>
+<script type="math/tex; mode=display">
+f(x)=[x^3_1 - x^2_2 - 1 \quad 2x_1 +x_2-2]^T \\
+A(x) = \left[\begin{matrix}
+3x_1^2 & -2x_2 \\
+2 & 1\\
+\end{matrix}\right] \\
+A(x) = \left[  
+\begin{matrix}
+\frac{\partial f_1(x)}{\partial x_1} & ... & \frac{\partial f_1(x)}{\partial x_m}\\
+... & ... & ... \\
+\frac{\partial f_n(x)}{\partial x_1} & ... & \frac{\partial f_n(x)}{\partial x_m}\\
+\end{matrix}
+\right]</script><h2 id="设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><a href="#设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right" class="headerlink" title="设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$"></a>设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</h2><h3 id="证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><a href="#证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭" class="headerlink" title="证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭"></a>证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</h3><p>$d_0^THd_1 = (1,0)\left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right]\left(\begin{matrix}-1\\2  \end{matrix}\right) = 0$所以得证</p>
+<h3 id="以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点"><a href="#以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点" class="headerlink" title="以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点"></a>以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点</h3>
       
     </div>
     
@@ -646,7 +678,7 @@ G_kd=-g_k</script></li>
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><span class="nav-number">2.</span> <span class="nav-text">在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述求解无约束最优化问题的牛顿法步骤"><span class="nav-number">3.</span> <span class="nav-text">描述求解无约束最优化问题的牛顿法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单一种你所知道的关于单变量最优化问题的线搜索算法"><span class="nav-number">4.</span> <span class="nav-text">简单一种你所知道的关于单变量最优化问题的线搜索算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><span class="nav-number">2.</span> <span class="nav-text">在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述求解无约束最优化问题的牛顿法步骤"><span class="nav-number">3.</span> <span class="nav-text">描述求解无约束最优化问题的牛顿法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单一种你所知道的关于单变量最优化问题的线搜索算法"><span class="nav-number">4.</span> <span class="nav-text">简单一种你所知道的关于单变量最优化问题的线搜索算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2"><span class="nav-number">5.</span> <span class="nav-text">设有非线性方程组f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#列出求解这个方程组的非线性最小二乘问题的数学模型"><span class="nav-number">5.1.</span> <span class="nav-text">列出求解这个方程组的非线性最小二乘问题的数学模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写出求解该问题的高斯-牛顿法迭代公式的具体形式"><span class="nav-number">5.2.</span> <span class="nav-text">写出求解该问题的高斯-牛顿法迭代公式的具体形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><span class="nav-number">6.</span> <span class="nav-text">设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><span class="nav-number">6.1.</span> <span class="nav-text">证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点"><span class="nav-number">6.2.</span> <span class="nav-text">以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点</span></a></li></ol></li></ol></div>
             
 
           </div>
