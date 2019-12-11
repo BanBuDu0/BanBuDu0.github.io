@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-12-09T10:11:25.928Z">
+<meta property="og:updated_time" content="2019-12-11T01:38:50.643Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="应用数学">
 <meta name="twitter:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
@@ -451,17 +451,16 @@ p_{i+1}:=q_i, \quad q_{i+1}:= a_{i+1} + 0.618(b_{i+1} - a_{i+1}).</script><p>计
 <h3 id="2-写出求解该问题的高斯-牛顿法迭代公式的具体形式"><a href="#2-写出求解该问题的高斯-牛顿法迭代公式的具体形式" class="headerlink" title="(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式"></a>(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式</h3><p>迭代公式为：$x_{k+1}=x_k - (A_k^TA_k)^{-1}A^T_kf_k$</p>
 <script type="math/tex; mode=display">
 f(x)=[x^3_1 - x^2_2 - 1 \quad 2x_1 +x_2-2]^T \\
-A(x) = \left[\begin{matrix}
-3x_1^2 & -2x_2 \\
-2 & 1\\
-\end{matrix}\right] \\
 A(x) = \left[  
 \begin{matrix}
 \frac{\partial f_1(x)}{\partial x_1} & ... & \frac{\partial f_1(x)}{\partial x_m}\\
 ... & ... & ... \\
 \frac{\partial f_n(x)}{\partial x_1} & ... & \frac{\partial f_n(x)}{\partial x_m}\\
 \end{matrix}
-\right]</script><h2 id="6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><a href="#6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right" class="headerlink" title="6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$"></a>6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</h2><h3 id="1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><a href="#1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭" class="headerlink" title="(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭"></a>(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</h3><p>$d_0^THd_1 = (1,0)\left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right]\left(\begin{matrix}-1\\2  \end{matrix}\right) = 0$所以得证</p>
+\right] = \left[\begin{matrix}
+3x_1^2 & -2x_2 \\
+2 & 1\\
+\end{matrix}\right] \\</script><h2 id="6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><a href="#6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right" class="headerlink" title="6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$"></a>6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</h2><h3 id="1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><a href="#1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭" class="headerlink" title="(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭"></a>(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</h3><p>$d_0^THd_1 = (1,0)\left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right]\left(\begin{matrix}-1\\2  \end{matrix}\right) = 0$所以得证</p>
 <h3 id="2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点"><a href="#2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点" class="headerlink" title="(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点"></a>(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点</h3><h2 id="7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点"><a href="#7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点" class="headerlink" title="7. 对于最优化问题\begin{aligned}min \quad f(x) & = 4x_1 - 3x_2\\ s.t. & -(x_1-3)^2+x_2+1 \ge0 \\ &4-x_1-x_2\ge0\\&x_2+7\ge0\end{aligned}求满足KT条件的点"></a>7. 对于最优化问题<script type="math/tex">\begin{aligned}min \quad f(x) & = 4x_1 - 3x_2\\ s.t. & -(x_1-3)^2+x_2+1 \ge0 \\ &4-x_1-x_2\ge0\\&x_2+7\ge0\end{aligned}</script>求满足KT条件的点</h2><p>对于一般约束问题：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -474,8 +473,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
 3. \quad g_i(x^*) \ge 0, \quad \lambda_i^*\ge 0, \quad \lambda_i^*g_i(x^*) = 0, & i =1,2,...,m.
 \end{cases}</script><p><strong>解如下</strong></p>
 <p>设$x^<em>= (x_1^</em>, x_2^*)$为KT点</p>
-<p>$\nabla f(x^<em>) = \left[ \begin{matrix}4\-3\end{matrix}\right]$ $\nabla g_1(x^</em>) = \left[ \begin{matrix}  -2(x_1^<em>-3)\\1\end{matrix}\right]$ $\nabla g_2(x^</em>) = \left[ \begin{matrix}-1\-1\end{matrix}\right]$ $\nabla g_3(x^*) = \left[ \begin{matrix}0\\1\end{matrix}\right]$</p>
-<script type="math/tex; mode=display">
+<script type="math/tex; mode=display">\nabla f(x^*) = \left[\begin{matrix}4\\-3\end{matrix}\right], \nabla g_1(x^*) = \left[\begin{matrix}-2(x_1^*-3)\\1\end{matrix}\right], \nabla g_2(x^*) = \left[\begin{matrix}-1\\-1\end{matrix}\right], \nabla g_3(x^*) = \left[\begin{matrix}0\\1\end{matrix}\right]</script><script type="math/tex; mode=display">
 \begin{aligned}
 1.\quad & \nabla f(x^*) - \sum_{i=1}^l\mu_i^*\nabla h_i(x^*) - \sum_{i=1}^m\lambda_i^*\nabla g_i(x^*) = 0\\
 -> & \left[\begin{matrix}4\\-3\end{matrix}\right]- \lambda_1^*\left[ \begin{matrix}  -2(x_1^*-3)\\1\end{matrix}\right] - \lambda_2^*\left[\begin{matrix}-1\\-1\end{matrix}\right] - \lambda_3^*\left[\begin{matrix}0\\1\end{matrix}\right] = 0\\
@@ -484,7 +482,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
 \lambda_2^*(4-x_1^*-x_2^*) = 0\\
 \lambda_3^*(x_2^*+7) = 0\\
 \end{cases}
-\end{aligned}</script><p>令$\lambda_2^<em>, \lambda_3^</em> = 0$，由1可以推出 $\lambda_1^<em> = -3, x_1^</em> = \frac {11}3$，由3.1得$x_2^* = -\frac 59$</p>
+\end{aligned}</script><p>令<script type="math/tex">\lambda_2^*, \lambda_3^* = 0</script>，由1可以推出 <script type="math/tex">\lambda_1^* = -3, x_1^* = \frac {11}3</script>，由3.1得<script type="math/tex">x_2^* = -\frac 59</script></p>
 <h2 id="8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"><a href="#8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性" class="headerlink" title="8. 设二次规划\begin{aligned}&min\quad f(x)=\frac12x^THx+c^Tx\\&s.t.\quad Ax=b \end{aligned}其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"></a>8. 设二次规划<script type="math/tex">\begin{aligned}&min\quad f(x)=\frac12x^THx+c^Tx\\&s.t.\quad Ax=b \end{aligned}</script>其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性</h2><p>首先构造拉格朗日函数：$L(x,\lambda) = \frac12x^THx+c^Tx - \lambda^T(Ax-b)$，</p>
 <p>$\frac{\partial L(x,\lambda)}{\partial x} = Hx + c - A^T\lambda = 0$,</p>
 <p>两边乘以$H^{-1}\quad-&gt; \quad x + H^{-1}c - H^{-1}A^T\lambda = 0$,<br>两边乘以$A \quad -&gt; \quad Ax + AH^{-1}c - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b + AH^{-1}c - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b + AH^{-1}c = AH^{-1}A^T\lambda$,<br>$ \quad -&gt; \quad \lambda = (AH^{-1}A^T)^{-1}(b + AH^{-1}c)$,<br>$ \quad -&gt; \quad x =  H^{-1}A^T(AH^{-1}A^T)^{-1}(b + AH^{-1}c) - H^{-1}c$,<br>解的唯一性：因为$H$正定，$A$行满秩；所以拉格朗日矩阵<script type="math/tex">\left[\begin{matrix}H&-A^T\\-A & 0\end{matrix}\right]</script>非奇异，即其解唯一。</p>
