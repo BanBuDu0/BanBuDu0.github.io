@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="增强车辆边缘计算网络中的用户体验：一种自适应资源分配方法  现状 service reliability (i.e., losing less data) freshness (i.e.,as  quickly  as  possible)  不能共存 可拓展的计算任务结构 - 采用了两种计算质量转换 configurations substitute使用简单的计算任务代替复杂的计算任务 dat">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-12-05T12:48:17.913Z">
+<meta property="og:updated_time" content="2019-12-09T10:51:40.861Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Enhancing the User Experience in Vehicular Edge Computing Networks-An Adaptive Resource Allocation Approach">
 <meta name="twitter:description" content="增强车辆边缘计算网络中的用户体验：一种自适应资源分配方法  现状 service reliability (i.e., losing less data) freshness (i.e.,as  quickly  as  possible)  不能共存 可拓展的计算任务结构 - 采用了两种计算质量转换 configurations substitute使用简单的计算任务代替复杂的计算任务 dat">
@@ -461,8 +461,10 @@ y_{n, m}^k(t) \in \{0,1\} \quad \forall m \in \mathcal G(t) & 车辆n在时刻t�
 定义 & 解释\\
 \hline
 P  & 标准发射功率 \\
-h_n^m & 车辆n与基站m之间的信道功率增益
-\end{array}</script><h4 id="CC-Allocation"><a href="#CC-Allocation" class="headerlink" title="CC Allocation"></a>CC Allocation</h4><h4 id="DD-Allocation"><a href="#DD-Allocation" class="headerlink" title="DD Allocation"></a>DD Allocation</h4>
+h_n^m & 车辆n与基站m之间的信道功率增益 \\
+b_n^k(t) & t时刻车辆n的任务k上传的RR无线资源决策的分数 \\
+\end{array}</script><p>通过任务分配和无线资源决策得到车辆n的任务k的卸载率：<br>$R_n^k(t) = \sum_{m\in \mathcal G_n}y_{n,m}^k(t)b_n^k(t)\omega log_2(1+\frac{Ph_n^m(t)}{N_0})$其中$，N_0$为噪声功率</p>
+<h4 id="CC-Allocation"><a href="#CC-Allocation" class="headerlink" title="CC Allocation"></a>CC Allocation</h4><h4 id="DD-Allocation"><a href="#DD-Allocation" class="headerlink" title="DD Allocation"></a>DD Allocation</h4>
       
     </div>
     
