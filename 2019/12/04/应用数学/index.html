@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-12-11T01:38:50.643Z">
+<meta property="og:updated_time" content="2019-12-20T04:17:49.122Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="应用数学">
 <meta name="twitter:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
@@ -409,7 +409,7 @@ f(x) & =f(x^*) + g(x^*)^T(x-x^*) +\omicron(||x-x^*||) \\
 <p><strong>二阶必要条件</strong>： 设 $f(x)$ 在开集 $D$ 上二阶连续可微。若 <script type="math/tex">x^* \in D</script>是 $min \; f(x)$ 的一个局部极小点，则必有 <script type="math/tex">g(x^*)=0</script> 且 <script type="math/tex">G(x^*)</script> 是 <strong><em>半正定矩阵</em></strong>。<br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
+f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)^TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
 &\to \quad f(x) - f(x^*) = \frac 12\alpha^2d^TG(x^*)d + O(\alpha^2)\\
 &\to \quad d^TG(x^*)d + \frac{O(2\alpha^2)}{\alpha^2} \ge 0 
 \end{aligned}</script><p>令 $ \alpha \to 0$得，<script type="math/tex">d^TG(x^*)d \ge 0</script>，所以<script type="math/tex">G(x^*)</script>是半正定矩阵</p>

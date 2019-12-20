@@ -410,7 +410,7 @@ f(x) & =f(x^*) + g(x^*)^T(x-x^*) +\omicron(||x-x^*||) \\
 <p><strong>二阶必要条件</strong>： 设 $f(x)$ 在开集 $D$ 上二阶连续可微。若 <script type="math/tex">x^* \in D</script>是 $min \; f(x)$ 的一个局部极小点，则必有 <script type="math/tex">g(x^*)=0</script> 且 <script type="math/tex">G(x^*)</script> 是 <strong><em>半正定矩阵</em></strong>。<br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
+f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)^TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
 &\to \quad f(x) - f(x^*) = \frac 12\alpha^2d^TG(x^*)d + O(\alpha^2)\\
 &\to \quad d^TG(x^*)d + \frac{O(2\alpha^2)}{\alpha^2} \ge 0 
 \end{aligned}</script><p>令 $ \alpha \to 0$得，<script type="math/tex">d^TG(x^*)d \ge 0</script>，所以<script type="math/tex">G(x^*)</script>是半正定矩阵</p>
