@@ -397,7 +397,7 @@
 </ul>
 </li>
 <li>多元泰勒展开式<script type="math/tex; mode=display">
- f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)TG(x_0)(x-x_0)+ O(x-x_0)^2</script></li>
+ f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)^TG(x_0)(x-x_0)+ O(x-x_0)^2</script></li>
 </ul>
 <h2 id="1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><a href="#1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件" class="headerlink" title="1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件"></a>1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</h2><p><strong>一阶必要条件</strong>： 设 $f(x)$ 在开集 $D$上一阶连续可微，若<script type="math/tex">x^* \in D</script>是$min \; f(x)$的一个局部极小点，则必有<script type="math/tex">g(x^*)  = 0</script><br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
 <script type="math/tex; mode=display">
@@ -473,7 +473,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
 2. \quad h_i(x^*) = 0, & i = 1,2,...,l, \\
 3. \quad g_i(x^*) \ge 0, \quad \lambda_i^*\ge 0, \quad \lambda_i^*g_i(x^*) = 0, & i =1,2,...,m.
 \end{cases}</script><p><strong>解如下</strong></p>
-<p>设$x^<em>= (x_1^</em>, x_2^*)$为KT点</p>
+<p>设<script type="math/tex">x^*= (x_1^*, x_2^*)</script>为KT点</p>
 <script type="math/tex; mode=display">\nabla f(x^*) = \left[\begin{matrix}4\\-3\end{matrix}\right], \nabla g_1(x^*) = \left[\begin{matrix}-2(x_1^*-3)\\1\end{matrix}\right], \nabla g_2(x^*) = \left[\begin{matrix}-1\\-1\end{matrix}\right], \nabla g_3(x^*) = \left[\begin{matrix}0\\1\end{matrix}\right]</script><script type="math/tex; mode=display">
 \begin{aligned}
 1.\quad & \nabla f(x^*) - \sum_{i=1}^l\mu_i^*\nabla h_i(x^*) - \sum_{i=1}^m\lambda_i^*\nabla g_i(x^*) = 0\\
