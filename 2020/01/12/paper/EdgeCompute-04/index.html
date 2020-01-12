@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="边缘计算,DRL,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="1. 引言现状  不确定的输入无线信道和隐私政策的不同，有些信息因素很难获得 动态的决策条件通信和计算的动态性 临时隔离大多数研究只着眼于系统的一个快照，都没有考虑到长期优化  问题  训练数据应该如何采集分布式或者集中式 强化学习的Agent应该部署在哪里在哪里训练用户设备（UE）、边缘端、云端 Agent的更新如何进行 训练数据的隐私问题  由这些问题引出了本文使用DRL来共同管理通信和计算资">
+<meta name="keywords" content="边缘计算,DRL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning">
+<meta property="og:url" content="http://yoursite.com/2020/01/12/paper/EdgeCompute-04/index.html">
+<meta property="og:site_name" content="SYJ BLOG">
+<meta property="og:description" content="1. 引言现状  不确定的输入无线信道和隐私政策的不同，有些信息因素很难获得 动态的决策条件通信和计算的动态性 临时隔离大多数研究只着眼于系统的一个快照，都没有考虑到长期优化  问题  训练数据应该如何采集分布式或者集中式 强化学习的Agent应该部署在哪里在哪里训练用户设备（UE）、边缘端、云端 Agent的更新如何进行 训练数据的隐私问题  由这些问题引出了本文使用DRL来共同管理通信和计算资">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2020-01-12T07:54:57.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning">
+<meta name="twitter:description" content="1. 引言现状  不确定的输入无线信道和隐私政策的不同，有些信息因素很难获得 动态的决策条件通信和计算的动态性 临时隔离大多数研究只着眼于系统的一个快照，都没有考虑到长期优化  问题  训练数据应该如何采集分布式或者集中式 强化学习的Agent应该部署在哪里在哪里训练用户设备（UE）、边缘端、云端 Agent的更新如何进行 训练数据的隐私问题  由这些问题引出了本文使用DRL来共同管理通信和计算资">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/12/paper/EdgeCompute-04/">
+
+
+
+
+
+  <title>In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SYJ BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">War never changes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/12/paper/EdgeCompute-04/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="syj">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SYJ BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-12T20:04:32+08:00">
+                2020-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article</span>
+                
+                <span title="Words count in article">
+                  2.8k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time</span>
+                
+                <span title="Reading time">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><h3 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h3><hr>
+<ul>
+<li><strong>不确定的输入</strong><br>无线信道和隐私政策的不同，有些信息因素很难获得</li>
+<li><strong>动态的决策条件</strong><br>通信和计算的动态性</li>
+<li><strong>临时隔离</strong><br>大多数研究只着眼于系统的一个快照，都没有考虑到长期优化</li>
+</ul>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><hr>
+<ul>
+<li><strong>训练数据应该如何采集</strong><br>分布式或者集中式</li>
+<li><strong>强化学习的Agent应该部署在哪里在哪里训练</strong><br>用户设备（UE）、边缘端、云端</li>
+<li><strong>Agent的更新如何进行</strong></li>
+<li><strong>训练数据的隐私问题</strong></li>
+</ul>
+<p>由这些问题引出了本文使用DRL来共同管理通信和计算资源，讨论MEC系统计算卸载和边缘缓存两种情况。</p>
+<p>引出了分布式训练DRL Agent的框架 —— 联邦学习( Federated Learning)</p>
+<h3 id="联邦学习的优点"><a href="#联邦学习的优点" class="headerlink" title="联邦学习的优点"></a>联邦学习的优点</h3><hr>
+<ul>
+<li><strong>大大减少了无线网络上传的数据量</strong></li>
+<li><strong>对移动通信环境和蜂窝网络条件的认知反应</strong></li>
+<li><strong>在实际蜂窝网络中，能够很好地适应异构的UE</strong></li>
+<li><strong>保障个人资料隐私</strong></li>
+</ul>
+<h3 id="本文的贡献"><a href="#本文的贡献" class="headerlink" title="本文的贡献"></a>本文的贡献</h3><hr>
+<ul>
+<li><strong>讨论了利用DRL(DQN)和分布式DRL来优化边缘缓存和计算的方法</strong></li>
+<li><strong>采用“In-Edge AI”架构，进一步利用“Federated Learning”，在MEC系统中更好地部署智能资源管理</strong></li>
+</ul>
+<h2 id="2-通过DRL优化边缘"><a href="#2-通过DRL优化边缘" class="headerlink" title="2. 通过DRL优化边缘"></a>2. 通过DRL优化边缘</h2><h3 id="MEC系统通过DRL进行缓存"><a href="#MEC系统通过DRL进行缓存" class="headerlink" title="MEC系统通过DRL进行缓存"></a>MEC系统通过DRL进行缓存</h3><hr>
+<p>内容的流行度基于$Zipf$分布，即</p>
+<blockquote>
+<p>在给定的语料中，对于任意一个term，其频度(freq)的排名（rank）和freq的乘积大致是一个常数。</p>
+<p>$P(r) = \frac{C}{r^\alpha}$。其中$r$是出现频率的排名，$P(r)$是出现的频率。</p>
+</blockquote>
+<p>并且假设内容流行度变化缓慢，并且所有内容的大小都相同。对于每个请求，边缘节点中的DRL Agent可以决定是否缓存，如果是，则Agent决定替换哪些本地内容。假设所有的内容流行度、用户偏好和请求的平均到达率在相对较长的一段时间内是静态的。将所有边缘节点的缓存替换问题建模为马尔可夫决策过程(MDP)，并使用DRL解决。</p>
+<h3 id="MEC系统通过DRL进行计算卸载"><a href="#MEC系统通过DRL进行计算卸载" class="headerlink" title="MEC系统通过DRL进行计算卸载"></a>MEC系统通过DRL进行计算卸载</h3><hr>
+<h4 id="通信模型"><a href="#通信模型" class="headerlink" title="通信模型"></a>通信模型</h4><p>用户设备与基站(属于边缘节点)之间的信道增益状态从有限的状态空间中独立选取，信道状态转换被建模为有限状态离散时间马尔可夫链。该场景可以使用Shannon-Hartley定理来评估可实现的数据速率。</p>
+<p>决策变量$a_n \in \{0\} \cup \mathcal M$，其中$\mathcal M = \{1,…,M\}$是无线信道。$a_n$表示用户设备$n$可以通过选择无线信道$a_n$将计算任务卸载到边缘，$a_n = 0$表示计算任务本地执行。</p>
+<h4 id="计算模型"><a href="#计算模型" class="headerlink" title="计算模型"></a>计算模型</h4><p>计算任务根据伯努利分布生成。</p>
+<p>所有生成的任务都存储在FIFO的任务队列中。</p>
+<ul>
+<li>当任务在本地执行时，执行时间$d_L = \frac v {f_L}$，其中$f_L$本地计算能力，由UE决定分配的能量决定</li>
+<li>当任务在边缘端执行时，执行时间$d_E = \frac v {f_E}$，其中$f_E$分配给UE的算力</li>
+</ul>
+<p>$f_E &gt;&gt;f_L$</p>
+<h4 id="计算卸载问题公式"><a href="#计算卸载问题公式" class="headerlink" title="计算卸载问题公式"></a>计算卸载问题公式</h4><p>控制动作$(c,e)$，其中，</p>
+<ul>
+<li>$c \in \{0\} \cup \{\mathcal M\}$，是计算卸载决策代表UE选择在本地执行任务$(c = 0)$还是通过哪个无线信道卸载任务</li>
+<li>$e$为无线通信和本地计算所分配的能量</li>
+</ul>
+<p>因此，整个问题可以归结为UE根据固定的控制策略$\Phi = (\Phi_c(\Upsilon), \Phi_e(\Upsilon))$，决定联合无线信道选择和能量分配。</p>
+<p>其中，$\Upsilon$为网络状态，涉及到任务排队状态、UE的累计能耗、UE占用无线信道的情况以及所有无线信道的质量。</p>
+<p>此外定义及时效用函数$u(\Upsilon,(c,e))$表示UE的QoE，其与任务的执行延迟（包括无线传输延迟和计算延迟）、任务排队延迟、UE的能耗、任务丢弃和失败的数量成反比。</p>
+<p>通过DRL的训练，控制决策$\Phi$能在长期的性能优化中增加UE的效用。</p>
+<h2 id="3-In-Edge-AI和联邦学习"><a href="#3-In-Edge-AI和联邦学习" class="headerlink" title="3. In-Edge AI和联邦学习"></a>3. In-Edge AI和联邦学习</h2><p><strong>如果DRL代理被训练在边缘节点或远程云服务器上，则有如下三个缺陷：</strong></p>
+<ol>
+<li>在考虑大体量UE时，训练数据量过大，会增加上行无线信道的负担</li>
+<li>需要上传到边缘节点或云端的训练数据是隐私敏感的，可能会造成潜在的隐私事故</li>
+<li>如果出于隐私考虑对培训数据进行转换，则服务器端代理数据的相关性不如设备上的数据</li>
+</ol>
+<p><strong>如果DRL代理是在UE上单独地训练，还有另外两个缺陷：</strong></p>
+<ol>
+<li>UE的计算能力相对较弱，对DRL代理进行大规模数据的训练需要较长的时间甚至是不可能的</li>
+<li>DRL代理的训练过程可能会引入UE的额外能量消耗</li>
+</ol>
+<p><strong>对于DRL、分布式DRL、联邦学习的总结如下：</strong></p>
+<script type="math/tex; mode=display">
+\begin{array}{c|c|c|c}
+ & DRL & 分布式DRL & 联邦学习\\
+\hline
+ Prons & \text{Best Performance} & 训练最快，几乎不可用于边缘 & 最小数据传输、隐私保护、灵活训练\\&&&、对不平衡和\text{no-IID}数据具有鲁棒性 \\
+\hline
+ Cons & 大量冗余的数据传输和隐私问题 &隐私问题， & 接近\text{Best Performance}\\&&\text{Weaker Performance} \\
+\hline
+ Fit & 小规模数据的缓存策略、流量工程。&中等规模数据的资源分配、缓存 & 大规模数据...\\&一个用户设备或一个边缘节点 &策略、计算卸载策略、流量工程
+\end{array}</script><p><strong>使用联邦学习而不是其他分布式方法来训练DRL代理，因为其能处理如下几个问题：</strong></p>
+<ol>
+<li><p>非独立同分布数据</p>
+<p>因为UE的任何单独训练数据都不能代表所有UE的训练数据，所以处理的数据是非独立同分布的。在FL中，这个问题可以通过将模型更新与FedAvg合并来解决 </p>
+<blockquote>
+<p>Communication-Efficient Learning of Deep Networks from Decentralized Data</p>
+</blockquote>
+</li>
+<li><p>限制的通信</p>
+<p>UEs通常是不可预测的处于离线或信号差的状态。不过使用额外的计算可以减少训练模型所需的通信回合的消耗。FL只要求一部分客户端在一轮中上传他们的更新，这就解决了客户经常无法预测处于离线状态的情况。</p>
+</li>
+<li><p>不平衡</p>
+<p>UEs之间的训练数据量不一样。FL使用FedAvg算法处理这种情况。</p>
+</li>
+<li><p>隐私和安全</p>
+<p>FL中需要上传的数据是用于更新DRL代理所需的最小数据。采用应用安全聚合和差异隐私技术</p>
+</li>
+</ol>
+<h3 id="在In-Edge-AI边缘系统中集成联邦学习"><a href="#在In-Edge-AI边缘系统中集成联邦学习" class="headerlink" title="在In-Edge AI边缘系统中集成联邦学习"></a>在In-Edge AI边缘系统中集成联邦学习</h3><hr>
+<h4 id="边缘到云"><a href="#边缘到云" class="headerlink" title="边缘到云"></a>边缘到云</h4><p>考虑MEC系统中的边缘缓存，边缘节点中使用的DRL代理根据UEs请求的内容动态缓存适当的内容。然而，请求内容的时空动态流行度对协同边缘缓存是一个难点。因此，属于移动网络运营商（MNOs）的云服务器可以作为协调边缘节点的中心服务器。在所有边缘节点中，每个节点都保留一个DRL代理，并通过自己的本地训练数据更新它。</p>
+<h4 id="UEs到边缘"><a href="#UEs到边缘" class="headerlink" title="UEs到边缘"></a>UEs到边缘</h4><p>在计算卸载的场景中，每个UE根据其中DRL代理的推理结果，决定是否将一个计算任务转移到边缘节点，通过哪个无线信道转移任务，以及转移的能耗。但是计算能力和能耗限制了它们在人工智能计算(大规模数据DRL训练)方面的能力。因此，将边缘中所有的边缘节点作为一个整体服务器来协调它们所覆盖的大量的UEs。通过该方案，计算能力相对较弱的UEs也可以容纳复杂的DRL agent。</p>
+<p>综上所述，客户端根据本地训练数据训练它的模型(之前从中央服务器下载)，并在可用时向后上传更新后的模型参数。FL使资源受限的边缘能够计算设备(包括UEs和边缘节点)来学习共享模型，同时保持训练数据在本地。</p>
+<h3 id="In-Edge-AI中联邦学习的优点和缺点"><a href="#In-Edge-AI中联邦学习的优点和缺点" class="headerlink" title="In-Edge AI中联邦学习的优点和缺点"></a>In-Edge AI中联邦学习的优点和缺点</h3><hr>
+<p><strong>FL的核心有点在于将知识的质量分散到大量的设备上，而不必集中训练数据。</strong>此外还有如下优点：</p>
+<ol>
+<li>cognitive</li>
+<li>鲁棒性</li>
+<li>灵活性</li>
+</ol>
+<p>但是由于联邦优化的限制，<strong>FL不能超越集中式DL训练模型</strong>，但仍然可以达到接近最佳的性能</p>
+<h3 id="实用性讨论"><a href="#实用性讨论" class="headerlink" title="实用性讨论"></a>实用性讨论</h3><hr>
+<h4 id="部署的挑战"><a href="#部署的挑战" class="headerlink" title="部署的挑战"></a>部署的挑战</h4><p>学习需要长时间的训练，且DRL模型在初步探索阶段只能随机决策，导致MEC系统容易瘫痪。<br><strong>使用转移学习来促进MEC系统中的训练过程</strong></p>
+<h4 id="延迟约束"><a href="#延迟约束" class="headerlink" title="延迟约束"></a>延迟约束</h4><p><strong>DRL中的神经网络仅仅是一个只含有一层隐藏层（该隐层含有200个神经元）的多层感知机</strong>。因此，一旦对模型进行了训练，由于DRL代理中主要网络的复杂性较低，推断过程可以快速执行</p>
+<h2 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h2><p>Xender一个月(2016年9月1日至2016年9月30日）的数据，设置了6个边缘节点</p>
+<p>对于UEs、边缘节点、云端中的DRL设置，选择Double DQN算法，选择tanh作为激活函数，优化器选择Adam。</p>
+<p>使用一个包含200个神经元的单层全连接前馈神经网络作为目标(TargetNet)和评估 (MainNet) Q网络。</p>
+<p>replay memory capacity $M = 5000$，mini-batch size $B = 200$，discount factor $\gamma = 0.9$, </p>
+<p>exploration probability $\epsilon = 0.001$，learning rate $\zeta = 0.005$，目标Q网络的替换周期 $\phi = 250$</p>
+<p><strong>在缓存实验中</strong>，比较了集中式 DDQN，LRU（最近最少使用），LFU(最不经常使用)，FIFO</p>
+<p><strong>在计算卸载实验中</strong>，比较了集中式DDQN，全部在设备端执行，全部在边缘节点执行，贪心执行（最大化即时效用）</p>
+<p>比较了理想情况下（无论是集中式DDQN的海量训练数据，还是FL的DDQN的轻量级模型更新，都可以在离散化的时间元内上传到目标位置）集中式DDQN和FL的DDQN的UEs的平均利用率。</p>
+<p>比较了是否使用FL时，更新模型上传的数据量。</p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>在本文中，我们讨论了将深度强化学习技术和联邦学习框架与移动边缘系统集成，并优化移动边缘计算、缓存和通信的潜力。我们对移动边缘系统中的边缘缓存和计算卸载进行了实验研究，并对“In-Edge AI”进行了评估，证明其具有接近最优的性能。在今后的工作中，我们不仅要通过edge的支持来优化学习计算任务，还要进行调度</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/边缘计算/" rel="tag"># 边缘计算</a>
+          
+            <a href="/tags/DRL/" rel="tag"># DRL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/04/应用数学/" rel="next" title="应用数学">
+                <i class="fa fa-chevron-left"></i> 应用数学
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="syj">
+          <p class="site-author-name" itemprop="name">syj</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BanBuDu0" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github-square"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/189284975/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/SYJ27783318" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.instagram.com/yuejunq/" target="_blank" title="Instagram">
+                  
+                    <i class="fa fa-fw fa-instagram"></i>
+                  
+                    
+                      Instagram
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1. 引言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#现状"><span class="nav-number">1.1.</span> <span class="nav-text">现状</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#联邦学习的优点"><span class="nav-number">1.3.</span> <span class="nav-text">联邦学习的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本文的贡献"><span class="nav-number">1.4.</span> <span class="nav-text">本文的贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-通过DRL优化边缘"><span class="nav-number">2.</span> <span class="nav-text">2. 通过DRL优化边缘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MEC系统通过DRL进行缓存"><span class="nav-number">2.1.</span> <span class="nav-text">MEC系统通过DRL进行缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MEC系统通过DRL进行计算卸载"><span class="nav-number">2.2.</span> <span class="nav-text">MEC系统通过DRL进行计算卸载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#通信模型"><span class="nav-number">2.2.1.</span> <span class="nav-text">通信模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算模型"><span class="nav-number">2.2.2.</span> <span class="nav-text">计算模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算卸载问题公式"><span class="nav-number">2.2.3.</span> <span class="nav-text">计算卸载问题公式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-In-Edge-AI和联邦学习"><span class="nav-number">3.</span> <span class="nav-text">3. In-Edge AI和联邦学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在In-Edge-AI边缘系统中集成联邦学习"><span class="nav-number">3.1.</span> <span class="nav-text">在In-Edge AI边缘系统中集成联邦学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#边缘到云"><span class="nav-number">3.1.1.</span> <span class="nav-text">边缘到云</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UEs到边缘"><span class="nav-number">3.1.2.</span> <span class="nav-text">UEs到边缘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#In-Edge-AI中联邦学习的优点和缺点"><span class="nav-number">3.2.</span> <span class="nav-text">In-Edge AI中联邦学习的优点和缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实用性讨论"><span class="nav-number">3.3.</span> <span class="nav-text">实用性讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#部署的挑战"><span class="nav-number">3.3.1.</span> <span class="nav-text">部署的挑战</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#延迟约束"><span class="nav-number">3.3.2.</span> <span class="nav-text">延迟约束</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-实验"><span class="nav-number">4.</span> <span class="nav-text">4. 实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5. 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">syj</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
