@@ -386,125 +386,25 @@
       
         
           
-            <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1. 引言"></a>1. 引言</h2><h3 id="现状"><a href="#现状" class="headerlink" title="现状"></a>现状</h3><hr>
-<ul>
-<li><strong>不确定的输入</strong><br>无线信道和隐私政策的不同，有些信息因素很难获得</li>
-<li><strong>动态的决策条件</strong><br>通信和计算的动态性</li>
-<li><strong>临时隔离</strong><br>大多数研究只着眼于系统的一个快照，都没有考虑到长期优化</li>
-</ul>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><hr>
-<ul>
-<li><strong>训练数据应该如何采集</strong><br>分布式或者集中式</li>
-<li><strong>强化学习的Agent应该部署在哪里在哪里训练</strong><br>用户设备（UE）、边缘端、云端</li>
-<li><strong>Agent的更新如何进行</strong></li>
-<li><strong>训练数据的隐私问题</strong></li>
-</ul>
-<p>由这些问题引出了本文使用DRL来共同管理通信和计算资源，讨论MEC系统计算卸载和边缘缓存两种情况。</p>
-<p>引出了分布式训练DRL Agent的框架 —— 联邦学习( Federated Learning)</p>
-<h3 id="联邦学习的优点"><a href="#联邦学习的优点" class="headerlink" title="联邦学习的优点"></a>联邦学习的优点</h3><hr>
-<ul>
-<li><strong>大大减少了无线网络上传的数据量</strong></li>
-<li><strong>对移动通信环境和蜂窝网络条件的认知反应</strong></li>
-<li><strong>在实际蜂窝网络中，能够很好地适应异构的UE</strong></li>
-<li><strong>保障个人资料隐私</strong></li>
-</ul>
-<h3 id="本文的贡献"><a href="#本文的贡献" class="headerlink" title="本文的贡献"></a>本文的贡献</h3><hr>
-<ul>
-<li><strong>讨论了利用DRL(DQN)和分布式DRL来优化边缘缓存和计算的方法</strong></li>
-<li><strong>采用“In-Edge AI”架构，进一步利用“Federated Learning”，在MEC系统中更好地部署智能资源管理</strong></li>
-</ul>
-<h2 id="2-通过DRL优化边缘"><a href="#2-通过DRL优化边缘" class="headerlink" title="2. 通过DRL优化边缘"></a>2. 通过DRL优化边缘</h2><h3 id="MEC系统通过DRL进行缓存"><a href="#MEC系统通过DRL进行缓存" class="headerlink" title="MEC系统通过DRL进行缓存"></a>MEC系统通过DRL进行缓存</h3><hr>
-<p>内容的流行度基于$Zipf$分布，即</p>
-<blockquote>
-<p>在给定的语料中，对于任意一个term，其频度(freq)的排名（rank）和freq的乘积大致是一个常数。</p>
-<p>$P(r) = \frac{C}{r^\alpha}$。其中$r$是出现频率的排名，$P(r)$是出现的频率。</p>
-</blockquote>
-<p>并且假设内容流行度变化缓慢，并且所有内容的大小都相同。对于每个请求，边缘节点中的DRL Agent可以决定是否缓存，如果是，则Agent决定替换哪些本地内容。假设所有的内容流行度、用户偏好和请求的平均到达率在相对较长的一段时间内是静态的。将所有边缘节点的缓存替换问题建模为马尔可夫决策过程(MDP)，并使用DRL解决。</p>
-<h3 id="MEC系统通过DRL进行计算卸载"><a href="#MEC系统通过DRL进行计算卸载" class="headerlink" title="MEC系统通过DRL进行计算卸载"></a>MEC系统通过DRL进行计算卸载</h3><hr>
-<h4 id="通信模型"><a href="#通信模型" class="headerlink" title="通信模型"></a>通信模型</h4><p>用户设备与基站(属于边缘节点)之间的信道增益状态从有限的状态空间中独立选取，信道状态转换被建模为有限状态离散时间马尔可夫链。该场景可以使用Shannon-Hartley定理来评估可实现的数据速率。</p>
-<p>决策变量$a_n \in \{0\} \cup \mathcal M$，其中$\mathcal M = \{1,…,M\}$是无线信道。$a_n$表示用户设备$n$可以通过选择无线信道$a_n$将计算任务卸载到边缘，$a_n = 0$表示计算任务本地执行。</p>
-<h4 id="计算模型"><a href="#计算模型" class="headerlink" title="计算模型"></a>计算模型</h4><p>计算任务根据伯努利分布生成。</p>
-<p>所有生成的任务都存储在FIFO的任务队列中。</p>
-<ul>
-<li>当任务在本地执行时，执行时间$d_L = \frac v {f_L}$，其中$f_L$本地计算能力，由UE决定分配的能量决定</li>
-<li>当任务在边缘端执行时，执行时间$d_E = \frac v {f_E}$，其中$f_E$分配给UE的算力</li>
-</ul>
-<p>$f_E &gt;&gt;f_L$</p>
-<h4 id="计算卸载问题公式"><a href="#计算卸载问题公式" class="headerlink" title="计算卸载问题公式"></a>计算卸载问题公式</h4><p>控制动作$(c,e)$，其中，</p>
-<ul>
-<li>$c \in \{0\} \cup \{\mathcal M\}$，是计算卸载决策代表UE选择在本地执行任务$(c = 0)$还是通过哪个无线信道卸载任务</li>
-<li>$e$为无线通信和本地计算所分配的能量</li>
-</ul>
-<p>因此，整个问题可以归结为UE根据固定的控制策略$\Phi = (\Phi_c(\Upsilon), \Phi_e(\Upsilon))$，决定联合无线信道选择和能量分配。</p>
-<p>其中，$\Upsilon$为网络状态，涉及到任务排队状态、UE的累计能耗、UE占用无线信道的情况以及所有无线信道的质量。</p>
-<p>此外定义及时效用函数$u(\Upsilon,(c,e))$表示UE的QoE，其与任务的执行延迟（包括无线传输延迟和计算延迟）、任务排队延迟、UE的能耗、任务丢弃和失败的数量成反比。</p>
-<p>通过DRL的训练，控制决策$\Phi$能在长期的性能优化中增加UE的效用。</p>
-<h2 id="3-In-Edge-AI和联邦学习"><a href="#3-In-Edge-AI和联邦学习" class="headerlink" title="3. In-Edge AI和联邦学习"></a>3. In-Edge AI和联邦学习</h2><p><strong>如果DRL代理被训练在边缘节点或远程云服务器上，则有如下三个缺陷：</strong></p>
-<ol>
-<li>在考虑大体量UE时，训练数据量过大，会增加上行无线信道的负担</li>
-<li>需要上传到边缘节点或云端的训练数据是隐私敏感的，可能会造成潜在的隐私事故</li>
-<li>如果出于隐私考虑对培训数据进行转换，则服务器端代理数据的相关性不如设备上的数据</li>
-</ol>
-<p><strong>如果DRL代理是在UE上单独地训练，还有另外两个缺陷：</strong></p>
-<ol>
-<li>UE的计算能力相对较弱，对DRL代理进行大规模数据的训练需要较长的时间甚至是不可能的</li>
-<li>DRL代理的训练过程可能会引入UE的额外能量消耗</li>
-</ol>
-<p><strong>对于DRL、分布式DRL、联邦学习的总结如下：</strong></p>
-<script type="math/tex; mode=display">
-\begin{array}{c|c|c|c}
- & DRL & 分布式DRL & 联邦学习\\
-\hline
- Prons & \text{Best Performance} & 训练最快，几乎不可用于边缘 & 最小数据传输、隐私保护、灵活训练\\&&&、对不平衡和\text{no-IID}数据具有鲁棒性 \\
-\hline
- Cons & 大量冗余的数据传输和隐私问题 &隐私问题， & 接近\text{Best Performance}\\&&\text{Weaker Performance} \\
-\hline
- Fit & 小规模数据的缓存策略、流量工程。&中等规模数据的资源分配、缓存 & 大规模数据...\\&一个用户设备或一个边缘节点 &策略、计算卸载策略、流量工程
-\end{array}</script><p><strong>使用联邦学习而不是其他分布式方法来训练DRL代理，因为其能处理如下几个问题：</strong></p>
-<ol>
-<li><p>非独立同分布数据</p>
-<p>因为UE的任何单独训练数据都不能代表所有UE的训练数据，所以处理的数据是非独立同分布的。在FL中，这个问题可以通过将模型更新与FedAvg合并来解决 </p>
-<blockquote>
-<p>Communication-Efficient Learning of Deep Networks from Decentralized Data</p>
-</blockquote>
-</li>
-<li><p>限制的通信</p>
-<p>UEs通常是不可预测的处于离线或信号差的状态。不过使用额外的计算可以减少训练模型所需的通信回合的消耗。FL只要求一部分客户端在一轮中上传他们的更新，这就解决了客户经常无法预测处于离线状态的情况。</p>
-</li>
-<li><p>不平衡</p>
-<p>UEs之间的训练数据量不一样。FL使用FedAvg算法处理这种情况。</p>
-</li>
-<li><p>隐私和安全</p>
-<p>FL中需要上传的数据是用于更新DRL代理所需的最小数据。采用应用安全聚合和差异隐私技术</p>
-</li>
-</ol>
-<h3 id="在In-Edge-AI边缘系统中集成联邦学习"><a href="#在In-Edge-AI边缘系统中集成联邦学习" class="headerlink" title="在In-Edge AI边缘系统中集成联邦学习"></a>在In-Edge AI边缘系统中集成联邦学习</h3><hr>
-<h4 id="边缘到云"><a href="#边缘到云" class="headerlink" title="边缘到云"></a>边缘到云</h4><p>考虑MEC系统中的边缘缓存，边缘节点中使用的DRL代理根据UEs请求的内容动态缓存适当的内容。然而，请求内容的时空动态流行度对协同边缘缓存是一个难点。因此，属于移动网络运营商（MNOs）的云服务器可以作为协调边缘节点的中心服务器。在所有边缘节点中，每个节点都保留一个DRL代理，并通过自己的本地训练数据更新它。</p>
-<h4 id="UEs到边缘"><a href="#UEs到边缘" class="headerlink" title="UEs到边缘"></a>UEs到边缘</h4><p>在计算卸载的场景中，每个UE根据其中DRL代理的推理结果，决定是否将一个计算任务转移到边缘节点，通过哪个无线信道转移任务，以及转移的能耗。但是计算能力和能耗限制了它们在人工智能计算(大规模数据DRL训练)方面的能力。因此，将边缘中所有的边缘节点作为一个整体服务器来协调它们所覆盖的大量的UEs。通过该方案，计算能力相对较弱的UEs也可以容纳复杂的DRL agent。</p>
-<p>综上所述，客户端根据本地训练数据训练它的模型(之前从中央服务器下载)，并在可用时向后上传更新后的模型参数。FL使资源受限的边缘能够计算设备(包括UEs和边缘节点)来学习共享模型，同时保持训练数据在本地。</p>
-<h3 id="In-Edge-AI中联邦学习的优点和缺点"><a href="#In-Edge-AI中联邦学习的优点和缺点" class="headerlink" title="In-Edge AI中联邦学习的优点和缺点"></a>In-Edge AI中联邦学习的优点和缺点</h3><hr>
-<p><strong>FL的核心有点在于将知识的质量分散到大量的设备上，而不必集中训练数据。</strong>此外还有如下优点：</p>
-<ol>
-<li>cognitive</li>
-<li>鲁棒性</li>
-<li>灵活性</li>
-</ol>
-<p>但是由于联邦优化的限制，<strong>FL不能超越集中式DL训练模型</strong>，但仍然可以达到接近最佳的性能</p>
-<h3 id="实用性讨论"><a href="#实用性讨论" class="headerlink" title="实用性讨论"></a>实用性讨论</h3><hr>
-<h4 id="部署的挑战"><a href="#部署的挑战" class="headerlink" title="部署的挑战"></a>部署的挑战</h4><p>学习需要长时间的训练，且DRL模型在初步探索阶段只能随机决策，导致MEC系统容易瘫痪。<br><strong>使用转移学习来促进MEC系统中的训练过程</strong></p>
-<h4 id="延迟约束"><a href="#延迟约束" class="headerlink" title="延迟约束"></a>延迟约束</h4><p><strong>DRL中的神经网络仅仅是一个只含有一层隐藏层（该隐层含有200个神经元）的多层感知机</strong>。因此，一旦对模型进行了训练，由于DRL代理中主要网络的复杂性较低，推断过程可以快速执行</p>
-<h2 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h2><p>Xender一个月(2016年9月1日至2016年9月30日）的数据，设置了6个边缘节点</p>
-<p>对于UEs、边缘节点、云端中的DRL设置，选择Double DQN算法，选择tanh作为激活函数，优化器选择Adam。</p>
-<p>使用一个包含200个神经元的单层全连接前馈神经网络作为目标(TargetNet)和评估 (MainNet) Q网络。</p>
-<p>replay memory capacity $M = 5000$，mini-batch size $B = 200$，discount factor $\gamma = 0.9$, </p>
-<p>exploration probability $\epsilon = 0.001$，learning rate $\zeta = 0.005$，目标Q网络的替换周期 $\phi = 250$</p>
-<p><strong>在缓存实验中</strong>，比较了集中式 DDQN，LRU（最近最少使用），LFU(最不经常使用)，FIFO</p>
-<p><strong>在计算卸载实验中</strong>，比较了集中式DDQN，全部在设备端执行，全部在边缘节点执行，贪心执行（最大化即时效用）</p>
-<p>比较了理想情况下（无论是集中式DDQN的海量训练数据，还是FL的DDQN的轻量级模型更新，都可以在离散化的时间元内上传到目标位置）集中式DDQN和FL的DDQN的UEs的平均利用率。</p>
-<p>比较了是否使用FL时，更新模型上传的数据量。</p>
-<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>在本文中，我们讨论了将深度强化学习技术和联邦学习框架与移动边缘系统集成，并优化移动边缘计算、缓存和通信的潜力。我们对移动边缘系统中的边缘缓存和计算卸载进行了实验研究，并对“In-Edge AI”进行了评估，证明其具有接近最优的性能。在今后的工作中，我们不仅要通过edge的支持来优化学习计算任务，还要进行调度</p>
+          1. 引言现状
 
-          
+不确定的输入无线信道和隐私政策的不同，有些信息因素很难获得
+动态的决策条件通信和计算的动态性
+临时隔离大多数研究只着眼于系统的一个快照，都没有考虑到长期优化
+
+问题
+
+训练数据应该如何采集分布式或者集中式
+强化学习的Agent应该部署在哪里在哪里训练用户设备（UE）、边缘端、云端
+
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/01/12/paper/EdgeCompute-04/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -677,112 +577,18 @@
       
         
           
-            <ul>
-<li>$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $</li>
-<li>范数<script type="math/tex; mode=display">
-|| w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}</script>一般p=2时可以省略不写，常用的<strong>向量范数</strong>如下<ul>
-<li>$p = 1$时范数表示向量元素之和</li>
-<li>$p = 2$时范数表示欧几里得距离</li>
-<li><script type="math/tex">||w||_{\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最大值</li>
-<li><script type="math/tex">||w||_{-\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最小值</li>
-</ul>
-</li>
-<li>多元泰勒展开式<script type="math/tex; mode=display">
- f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)^TG(x_0)(x-x_0)+ O(x-x_0)^2</script></li>
-</ul>
-<h2 id="1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><a href="#1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件" class="headerlink" title="1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件"></a>1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</h2><p><strong>一阶必要条件</strong>： 设 $f(x)$ 在开集 $D$上一阶连续可微，若<script type="math/tex">x^* \in D</script>是$min \; f(x)$的一个局部极小点，则必有<script type="math/tex">g(x^*)  = 0</script><br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-f(x) & =f(x^*) + g(x^*)^T(x-x^*) +\omicron(||x-x^*||) \\
- & =f(x^*)- \alpha g(x^*)^Tg(x^*) + \omicron(\alpha) \\
- & = f(x^*) - \alpha||g(x^*)||^2 + \omicron(\alpha)
-\end{aligned}</script><p>因为<script type="math/tex">f(x^*)</script>是极小值点，所以<script type="math/tex">f(x) > f(x^*)</script>，所以<script type="math/tex">- \alpha||g(x^*)||^2 + \omicron(\alpha) > 0</script><br>即<script type="math/tex">||g(x^*)||^2 \le \frac{ \omicron(\alpha)}{ \alpha}</script></p>
-<p>令两边 $ \alpha \to 0$得出<script type="math/tex">||g(x^*)|| = 0</script>, 即 <script type="math/tex">g(x^*) = 0</script></p>
-<p><strong>二阶必要条件</strong>： 设 $f(x)$ 在开集 $D$ 上二阶连续可微。若 <script type="math/tex">x^* \in D</script>是 $min \; f(x)$ 的一个局部极小点，则必有 <script type="math/tex">g(x^*)=0</script> 且 <script type="math/tex">G(x^*)</script> 是 <strong><em>半正定矩阵</em></strong>。<br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)^TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
-&\to \quad f(x) - f(x^*) = \frac 12\alpha^2d^TG(x^*)d + O(\alpha^2)\\
-&\to \quad d^TG(x^*)d + \frac{O(2\alpha^2)}{\alpha^2} \ge 0 
-\end{aligned}</script><p>令 $ \alpha \to 0$得，<script type="math/tex">d^TG(x^*)d \ge 0</script>，所以<script type="math/tex">G(x^*)</script>是半正定矩阵</p>
-<p><strong>二阶充分条件</strong>： 设$f(x)$在开集$D$上二阶连续可微. 若<script type="math/tex">x^* \in D</script>满足条件<script type="math/tex">g(x^*) = 0</script>及<script type="math/tex">G(x^*)</script>是正定矩阵，则<script type="math/tex">x^*</script>是$min \; f(x)$的一个局部极小点</p>
-<h2 id="2-在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><a href="#2-在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架" class="headerlink" title="2. 在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架"></a>2. 在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</h2><ol>
-<li>给定初始化参数以及初始迭代点 $x_0$. 置 $k:= 0$</li>
-<li>若 $x_k$满足某种终止准则，停止迭代，以$x_k$作为近似极小</li>
-<li>通过求解$x_k$处的某个子问题确定下降方向$d_k$</li>
-<li>通过某种搜索方式确定步长因子$\alpha_k$，使得$f(x_k+\alpha_kd_k) &lt; f(x_k)$</li>
-<li>令$x_{k+1}:=x_k + \alpha_k d_k, k:=k+1$，转2</li>
-</ol>
-<h2 id="3-描述求解无约束最优化问题的牛顿法步骤"><a href="#3-描述求解无约束最优化问题的牛顿法步骤" class="headerlink" title="3. 描述求解无约束最优化问题的牛顿法步骤"></a>3. 描述求解无约束最优化问题的牛顿法步骤</h2><ol>
-<li>给定终止误差值$0 \le \epsilon &lt;&lt; 1$，初始点$x_0 \in \mathbb R^n$. 令 $k := 0$.</li>
-<li>计算 $g_k = \nabla f(x_k)$. 若 $||g_k|| \le \epsilon$，停算，输出 <script type="math/tex">x^* \approx x_k</script>.</li>
-<li>计算$G_k = \nabla^2f(x_k)$，并求解线性方程组得解 $d_k$，<script type="math/tex; mode=display">
-G_kd=-g_k</script></li>
-<li>令 $x_{k+1} = x_k + d_k, k := k+1$，转2.</li>
-</ol>
-<h2 id="4-简单一种你所知道的关于单变量最优化问题的线搜索算法"><a href="#4-简单一种你所知道的关于单变量最优化问题的线搜索算法" class="headerlink" title="4. 简单一种你所知道的关于单变量最优化问题的线搜索算法"></a>4. 简单一种你所知道的关于单变量最优化问题的线搜索算法</h2><p><strong>0.618法</strong></p>
-<ol>
-<li><p>确定初始搜索区间$[a_0, b_0]$和容许误差 $\epsilon &gt; 0$. 计算初始试探点</p>
-<script type="math/tex; mode=display">
-p_0 = a_0 + 0.382(b_0 - a_0), \quad q_0 = a_0 + 0.618(b_0 - a_0)</script><p>及相应的函数值 $\phi(p_0), \phi(q_0)$. 置 $i := 0$</p>
-</li>
-<li><p>若$\phi(p_i) &lt; \phi(q_i)$，转3；否则转4</p>
-</li>
-<li><p>计算左试探点. 若$|q_i - a_i| \le \epsilon$，停算，输出$p_i$；否则，令</p>
-<script type="math/tex; mode=display">
-a_{i+1}:=a_i, \quad b_{i+1} := q_i, \quad \phi(q_{i+1}):=\phi(p_i),\\
-q_{i+1}:=p_i, \quad p_{i+1}:= a_{i+1} + 0.382(b_{i+1} - a_{i+1}).</script><p>计算$\phi(p_{i+1}), i:=i+1$，转2.</p>
-</li>
-<li><p>计算右试探点. 若$|b_i - p_i| \le \epsilon$，停算，输出$q_i$；否则，令</p>
-<script type="math/tex; mode=display">
-a_{i+1}:=p_i, \quad b_{i+1} := b_i, \quad \phi(p_{i+1}):=\phi(q_i),\\
-p_{i+1}:=q_i, \quad q_{i+1}:= a_{i+1} + 0.618(b_{i+1} - a_{i+1}).</script><p>计算$\phi(q_{i+1}), i := i + 1$，转2.</p>
-</li>
-</ol>
-<h2 id="5-设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2"><a href="#5-设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2" class="headerlink" title="5. 设有非线性方程组f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2"></a>5. 设有非线性方程组<script type="math/tex">f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2</script></h2><h3 id="1-列出求解这个方程组的非线性最小二乘问题的数学模型"><a href="#1-列出求解这个方程组的非线性最小二乘问题的数学模型" class="headerlink" title="(1). 列出求解这个方程组的非线性最小二乘问题的数学模型"></a>(1). 列出求解这个方程组的非线性最小二乘问题的数学模型</h3><p>数学模型为：$min((x^3_1 - x^2_2 - 1)^2 +(2x_1 +x_2-2)^2 )$</p>
-<h3 id="2-写出求解该问题的高斯-牛顿法迭代公式的具体形式"><a href="#2-写出求解该问题的高斯-牛顿法迭代公式的具体形式" class="headerlink" title="(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式"></a>(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式</h3><p>迭代公式为：$x_{k+1}=x_k - (A_k^TA_k)^{-1}A^T_kf_k$</p>
-<script type="math/tex; mode=display">
-f(x)=[x^3_1 - x^2_2 - 1 \quad 2x_1 +x_2-2]^T \\
-A(x) = \left[  
-\begin{matrix}
-\frac{\partial f_1(x)}{\partial x_1} & ... & \frac{\partial f_1(x)}{\partial x_m}\\
-... & ... & ... \\
-\frac{\partial f_n(x)}{\partial x_1} & ... & \frac{\partial f_n(x)}{\partial x_m}\\
-\end{matrix}
-\right] = \left[\begin{matrix}
-3x_1^2 & -2x_2 \\
-2 & 1\\
-\end{matrix}\right] \\</script><h2 id="6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><a href="#6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right" class="headerlink" title="6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$"></a>6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</h2><h3 id="1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><a href="#1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭" class="headerlink" title="(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭"></a>(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</h3><p>$d_0^THd_1 = (1,0)\left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right]\left(\begin{matrix}-1\\2  \end{matrix}\right) = 0$所以得证</p>
-<h3 id="2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点"><a href="#2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点" class="headerlink" title="(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点"></a>(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点</h3><h2 id="7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点"><a href="#7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点" class="headerlink" title="7. 对于最优化问题\begin{aligned}min \quad f(x) & = 4x_1 - 3x_2\\ s.t. & -(x_1-3)^2+x_2+1 \ge0 \\ &4-x_1-x_2\ge0\\&x_2+7\ge0\end{aligned}求满足KT条件的点"></a>7. 对于最优化问题<script type="math/tex">\begin{aligned}min \quad f(x) & = 4x_1 - 3x_2\\ s.t. & -(x_1-3)^2+x_2+1 \ge0 \\ &4-x_1-x_2\ge0\\&x_2+7\ge0\end{aligned}</script>求满足KT条件的点</h2><p>对于一般约束问题：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\ 
-& g_i(x) \ge 0, \quad i = 1,2,...,m.\end{aligned}</script><p>KT条件如下：</p>
-<script type="math/tex; mode=display">
-\begin{cases}
-1.\quad\nabla f(x^*) - \sum_{i=1}^l\mu_i^*\nabla h_i(x^*) - \sum_{i=1}^m\lambda_i^*\nabla g_i(x^*) = 0, \\
-2. \quad h_i(x^*) = 0, & i = 1,2,...,l, \\
-3. \quad g_i(x^*) \ge 0, \quad \lambda_i^*\ge 0, \quad \lambda_i^*g_i(x^*) = 0, & i =1,2,...,m.
-\end{cases}</script><p><strong>解如下</strong></p>
-<p>设<script type="math/tex">x^*= (x_1^*, x_2^*)</script>为KT点</p>
-<script type="math/tex; mode=display">\nabla f(x^*) = \left[\begin{matrix}4\\-3\end{matrix}\right], \nabla g_1(x^*) = \left[\begin{matrix}-2(x_1^*-3)\\1\end{matrix}\right], \nabla g_2(x^*) = \left[\begin{matrix}-1\\-1\end{matrix}\right], \nabla g_3(x^*) = \left[\begin{matrix}0\\1\end{matrix}\right]</script><script type="math/tex; mode=display">
-\begin{aligned}
-1.\quad & \nabla f(x^*) - \sum_{i=1}^l\mu_i^*\nabla h_i(x^*) - \sum_{i=1}^m\lambda_i^*\nabla g_i(x^*) = 0\\
--> & \left[\begin{matrix}4\\-3\end{matrix}\right]- \lambda_1^*\left[ \begin{matrix}  -2(x_1^*-3)\\1\end{matrix}\right] - \lambda_2^*\left[\begin{matrix}-1\\-1\end{matrix}\right] - \lambda_3^*\left[\begin{matrix}0\\1\end{matrix}\right] = 0\\
-3. \quad & \lambda_i^*g_i(x^*) = 0 \\
--> & \begin{cases}\lambda_1^*(-(x_1^*-3)^2+x_2^*+1) = 0\\
-\lambda_2^*(4-x_1^*-x_2^*) = 0\\
-\lambda_3^*(x_2^*+7) = 0\\
-\end{cases}
-\end{aligned}</script><p>令<script type="math/tex">\lambda_2^*, \lambda_3^* = 0</script>，由1可以推出 <script type="math/tex">\lambda_1^* = -3, x_1^* = \frac {11}3</script>，由3.1得<script type="math/tex">x_2^* = -\frac 59</script></p>
-<h2 id="8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"><a href="#8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性" class="headerlink" title="8. 设二次规划\begin{aligned}&min\quad f(x)=\frac12x^THx+c^Tx\\&s.t.\quad Ax=b \end{aligned}其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"></a>8. 设二次规划<script type="math/tex">\begin{aligned}&min\quad f(x)=\frac12x^THx+c^Tx\\&s.t.\quad Ax=b \end{aligned}</script>其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性</h2><p>首先构造拉格朗日函数：$L(x,\lambda) = \frac12x^THx+c^Tx - \lambda^T(Ax-b)$，</p>
-<p>$\frac{\partial L(x,\lambda)}{\partial x} = Hx + c - A^T\lambda = 0$,</p>
-<p>两边乘以$H^{-1}\quad-&gt; \quad x + H^{-1}c - H^{-1}A^T\lambda = 0$,<br>两边乘以$A \quad -&gt; \quad Ax + AH^{-1}c - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b + AH^{-1}c - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b + AH^{-1}c = AH^{-1}A^T\lambda$,<br>$ \quad -&gt; \quad \lambda = (AH^{-1}A^T)^{-1}(b + AH^{-1}c)$,<br>$ \quad -&gt; \quad x =  H^{-1}A^T(AH^{-1}A^T)^{-1}(b + AH^{-1}c) - H^{-1}c$,<br>解的唯一性：因为$H$正定，$A$行满秩；所以拉格朗日矩阵<script type="math/tex">\left[\begin{matrix}H&-A^T\\-A & 0\end{matrix}\right]</script>非奇异，即其解唯一。</p>
-<h2 id="设A是m-n实满秩矩阵，a为n维实向量，求解二次规划-begin-aligned-min-quad-f-x-frac12-x-a-T-x-a-s-t-quad-Ax-b-end-aligned-以及相应的拉格朗日乘子"><a href="#设A是m-n实满秩矩阵，a为n维实向量，求解二次规划-begin-aligned-min-quad-f-x-frac12-x-a-T-x-a-s-t-quad-Ax-b-end-aligned-以及相应的拉格朗日乘子" class="headerlink" title="设A是m*n实满秩矩阵，a为n维实向量，求解二次规划\begin{aligned}&min\quad f(x)=\frac12(x-a)^T(x-a),\\&s.t.\quad Ax=b, \end{aligned}以及相应的拉格朗日乘子"></a>设A是m*n实满秩矩阵，a为n维实向量，求解二次规划<script type="math/tex">\begin{aligned}&min\quad f(x)=\frac12(x-a)^T(x-a),\\&s.t.\quad Ax=b, \end{aligned}</script>以及相应的拉格朗日乘子</h2><p>首先构造拉格朗日函数：$L(x,\lambda) = \frac12x^THx-a^Tx + \frac12a^Ta - \lambda^T(Ax-b)$，其中$H$是单位阵</p>
-<p>$\frac{\partial L(x,\lambda)}{\partial x} = Hx -a - A^T\lambda = 0$,</p>
-<p>两边乘以$H^{-1}\quad-&gt; \quad x - H^{-1}a - H^{-1}A^T\lambda = 0$,<br>两边乘以$A \quad -&gt; \quad Ax - AH^{-1}a - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b - AH^{-1}a - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b - Aa - AA^T\lambda = 0$,<br>$ \quad -&gt; \quad \lambda=(AA^T)^{-1}(b - Aa)$,<br>$ \quad -&gt; \quad x=a + A^T(AA^T)^{-1}(b - Aa)$.</p>
-
           
+$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $
+范数
+|| w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/04/应用数学/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -848,7 +654,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/11/21/paper/EdgeCompute-03/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2019/11/21/paper/EdgeCompute-03/" itemprop="url">Enhancing the User Experience in Vehicular Edge Computing Networks-An Adaptive Resource Allocation Approach</a></h1>
         
 
         <div class="post-meta">
@@ -860,7 +666,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-21T20:03:47+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-21T20:04:32+08:00">
                 2019-11-21
               </time>
             
@@ -870,6 +676,28 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文/" itemprop="url" rel="index">
+                    <span itemprop="name">论文</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -894,7 +722,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  0
+                  1.2k
                 </span>
               
 
@@ -910,7 +738,7 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  4
                 </span>
               
             </div>
@@ -933,8 +761,23 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            
           
+增强车辆边缘计算网络中的用户体验：一种自适应资源分配方法
+
+现状
+service reliability (i.e., losing less data)
+freshness (i.e.,as  quickly  as  possible)
+
+以上两点不能共存
+可拓展的计算任务结构 - 采用了两种
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/21/paper/EdgeCompute-03/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1107,77 +950,22 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p><strong>应用场景</strong><br><img src="https://i.loli.net/2019/11/07/MBjKrSGyJkpAdnb.jpg" alt="1.jpg"><br>如上所示，共有三个主要的应用场景。</p>
-<ul>
-<li>车速引导 - 单节点<br> 车联网在交叉口向汽车提供路口状态信息，提醒汽车控制车速。</li>
-<li>信号灯配时优化 - 多节点<br> 将集中式的控制优化为路口间协调控制，通过交叉口的边缘节点采集数据，并与上下游的相邻节点协调控制<blockquote>
-<p>每个交叉口就是一个边缘节点</p>
-</blockquote>
-</li>
-<li>特殊车辆优先通行<ul>
-<li>低优先级车辆 - 单节点<br> 低优先级车辆包括公交车等，不需要牺牲普通社会车辆的通行效率</li>
-<li>高优先级车辆 - 多节点<br> 高优先级车辆包括救护车等，需保证其在最短的时间内到达目的地。<blockquote>
-<p>由云端和边缘协同保障其通行</p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="信号灯配时优化"><a href="#信号灯配时优化" class="headerlink" title="信号灯配时优化"></a>信号灯配时优化</h3><blockquote>
-<p>交叉路口处红、绿灯的时间配比称为信号配时</p>
-</blockquote>
-<p>信号灯配时优化有两种类型：</p>
-<ol>
-<li><p>周期式<br><strong>相位结构和相位顺序固定。存在时效性差，配时参数更新有滞后性的问题</strong></p>
-<blockquote>
-<p>相位指的是使得一组没有冲突的交通流同时获得通行权的信号灯状态。</p>
-</blockquote>
-<p><img src="https://i.loli.net/2019/11/07/UD9G6OLP8lxcew1.png" alt="无标题.png"><br>如上图，红线所示四种通行方式的车辆可以同时通过这个交叉口，因此这四种同行方式合称一个相位。<br><img src="https://i.loli.net/2019/11/07/UG7ix5LTeSJnoEf.png" alt="无标题.png"><br>如上图所示为四相位交叉口（途中一种颜色的箭头代表一种相位）</p>
-</li>
-<li>非周期式<br>根据实时的交通流信息即时选择相位并决定相位时长，是一种实时自适应的交通控制方式<br>边缘节点可以将非周期的优化分为两个子模块<ul>
-<li>相位的选择</li>
-<li>相位时长的确定</li>
-</ul>
-</li>
-</ol>
-<p>信号灯配时优化有两个关注点：</p>
-<ol>
-<li>如何选择合适的交通数据，在基本无需云端干涉的情况下如何独立地完成信号灯配时优化</li>
-<li>边缘节点如何对传统的非周期式配时决策方法做出优化<br>非周期式的交通控制的配时决策方法如模糊控制、神经网络、遗传算法以及强化学习等都不适合边缘计算的加入。<ul>
-<li>模糊控制不能充分适应交通流实时变化的不确定性</li>
-<li>神经网络和遗传算法模型复杂，计算量大</li>
-<li>强化学习先验知识少，容易探索到不合理的配时参数</li>
-</ul>
-</li>
-</ol>
-<h3 id="紧急车辆多节点优先通行"><a href="#紧急车辆多节点优先通行" class="headerlink" title="紧急车辆多节点优先通行"></a>紧急车辆多节点优先通行</h3><p>现有 —- 单交叉口紧急通行和最短路径选择，但是没有做到多交叉口的协调控制<br>研究 —- 云边协同控制大范围多交叉口</p>
-<h2 id="基于边缘计算的交叉口控制算法"><a href="#基于边缘计算的交叉口控制算法" class="headerlink" title="基于边缘计算的交叉口控制算法"></a>基于边缘计算的交叉口控制算法</h2><h3 id="模糊控制加强化学习"><a href="#模糊控制加强化学习" class="headerlink" title="模糊控制加强化学习"></a>模糊控制加强化学习</h3><p>算法流程如下所示<br><img src="https://i.loli.net/2019/11/08/2Rh6MLVIE17uHxC.jpg" alt="a.jpg"></p>
-<h3 id="相位选择和相位时长的初步确定-—-模糊控制输入优化"><a href="#相位选择和相位时长的初步确定-—-模糊控制输入优化" class="headerlink" title="相位选择和相位时长的初步确定 — 模糊控制输入优化"></a>相位选择和相位时长的初步确定 — 模糊控制输入优化</h3><p>采用相位驶出区和相位驶入区的车辆数的<strong>差</strong>来作为输入</p>
-<ul>
-<li>模糊化：高斯型隶属度曲线</li>
-<li>接模糊化：重心法<blockquote>
-<p>取隶属度函数曲线与横坐标围成面积的重心，作为模糊推理的最终输出值</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="相位时长调整-—-Q学习"><a href="#相位时长调整-—-Q学习" class="headerlink" title="相位时长调整 — Q学习"></a>相位时长调整 — Q学习</h3><ul>
-<li>状态空间<br> 包括交叉口以及周边的交通流信息，也包括交叉口本身的信号灯配时信息</li>
-<li>动作空间<br> 绿灯建议配时的调整量</li>
-<li>奖励函数<br> 平均延误时间</li>
-<li>动作选择方式<br> $\epsilon$-greedy<blockquote>
-<p>在贪心的基础上加入$\epsilon$, 让程序有小概率选择非当前最优，保留当前最优在下一次继续被利用</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="紧急车辆通行的交通控制"><a href="#紧急车辆通行的交通控制" class="headerlink" title="紧急车辆通行的交通控制"></a>紧急车辆通行的交通控制</h2><p>每个交叉口都分为三种状态：</p>
-<ol>
-<li>正常交通控制状态<br>节点未加入任务时的状态</li>
-<li>路径饱和度控制状态<br>节点加入任务且车辆尚未到达时的状态</li>
-<li>节点通行控制状态<br>车辆到达时的状态</li>
-</ol>
-<p>三种状态的交替如下图所示<br><img src="https://i.loli.net/2019/11/10/MePplL8Aacm2XEC.png" alt="1573363084(1).png"></p>
+          问题描述应用场景如上所示，共有三个主要的应用场景。
 
-          
+车速引导 - 单节点 车联网在交叉口向汽车提供路口状态信息，提醒汽车控制车速。
+信号灯配时优化 - 多节点 将集中式的控制优化为路口间协调控制，通过交叉口的边缘节点采集数据，并与上下游的相邻节点协调控制
+每个交叉口就是一个边缘节点
+
+
+特殊车辆优
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/07/paper/EdgeCompute-02/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1350,27 +1138,16 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2><h3 id="cost-function"><a href="#cost-function" class="headerlink" title="cost function"></a>cost function</h3><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$</p>
-<p><strong>and</strong><br>$Cost(h_\theta(x),y) = \begin{cases}<br>-log(h_\theta(x)) &amp; y = 1\\<br>-log(1-h_\theta(x)) &amp; y = 0\\<br>\end{cases}<br>$</p>
-<p><strong>and</strong><br><strong><em>define</em></strong>: $g(z) = \frac{1}{1 + e ^{-z}}$<br>$h_\theta(x) = g(\theta^Tx) = \frac{1}{1 + e ^{-\theta^Tx}}$</p>
-<h2 id="Regularization-正则化"><a href="#Regularization-正则化" class="headerlink" title="Regularization(正则化)"></a>Regularization(正则化)</h2><h3 id="overfitting-过拟合"><a href="#overfitting-过拟合" class="headerlink" title="overfitting(过拟合)"></a>overfitting(过拟合)</h3><p>解决方法：</p>
-<ol>
-<li><p>减少特征值</p>
-<ol>
-<li>手动选择需要保留的特征值</li>
-<li>模型选择算法</li>
-</ol>
-</li>
-<li><p>正则化</p>
-<ol>
-<li>保留所有特征值，减少量级或者参数$\theta$的大小 - 加入惩罚</li>
-</ol>
-</li>
-</ol>
-<h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>$J(\theta) = \frac{1}{2m}\left[\sum_{i = 1}^{m} (h_\theta(x^{(i)}) - y^{(i)})^2 + \lambda \sum_{j = 1}^n \theta_j^2 \right] $</p>
-<p>在损失函数的最后为每个$\theta$加上惩罚$\lambda$</p>
-
-          
+          Logistic Regressioncost function$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$
+and$Cost(h_\theta(x),y) = \begin{cases}-log(
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/04/ml/classification/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1543,31 +1320,23 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <h2 id="参数定义"><a href="#参数定义" class="headerlink" title="参数定义"></a>参数定义</h2><p><img src="https://i.loli.net/2019/11/01/dyFkO4VGcolhfwx.png" alt="1.png"></p>
-<h2 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p><img src="https://i.loli.net/2019/10/31/v2U7sr3gLO8o1B4.jpg" alt="1.jpg"></p>
-<ul>
-<li>:= 表示赋值</li>
-<li>$\alpha   $表示学习率，控制梯度下降时迈出多大的步子</li>
-</ul>
-<p><img src="https://i.loli.net/2019/10/31/DSq1POlGNxcdQCw.jpg" alt="2.jpg"></p>
-<p>多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数</p>
-<h3 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h3><h4 id="平方误差代价函数"><a href="#平方误差代价函数" class="headerlink" title="平方误差代价函数"></a><strong>平方误差代价函数</strong></h4><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)}) = \frac{1}{2m}\sum_{i=1}^{m}(h_\theta(x^{(i)}) - y ^{(i)}) ^ 2$<br>其中$h_\theta(x^{(i)})$是模型预测的值，$y ^{(i)}$是样本实际值，这两个之差的平方展示了预测值和样本值的偏离度</p>
-<blockquote>
-<p>平方误差代价函数多用于回归</p>
-</blockquote>
-<h4 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h4><p>基于均方误差最小化在进行模型求解的方法就是最小二乘法，均方误差是回归任务最常用的性能度量。</p>
-<h3 id="Feature-Scaling-特征缩放"><a href="#Feature-Scaling-特征缩放" class="headerlink" title="Feature Scaling - 特征缩放"></a>Feature Scaling - 特征缩放</h3><blockquote>
-<p>get every feature into approximately a $-1 &lt;= X_i &lt;= 1$ range</p>
-</blockquote>
-<p>让 $X_i$ 等于 $X_i$ 除以 $\max(X_i)$，让 $X_i$ 处于 $[-1，1]$ 之间<br>为了让梯度下降的更快</p>
-<h3 id="Mean-normalization-均值归一化-是特征缩放的一种手段"><a href="#Mean-normalization-均值归一化-是特征缩放的一种手段" class="headerlink" title="Mean normalization - 均值归一化(是特征缩放的一种手段)"></a>Mean normalization - 均值归一化(是特征缩放的一种手段)</h3><p>在特征缩放的时候一般是 $X_i$ 直接除以 $\max(X_i)$, 均值归一化的话 $X_i$ 先减去 $X_i$ 的均值再除以 $\max(X_i)$</p>
-<h2 id="Normal-equation-正规方程"><a href="#Normal-equation-正规方程" class="headerlink" title="Normal equation - 正规方程"></a>Normal equation - 正规方程</h2><blockquote>
-<p>不用迭代，一步到位求得最优解</p>
-</blockquote>
-<p><img src="https://i.loli.net/2019/11/02/25OcFhZl1dzbWNe.png" alt="1.png"><br><strong>不用进行特征缩放</strong></p>
-<h2 id="正规方程和梯度下降法的比较"><a href="#正规方程和梯度下降法的比较" class="headerlink" title="正规方程和梯度下降法的比较"></a>正规方程和梯度下降法的比较</h2><p><img src="https://i.loli.net/2019/11/02/Fw4A8LOqPc6vH37.png" alt="1.png"></p>
+          参数定义
+梯度下降法
 
-          
+:= 表示赋值
+$\alpha   $表示学习率，控制梯度下降时迈出多大的步子
+
+
+多参数需要同步更新多个参数，如上图左边；上图右边就是错误的更新，$\theta_0$先更新了，再更新 $\theta_1$ 时使用的是更新之后的代价函数
+cost function - 代价函
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/02/ml/linear_regression/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1740,14 +1509,20 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <h2 id="线代知识"><a href="#线代知识" class="headerlink" title="线代知识"></a>线代知识</h2><h3 id="Matrix"><a href="#Matrix" class="headerlink" title="Matrix"></a>Matrix</h3><p><img src="https://i.loli.net/2019/11/01/dGBarMUENyYA2n5.jpg" alt="1.jpg"></p>
-<p>表示所有 4 x 2 矩阵的集合</p>
-<h3 id="Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的"><a href="#Vector-An-n-x-1-matrix-向量是一个-n-x-1-的矩阵，竖的" class="headerlink" title="Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)"></a>Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)</h3><p><img src="https://i.loli.net/2019/11/01/IeH6qUgCo5bXJuw.jpg" alt="1.png"></p>
-<p>表示一个4维向量的集合</p>
-<h2 id="Supervised-Learning"><a href="#Supervised-Learning" class="headerlink" title="Supervised Learning"></a>Supervised Learning</h2><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><h3 id="回归"><a href="#回归" class="headerlink" title="回归"></a>回归</h3><h4 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h4><p>link to linear_regression</p>
-<h2 id="unsupervised-Learning"><a href="#unsupervised-Learning" class="headerlink" title="unsupervised Learning"></a>unsupervised Learning</h2><h3 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h3><h2 id="cost-function-代价函数"><a href="#cost-function-代价函数" class="headerlink" title="cost function - 代价函数"></a>cost function - 代价函数</h2><p>$J(\theta) = \frac{1}{m}\sum_{i = 1}^{m} Cost(h_\theta(x^{(i)}),y^{(i)})$</p>
-
-          
+          线代知识Matrix
+表示所有 4 x 2 矩阵的集合
+Vector: An n x 1 matrix (向量是一个 n x 1 的矩阵，竖的)
+表示一个4维向量的集合
+Supervised Learning分类回归线性回归link to linear_regression
+unsupervised
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/01/ml/ml/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1920,93 +1695,20 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <blockquote>
-<p><strong>软件超密集网络中移动边缘计算的任务卸载</strong></p>
-</blockquote>
-<ul>
-<li>Hessian matrix 黑塞矩阵<br>黑塞矩阵是由一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率，常用于牛顿法解决优化问题，利用黑塞矩阵可判定多元函数的极值问题。</li>
-<li>线性与非线性<br>线性表示两个变量之间是一次函数的关系，线性关系中的量是成比例的<br>非线性即除了两个变量是一次函数关系之外的关系</li>
-<li>Karush-Kuhn-Tucker conditions<br>KKT 条件是在满足一些有规则的条件下，一个非线性规划问题能有最优解的充要条件</li>
-</ul>
-<h2 id="移动边缘计算主要展现了两个优点"><a href="#移动边缘计算主要展现了两个优点" class="headerlink" title="移动边缘计算主要展现了两个优点"></a>移动边缘计算主要展现了两个优点</h2><ol>
-<li><p>减少了任务持续时间</p>
-<ul>
-<li>任务上传到云端的时间</li>
-<li>在云端执行的时间</li>
-<li>云端返回结果的时间</li>
-</ul>
-</li>
-<li><p>减少了移动设备的能量消耗</p>
-<ul>
-<li>延迟敏感性计算应该放在边缘端执行，没有延迟要求的计算可以放在云计算中心执行</li>
-<li>大体量但是仅需少量的计算资源的任务应放在用户设备执行</li>
-</ul>
-</li>
-</ol>
-<h2 id="software-defined-ultra-dense-network-SD-UDN"><a href="#software-defined-ultra-dense-network-SD-UDN" class="headerlink" title="software defined ultra dense network(SD-UDN)"></a>software defined ultra dense network(SD-UDN)</h2><p><strong>软件定义的超密集网络</strong><br>核心思想是分离控制层和数据层（通过虚拟化技术）<br>在未来的通信网络中，边缘节点将被部署在超密集网络中为用户提供计算卸载服务</p>
-<h3 id="software-defined-network-SDN-软件定义网络"><a href="#software-defined-network-SDN-软件定义网络" class="headerlink" title="software defined network(SDN) 软件定义网络"></a>software defined network(SDN) 软件定义网络</h3><p>利用OpenFlow协议将路由器的控制平面从数据平面中分离出来，改用软件的方式实现。该架构可使网络管理员在不变动硬件设备的前提下，以中央控制方式用程序重新规划网络。</p>
-<h3 id="移动边缘计算在软件超密集网络中的有效应用将会面临的挑战"><a href="#移动边缘计算在软件超密集网络中的有效应用将会面临的挑战" class="headerlink" title="移动边缘计算在软件超密集网络中的有效应用将会面临的挑战"></a>移动边缘计算在软件超密集网络中的有效应用将会面临的挑战</h3><h4 id="1-如何控制和分配少量的分布式资源"><a href="#1-如何控制和分配少量的分布式资源" class="headerlink" title="1. 如何控制和分配少量的分布式资源"></a>1. 如何控制和分配少量的分布式资源</h4><ul>
-<li>小蜂窝基站的密集部署增加了网络环境的复杂性</li>
-<li>边缘端的计算资源是有限的</li>
-</ul>
-<h4 id="2-如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端"><a href="#2-如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端" class="headerlink" title="2. 如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端"></a>2. 如何根据手机剩余电量和网络状态来实施计算任务卸载到边缘端</h4><ul>
-<li>用户对他们加入的无线网络只有很少的信息，不知道一些关键信息例如——网络的流量负荷和边缘端的计算负荷等信息</li>
-</ul>
-<h2 id="移动边缘计算主要有两个研究点"><a href="#移动边缘计算主要有两个研究点" class="headerlink" title="移动边缘计算主要有两个研究点"></a>移动边缘计算主要有两个研究点</h2><ol>
-<li>任务卸载策略</li>
-<li>资源分配策略</li>
-</ol>
-<blockquote>
-<p>先给引理，再给证明，最后证明给出算法的敛散性-可得到解</p>
-</blockquote>
-<h2 id="task-placement-problem"><a href="#task-placement-problem" class="headerlink" title="task placement problem"></a>task placement problem</h2><p>给出了任务分配算法, 定义一个连续常量y， y的和 = 1， 通过不停的迭代，得到 y 的 t 次 - y 的 t-1 次的绝对值小于一个给定的阈值，就得到了最优化的y</p>
-<p>证明了该问题是能得出解的凸优化问题</p>
-<h2 id="resource-allocation-problem"><a href="#resource-allocation-problem" class="headerlink" title="resource allocation problem"></a>resource allocation problem</h2><ul>
-<li>引理：该问题是凸优化问题，且该解能够通过求解得到</li>
-</ul>
-<h2 id="创新点"><a href="#创新点" class="headerlink" title="创新点"></a>创新点</h2><h3 id="1-提出了软件定义的超密集网络架构-SD-UDN"><a href="#1-提出了软件定义的超密集网络架构-SD-UDN" class="headerlink" title="1. 提出了软件定义的超密集网络架构(SD-UDN)"></a>1. 提出了软件定义的超密集网络架构(SD-UDN)</h3><blockquote>
-<p>当前一些移动边缘计算的研究一般只考虑单一的移动边缘计算服务</p>
-</blockquote>
-<p>考虑到了多服务器的又没有考虑到超密集网络</p>
-<p><img src="https://i.loli.net/2019/10/15/8s79DruGAmHlM2g.png" alt="WeChatba8ed283865123f166e74e364e969293.png"></p>
-<p>基于控制域和数据域的分离。将controller部署在宏蜂窝基站，根据controller的决策，移动设备可以决定是将计算任务卸载到边缘端执行还是在本地执行。</p>
-<h4 id="A-SD-UDN-包含3层结构"><a href="#A-SD-UDN-包含3层结构" class="headerlink" title="A. SD-UDN 包含3层结构"></a>A. <strong><em>SD-UDN</em></strong> 包含3层结构</h4><ol>
-<li>用户层<br><strong>哪些用户需要卸载计算任务</strong><br>用户通过无线网络和小蜂窝基站或者宏蜂窝基站连接<br><strong>本文忽略了移动设备向控制者发送数据时的时延和能耗</strong></li>
-<li>数据层<br><strong>小蜂窝基站和部署在小蜂窝基站附近的边缘节点</strong><br>小蜂窝基站通过高速前沿运输网络和宏蜂窝基站连接</li>
-<li>控制层<br><strong>部署在宏蜂窝基站的controller</strong><br>完成主要的控制功能，如资源分配调度，信息汇总等<br><strong>提出了如下三个模型</strong></li>
-</ol>
-<h4 id="B-网络模型"><a href="#B-网络模型" class="headerlink" title="B. 网络模型"></a>B. 网络模型</h4><p>给出了之后两个模型需要用到的变量的定义</p>
-<font color="#FF0000">聚焦于本地计算和卸载到边缘计算而不考虑卸载到更远的云中心</font>
-
-<h4 id="C-传输模型"><a href="#C-传输模型" class="headerlink" title="C. 传输模型"></a>C. 传输模型</h4><p>给出了<strong>上传数据速率</strong>、<strong>传输延迟</strong>、<strong>传输消耗</strong>的计算公式</p>
-<h4 id="D-任务卸载模型"><a href="#D-任务卸载模型" class="headerlink" title="D. 任务卸载模型"></a>D. 任务卸载模型</h4><p>给出一些公式<br><strong>本地计算</strong><br>本地执行时间 = 任务计算量 / CPU能力<br>本地执行耗能 = 发射功率 x 任务计算量<br><strong>移动边缘计算</strong><br>任务持续时间 = (任务计算量 / (计算资源 x 分配到的计算资源的比例)) + (计算任务的尺寸大小 / 数据上传到边缘端的传输速率)</p>
-<blockquote>
-<p>忽略了边缘端返回计算结果的时延</p>
-</blockquote>
-<h4 id="E-问题公式"><a href="#E-问题公式" class="headerlink" title="E. 问题公式"></a>E. 问题公式</h4><p>给出了给出了任务卸载问题的任务持续总时间的优化公式：<br><img src="https://i.loli.net/2019/10/17/PahxnFsLBrHq27S.png" alt="WeChata84fc8ddc4da252c491536f2a200ff82.png"><br>其中 Xi 是决策0-1变量，决定任务是在本地执行还是边缘端执行，最优化问题的解就是本地执行和边缘执行的所有任务持续时间在约束条件下的最小值，约束条件如下：</p>
-<ol>
-<li><p>本地耗能比电池余量要小</p>
-</li>
-<li><p>任务传输到边缘端的耗能比电池余量要小</p>
-</li>
-<li><p>执行任务的边缘节点是提供服务的节点<br>Yi是分配给任务Qi的边缘节点，A(ui)是提供服务的基站</p>
-</li>
-<li><p>所有计算资源的分配不能超过该节点的计算资源总和</p>
-</li>
-</ol>
-<h3 id="2-软件定义的任务卸载模型-software-defined-task-offloading-SDTO-，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力"><a href="#2-软件定义的任务卸载模型-software-defined-task-offloading-SDTO-，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力" class="headerlink" title="2. 软件定义的任务卸载模型(software defined task offloading-SDTO)，不仅考虑到了如何减少任务持续时间而且考虑到了电池能力"></a>2. 软件定义的任务卸载模型(software defined task offloading-SDTO)，不仅考虑到了如何减少任务持续时间而且考虑到了<em>电池能力</em></h3><h4 id="该模型包含以下两个方面"><a href="#该模型包含以下两个方面" class="headerlink" title="该模型包含以下两个方面"></a>该模型包含以下两个方面</h4><ul>
-<li><p>计算任务在哪里执行——本地或是边缘端，哪个边缘（任务分配问题）<br>将该问题转化为0-1优化问题<br><font color="#FF0000">但是这里没有考虑云计算中心的任务卸载</font>私认为可以将一些计算密集型且非延迟敏感性任务卸载到云计算中心</p>
-</li>
-<li><p>边缘应该给每个任务分配多少资源（资源分配问题）<br>将该模型转化为凸优化问题</p>
-</li>
-<li><p>证明了计算资源分配是是凸优化问题</p>
-</li>
-<li>给出了任务分配算法</li>
-<li>进行了大量的实验证明SDTO模型比随机模型和统一任务计算卸载模型更好</li>
-</ul>
-<h4 id="定义该模型为混合整数非线性规划模型且证明是NP难问题"><a href="#定义该模型为混合整数非线性规划模型且证明是NP难问题" class="headerlink" title="定义该模型为混合整数非线性规划模型且证明是NP难问题"></a>定义该模型为混合整数非线性规划模型且证明是NP难问题</h4><p>因为任务卸载是整体的任务卸载，所以是整数规划问题</p>
-<h4 id="该模型的目标是在电量消耗这个条件下最小化任务持续时间"><a href="#该模型的目标是在电量消耗这个条件下最小化任务持续时间" class="headerlink" title="该模型的目标是在电量消耗这个条件下最小化任务持续时间"></a>该模型的目标是在电量消耗这个条件下最小化任务持续时间</h4>
           
+软件超密集网络中移动边缘计算的任务卸载
+
+
+Hessian matrix 黑塞矩阵黑塞矩阵是由一个多元函数的二阶偏导数构成的方阵，描述了函数的局部曲率，常用于牛顿法解决优化问题，利用黑塞矩阵可判定多元函数的极值问题。
+线性与非线性线性表示两个变量之间是一次函数的关系，线性关系中的量是成比例的非线性
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/10/14/paper/EdgeCompute-01/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2179,39 +1881,18 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="交通预测问题"><a href="#交通预测问题" class="headerlink" title="交通预测问题"></a>交通预测问题</h3><ol>
-<li><p>将传感器网络表示为带权有向图 G = (V, E,W)，其中 V 是点集， E 是边集， W 是 N * N 的带权邻接矩阵表示节点的邻近度</p>
-</li>
-<li><p>将在图 G 上观察到的交通流量视为一个 N * P 的图信号矩阵 X ，其中 P 是每个节点上的特征数，特征例如速度、体积等。 X 就是整个路网在某一时刻的状况</p>
-</li>
-<li><p>用 X(t) 表示 t 时刻观测到的路网状况</p>
-</li>
-<li><p>交通预测的问题就在于学习一个函数 h(.)，通过过去的路网状况矩阵 T’，预测未来 T 时刻的路网状况矩阵。</p>
-</li>
-</ol>
-<h3 id="空间依赖性模型"><a href="#空间依赖性模型" class="headerlink" title="空间依赖性模型"></a>空间依赖性模型</h3><h4 id="将交通流建模为扩散的过程"><a href="#将交通流建模为扩散的过程" class="headerlink" title="将交通流建模为扩散的过程"></a>将交通流建模为扩散的过程</h4><ul>
-<li><p>random walk 随机游走<br>随机游走是指基于过去的表现，无法预测将来的发展步骤和方向<br>一般的随机游走是以马尔可夫链或者马尔可夫过程的形式出现的 </p>
-</li>
-<li><p>马尔可夫性质如下<br><img src="DIFFUSION-CONVOLUTIONAL-RECURRENT-NEURAL/25a6129f9ba1a9ed334f56c45590db0743eabe58.svg" alt="马尔可夫性质"></p>
-</li>
-</ul>
-<h4 id="这个扩散过程的特征是在图-G-上重启概率-alpha-在-0-1-之间和包含转移矩阵-D-O-1-W-的随机游走。其中-D-O-是表示图中顶点出度的对角矩阵"><a href="#这个扩散过程的特征是在图-G-上重启概率-alpha-在-0-1-之间和包含转移矩阵-D-O-1-W-的随机游走。其中-D-O-是表示图中顶点出度的对角矩阵" class="headerlink" title="这个扩散过程的特征是在图 G 上重启概率 $\alpha$ 在[0, 1]之间和包含转移矩阵$D_O^{-1}W$的随机游走。其中$D_O$是表示图中顶点出度的对角矩阵"></a>这个扩散过程的特征是在图 G 上重启概率 $\alpha$ 在[0, 1]之间和包含转移矩阵$D_O^{-1}W$的随机游走。其中$D_O$是表示图中顶点出度的对角矩阵</h4><ul>
-<li><p>sequence to sequence architecture 序列到序列模型<br>使用两个循环神经网络，将一个序列直接转换到另一个序列。一般通过Encoder-Decoder（编码-解码）框架实现</p>
-</li>
-<li><p>Autoregressive 自回归<br>从线性回归发展而来，不是用来预测其他变量，而是用来预测自己，所以叫自回归</p>
-</li>
-</ul>
-<h4 id="扩散卷积同时定义在有向图和无向图上"><a href="#扩散卷积同时定义在有向图和无向图上" class="headerlink" title="扩散卷积同时定义在有向图和无向图上"></a>扩散卷积同时定义在有向图和无向图上</h4><ol>
-<li>D 表示Degree matrix, 只有主对角线上有非零元素, $L = D^{-{1\over2}}(D - W)D^{-{1\over2}}$ 是一个归一化的拉普拉斯算子</li>
-</ol>
-<ul>
-<li>spectral graph convolution 谱图卷积</li>
-</ul>
-<h3 id="时间动态性模型"><a href="#时间动态性模型" class="headerlink" title="时间动态性模型"></a>时间动态性模型</h3><h4 id="利用循环神经网络模拟时间依赖性"><a href="#利用循环神经网络模拟时间依赖性" class="headerlink" title="利用循环神经网络模拟时间依赖性"></a>利用循环神经网络模拟时间依赖性</h4><ul>
-<li>LSTM(Long Short-Term Memory) 长短期记忆网络</li>
-</ul>
-<h4 id="用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion-Convolutional-Gated-Recurrent-Unit-DCGRU-扩散卷积门控递归单元"><a href="#用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion-Convolutional-Gated-Recurrent-Unit-DCGRU-扩散卷积门控递归单元" class="headerlink" title="用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion Convolutional Gated Recurrent Unit (DCGRU)-扩散卷积门控递归单元"></a>用扩散卷积代替了GPU中的矩阵乘法，得到了Diffusion Convolutional Gated Recurrent Unit (DCGRU)-扩散卷积门控递归单元</h4><h4 id="整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练"><a href="#整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练" class="headerlink" title="整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练"></a>整个网络通过最大限度地利用时间反向传播生成目标未来时间序列的可能性来训练</h4><h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><h3 id="通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN"><a href="#通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN" class="headerlink" title="通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN"></a>通过和一些DCRNN的变体的实验的比较，来验证为什么要用DCRNN</h3>
-          
+          方法交通预测问题
+将传感器网络表示为带权有向图 G = (V, E,W)，其中 V 是点集， E 是边集， W 是 N * N 的带权邻接矩阵表示节点的邻近度
+
+将在图 G 上观察到的交通流量视为一个 N * P 的图信号矩阵 X ，其中 P 是每个节点上的特征数，特征例如速度、体积等。 X 就是整
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/08/21/paper/Traffic-01/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2384,45 +2065,20 @@ min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\
       
         
           
-            <p>给定区间范围x, y时，要考虑y是否比x大。</p>
-<p>a，b的最大公约数记为(a, b)</p>
-<p>a，b的最小公倍数记为[a, b]</p>
-<p>则 (a, b)x[a, b]=ab</p>
-<p>附上求最小公约数代码：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">divisor</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a % b == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> b;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> divisor(b, a % b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="HDUOJ-2035"><a href="#HDUOJ-2035" class="headerlink" title="HDUOJ_2035"></a>HDUOJ_2035</h3><p>求A^B的最后三位数表示的整数。</p>
-<p>A^B % 1000，肯定值回溢出。全部乘起来再模等价于每个模再累乘</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a, b;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">cin</span> &gt;&gt; a &gt;&gt; b &amp;&amp; (a != <span class="number">0</span> || b != <span class="number">0</span>))&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(b--)&#123;</span><br><span class="line">            res = res * a % <span class="number">1000</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; res &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="HDUOJ-2036"><a href="#HDUOJ-2036" class="headerlink" title="HDUOJ_2036"></a>HDUOJ_2036</h3><p>求任意多边形的面积公式：</p>
-<p>S=0.5*abs(x1*y2-y1*x2+x2*y3-y2*x3+…+xn*y1-yn*x1)</p>
-<h3 id="HDUOJ-2038"><a href="#HDUOJ-2038" class="headerlink" title="HDUOJ_2038"></a>HDUOJ_2038</h3><p>区间贪心</p>
-<h3 id="HDUOJ-2041-HDUOJ-2044"><a href="#HDUOJ-2041-HDUOJ-2044" class="headerlink" title="HDUOJ_2041,HDUOJ_2044"></a>HDUOJ_2041,HDUOJ_2044</h3><p>斐波那契数列，递推</p>
-<h3 id="HDUOJ-2042-HDUOJ-2013"><a href="#HDUOJ-2042-HDUOJ-2013" class="headerlink" title="HDUOJ_2042,HDUOJ_2013"></a>HDUOJ_2042,HDUOJ_2013</h3><p>同一题，数学公式转化</p>
-<h3 id="HDUOJ2044-2050"><a href="#HDUOJ2044-2050" class="headerlink" title="HDUOJ2044-2050"></a>HDUOJ2044-2050</h3><p>递推专场，斐波那契数列，递推数组一般设为long long</p>
-<h3 id="2046递推思想"><a href="#2046递推思想" class="headerlink" title="2046递推思想"></a>2046递推思想</h3><p>（1）当前面2<em>(i-1)方格区域已经铺满时：可以竖着放一块1</em>2骨牌将整个区域铺满，故此时方案总数为f[i-1]；</p>
-<p>（2）当前面2<em>(i-2)方格区域已经铺满时：可以横着放两块1</em>2骨牌将整个区域铺满，故此时方案总数为f[i-2]。</p>
-<p>f[i] = f[i – 1] + f[i – 2]</p>
-<h3 id="2047递推思想"><a href="#2047递推思想" class="headerlink" title="2047递推思想"></a>2047递推思想</h3><ol>
-<li><p>最后一个字符是’O’，此时倒数第二个字符只可能是’E’或’F’，前n-2个字符的选择就是f(n-2)，所以这种情况下，选择数就是2*f(n-2)</p>
-</li>
-<li><p>最后一个字符不是’O’，此时最后一个字符可能是’E’或’F’，前n-1个字符的选择就是f(n-1)，所以这种情况下，选择数就是2*f(n-1)</p>
-</li>
-</ol>
-<p>f[i] = 2 * (f[i – 1] + f[i – 2])</p>
-<h3 id="2050递推思想"><a href="#2050递推思想" class="headerlink" title="2050递推思想"></a>2050递推思想</h3><p>f[n] = =2n^2-n+1</p>
-<h3 id="2058"><a href="#2058" class="headerlink" title="2058"></a>2058</h3><p>等差数列求和公式 <em>Sn = n\</em>a1 + n*(n-1)*d/2*</p>
-<p>反求a1，a1=(Sn – n*(n-1)/2)/2</p>
-<h3 id="2064"><a href="#2064" class="headerlink" title="2064"></a>2064</h3><p>找规律 把n 个盘子从A 间接(不能把盘子直接从A 移到C )移到C 需要以下五步:</p>
-<ol>
-<li>把n – 1 个盘子间接从A 移到C, f(n – 1)</li>
-<li>把最大的盘子从A 移到B, 1</li>
-<li>把n – 1 个盘子间接从C 移到A, f(n – 1)</li>
-<li>把最大的盘子从B 移到C 1</li>
-<li>把n – 1 个盘子间接从A 移到C, f(n – 1)</li>
-</ol>
-<p>易得f(n) = 3 *　f(n – 1) + 2, f(1) = 2;</p>
-
-          
+          给定区间范围x, y时，要考虑y是否比x大。
+a，b的最大公约数记为(a, b)
+a，b的最小公倍数记为[a, b]
+则 (a, b)x[a, b]=ab
+附上求最小公约数代码：
+1234567int divisor(int a, int b)&#123;    if(a % b == 0)&#12
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/07/11/HDUOJ/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
