@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="课程,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
+<meta name="keywords" content="课程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="应用数学">
+<meta property="og:url" content="http://yoursite.com/2019/12/04/class/应用数学/index.html">
+<meta property="og:site_name" content="SYJ BLOG">
+<meta property="og:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2020-01-14T07:35:22.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="应用数学">
+<meta name="twitter:description" content="$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $ 范数 || w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}一般p=2时可以省略不写，常用的向量范数如下 $p = 1$时范数表示向量元素之和 $p = 2$时">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/04/class/应用数学/">
+
+
+
+
+
+  <title>应用数学 | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SYJ BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">War never changes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/class/应用数学/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="syj">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SYJ BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">应用数学</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-04T18:45:00+08:00">
+                2019-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/应用数学/" itemprop="url" rel="index">
+                    <span itemprop="name">应用数学</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article</span>
+                
+                <span title="Words count in article">
+                  1.9k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time</span>
+                
+                <span title="Reading time">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>$g(x) = \nabla f(x)  \quad g_k = \nabla f(x_k) \quad G(x) = \nabla^2f(x) \quad G_k = \nabla^2f(x_k) $</li>
+<li>范数<script type="math/tex; mode=display">
+|| w ||_p =(\sum_{i=1}^n|w_i|^p)^{1 \over p}</script>一般p=2时可以省略不写，常用的<strong>向量范数</strong>如下<ul>
+<li>$p = 1$时范数表示向量元素之和</li>
+<li>$p = 2$时范数表示欧几里得距离</li>
+<li><script type="math/tex">||w||_{\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最大值</li>
+<li><script type="math/tex">||w||_{-\infty} = \max_i|x_i|</script>表示所有向量元素绝对值中的最小值</li>
+</ul>
+</li>
+<li>多元泰勒展开式<script type="math/tex; mode=display">
+ f(x)=f(x_0) + g(x)^T(x-x_0) + \frac 12(x-x_0)^TG(x_0)(x-x_0)+ O(x-x_0)^2</script></li>
+</ul>
+<h2 id="1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><a href="#1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件" class="headerlink" title="1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件"></a>1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</h2><p><strong>一阶必要条件</strong>： 设 $f(x)$ 在开集 $D$上一阶连续可微，若<script type="math/tex">x^* \in D</script>是$min \; f(x)$的一个局部极小点，则必有<script type="math/tex">g(x^*)  = 0</script><br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f(x) & =f(x^*) + g(x^*)^T(x-x^*) +\omicron(||x-x^*||) \\
+ & =f(x^*)- \alpha g(x^*)^Tg(x^*) + \omicron(\alpha) \\
+ & = f(x^*) - \alpha||g(x^*)||^2 + \omicron(\alpha)
+\end{aligned}</script><p>因为<script type="math/tex">f(x^*)</script>是极小值点，所以<script type="math/tex">f(x) > f(x^*)</script>，所以<script type="math/tex">- \alpha||g(x^*)||^2 + \omicron(\alpha) > 0</script><br>即<script type="math/tex">||g(x^*)||^2 \le \frac{ \omicron(\alpha)}{ \alpha}</script></p>
+<p>令两边 $ \alpha \to 0$得出<script type="math/tex">||g(x^*)|| = 0</script>, 即 <script type="math/tex">g(x^*) = 0</script></p>
+<p><strong>二阶必要条件</strong>： 设 $f(x)$ 在开集 $D$ 上二阶连续可微。若 <script type="math/tex">x^* \in D</script>是 $min \; f(x)$ 的一个局部极小点，则必有 <script type="math/tex">g(x^*)=0</script> 且 <script type="math/tex">G(x^*)</script> 是 <strong><em>半正定矩阵</em></strong>。<br>证明：<br>取 <script type="math/tex">x = x^* - \alpha g(x^*) \in D \quad \alpha > 0</script></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f(x)& =f(x^*) + g(x^*)^T(x-x^*)+\frac 12(x-x^*)^TG(x^*)(x-x^*)+ O(x-x^*)^2 \\
+&\to \quad f(x) - f(x^*) = \frac 12\alpha^2d^TG(x^*)d + O(\alpha^2)\\
+&\to \quad d^TG(x^*)d + \frac{O(2\alpha^2)}{\alpha^2} \ge 0 
+\end{aligned}</script><p>令 $ \alpha \to 0$得，<script type="math/tex">d^TG(x^*)d \ge 0</script>，所以<script type="math/tex">G(x^*)</script>是半正定矩阵</p>
+<p><strong>二阶充分条件</strong>： 设$f(x)$在开集$D$上二阶连续可微. 若<script type="math/tex">x^* \in D</script>满足条件<script type="math/tex">g(x^*) = 0</script>及<script type="math/tex">G(x^*)</script>是正定矩阵，则<script type="math/tex">x^*</script>是$min \; f(x)$的一个局部极小点</p>
+<h2 id="2-在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><a href="#2-在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架" class="headerlink" title="2. 在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架"></a>2. 在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</h2><ol>
+<li>给定初始化参数以及初始迭代点 $x_0$. 置 $k:= 0$</li>
+<li>若 $x_k$满足某种终止准则，停止迭代，以$x_k$作为近似极小</li>
+<li>通过求解$x_k$处的某个子问题确定下降方向$d_k$</li>
+<li>通过某种搜索方式确定步长因子$\alpha_k$，使得$f(x_k+\alpha_kd_k) &lt; f(x_k)$</li>
+<li>令$x_{k+1}:=x_k + \alpha_k d_k, k:=k+1$，转2</li>
+</ol>
+<h2 id="3-描述求解无约束最优化问题的牛顿法步骤"><a href="#3-描述求解无约束最优化问题的牛顿法步骤" class="headerlink" title="3. 描述求解无约束最优化问题的牛顿法步骤"></a>3. 描述求解无约束最优化问题的牛顿法步骤</h2><ol>
+<li>给定终止误差值$0 \le \epsilon &lt;&lt; 1$，初始点$x_0 \in \mathbb R^n$. 令 $k := 0$.</li>
+<li>计算 $g_k = \nabla f(x_k)$. 若 $||g_k|| \le \epsilon$，停算，输出 <script type="math/tex">x^* \approx x_k</script>.</li>
+<li>计算$G_k = \nabla^2f(x_k)$，并求解线性方程组得解 $d_k$，<script type="math/tex; mode=display">
+G_kd=-g_k</script></li>
+<li>令 $x_{k+1} = x_k + d_k, k := k+1$，转2.</li>
+</ol>
+<h2 id="4-简单一种你所知道的关于单变量最优化问题的线搜索算法"><a href="#4-简单一种你所知道的关于单变量最优化问题的线搜索算法" class="headerlink" title="4. 简单一种你所知道的关于单变量最优化问题的线搜索算法"></a>4. 简单一种你所知道的关于单变量最优化问题的线搜索算法</h2><p><strong>0.618法</strong></p>
+<ol>
+<li><p>确定初始搜索区间$[a_0, b_0]$和容许误差 $\epsilon &gt; 0$. 计算初始试探点</p>
+<script type="math/tex; mode=display">
+p_0 = a_0 + 0.382(b_0 - a_0), \quad q_0 = a_0 + 0.618(b_0 - a_0)</script><p>及相应的函数值 $\phi(p_0), \phi(q_0)$. 置 $i := 0$</p>
+</li>
+<li><p>若$\phi(p_i) &lt; \phi(q_i)$，转3；否则转4</p>
+</li>
+<li><p>计算左试探点. 若$|q_i - a_i| \le \epsilon$，停算，输出$p_i$；否则，令</p>
+<script type="math/tex; mode=display">
+a_{i+1}:=a_i, \quad b_{i+1} := q_i, \quad \phi(q_{i+1}):=\phi(p_i),\\
+q_{i+1}:=p_i, \quad p_{i+1}:= a_{i+1} + 0.382(b_{i+1} - a_{i+1}).</script><p>计算$\phi(p_{i+1}), i:=i+1$，转2.</p>
+</li>
+<li><p>计算右试探点. 若$|b_i - p_i| \le \epsilon$，停算，输出$q_i$；否则，令</p>
+<script type="math/tex; mode=display">
+a_{i+1}:=p_i, \quad b_{i+1} := b_i, \quad \phi(p_{i+1}):=\phi(q_i),\\
+p_{i+1}:=q_i, \quad q_{i+1}:= a_{i+1} + 0.618(b_{i+1} - a_{i+1}).</script><p>计算$\phi(q_{i+1}), i := i + 1$，转2.</p>
+</li>
+</ol>
+<h2 id="5-设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2"><a href="#5-设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2" class="headerlink" title="5. 设有非线性方程组f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2"></a>5. 设有非线性方程组<script type="math/tex">f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2</script></h2><h3 id="1-列出求解这个方程组的非线性最小二乘问题的数学模型"><a href="#1-列出求解这个方程组的非线性最小二乘问题的数学模型" class="headerlink" title="(1). 列出求解这个方程组的非线性最小二乘问题的数学模型"></a>(1). 列出求解这个方程组的非线性最小二乘问题的数学模型</h3><p>数学模型为：$min((x^3_1 - x^2_2 - 1)^2 +(2x_1 +x_2-2)^2 )$</p>
+<h3 id="2-写出求解该问题的高斯-牛顿法迭代公式的具体形式"><a href="#2-写出求解该问题的高斯-牛顿法迭代公式的具体形式" class="headerlink" title="(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式"></a>(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式</h3><p>迭代公式为：$x_{k+1}=x_k - (A_k^TA_k)^{-1}A^T_kf_k$</p>
+<script type="math/tex; mode=display">
+f(x)=[x^3_1 - x^2_2 - 1 \quad 2x_1 +x_2-2]^T \\
+A(x) = \left[  
+\begin{matrix}
+\frac{\partial f_1(x)}{\partial x_1} & ... & \frac{\partial f_1(x)}{\partial x_m}\\
+... & ... & ... \\
+\frac{\partial f_n(x)}{\partial x_1} & ... & \frac{\partial f_n(x)}{\partial x_m}\\
+\end{matrix}
+\right] = \left[\begin{matrix}
+3x_1^2 & -2x_2 \\
+2 & 1\\
+\end{matrix}\right] \\</script><h2 id="6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><a href="#6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right" class="headerlink" title="6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$"></a>6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</h2><h3 id="1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><a href="#1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭" class="headerlink" title="(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭"></a>(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</h3><p>$d_0^THd_1 = (1,0)\left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right]\left(\begin{matrix}-1\\2  \end{matrix}\right) = 0$所以得证</p>
+<h3 id="2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点"><a href="#2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点" class="headerlink" title="(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点"></a>(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点</h3><h2 id="7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点"><a href="#7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点" class="headerlink" title="7. 对于最优化问题\begin{aligned}min \quad f(x) & = 4x_1 - 3x_2\\ s.t. & -(x_1-3)^2+x_2+1 \ge0 \\ &4-x_1-x_2\ge0\\&x_2+7\ge0\end{aligned}求满足KT条件的点"></a>7. 对于最优化问题<script type="math/tex">\begin{aligned}min \quad f(x) & = 4x_1 - 3x_2\\ s.t. & -(x_1-3)^2+x_2+1 \ge0 \\ &4-x_1-x_2\ge0\\&x_2+7\ge0\end{aligned}</script>求满足KT条件的点</h2><p>对于一般约束问题：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+min  \quad& f(x),\\ s.t. \quad & h_i(x) = 0, \quad i = 1,2,...,l, \\ 
+& g_i(x) \ge 0, \quad i = 1,2,...,m.\end{aligned}</script><p>KT条件如下：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+1.\quad\nabla f(x^*) - \sum_{i=1}^l\mu_i^*\nabla h_i(x^*) - \sum_{i=1}^m\lambda_i^*\nabla g_i(x^*) = 0, \\
+2. \quad h_i(x^*) = 0, & i = 1,2,...,l, \\
+3. \quad g_i(x^*) \ge 0, \quad \lambda_i^*\ge 0, \quad \lambda_i^*g_i(x^*) = 0, & i =1,2,...,m.
+\end{cases}</script><p><strong>解如下</strong></p>
+<p>设<script type="math/tex">x^*= (x_1^*, x_2^*)</script>为KT点</p>
+<script type="math/tex; mode=display">\nabla f(x^*) = \left[\begin{matrix}4\\-3\end{matrix}\right], \nabla g_1(x^*) = \left[\begin{matrix}-2(x_1^*-3)\\1\end{matrix}\right], \nabla g_2(x^*) = \left[\begin{matrix}-1\\-1\end{matrix}\right], \nabla g_3(x^*) = \left[\begin{matrix}0\\1\end{matrix}\right]</script><script type="math/tex; mode=display">
+\begin{aligned}
+1.\quad & \nabla f(x^*) - \sum_{i=1}^l\mu_i^*\nabla h_i(x^*) - \sum_{i=1}^m\lambda_i^*\nabla g_i(x^*) = 0\\
+-> & \left[\begin{matrix}4\\-3\end{matrix}\right]- \lambda_1^*\left[ \begin{matrix}  -2(x_1^*-3)\\1\end{matrix}\right] - \lambda_2^*\left[\begin{matrix}-1\\-1\end{matrix}\right] - \lambda_3^*\left[\begin{matrix}0\\1\end{matrix}\right] = 0\\
+3. \quad & \lambda_i^*g_i(x^*) = 0 \\
+-> & \begin{cases}\lambda_1^*(-(x_1^*-3)^2+x_2^*+1) = 0\\
+\lambda_2^*(4-x_1^*-x_2^*) = 0\\
+\lambda_3^*(x_2^*+7) = 0\\
+\end{cases}
+\end{aligned}</script><p>令<script type="math/tex">\lambda_2^*, \lambda_3^* = 0</script>，由1可以推出 <script type="math/tex">\lambda_1^* = -3, x_1^* = \frac {11}3</script>，由3.1得<script type="math/tex">x_2^* = -\frac 59</script></p>
+<h2 id="8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"><a href="#8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性" class="headerlink" title="8. 设二次规划\begin{aligned}&min\quad f(x)=\frac12x^THx+c^Tx\\&s.t.\quad Ax=b \end{aligned}其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"></a>8. 设二次规划<script type="math/tex">\begin{aligned}&min\quad f(x)=\frac12x^THx+c^Tx\\&s.t.\quad Ax=b \end{aligned}</script>其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性</h2><p>首先构造拉格朗日函数：$L(x,\lambda) = \frac12x^THx+c^Tx - \lambda^T(Ax-b)$，</p>
+<p>$\frac{\partial L(x,\lambda)}{\partial x} = Hx + c - A^T\lambda = 0$,</p>
+<p>两边乘以$H^{-1}\quad-&gt; \quad x + H^{-1}c - H^{-1}A^T\lambda = 0$,<br>两边乘以$A \quad -&gt; \quad Ax + AH^{-1}c - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b + AH^{-1}c - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b + AH^{-1}c = AH^{-1}A^T\lambda$,<br>$ \quad -&gt; \quad \lambda = (AH^{-1}A^T)^{-1}(b + AH^{-1}c)$,<br>$ \quad -&gt; \quad x =  H^{-1}A^T(AH^{-1}A^T)^{-1}(b + AH^{-1}c) - H^{-1}c$,<br>解的唯一性：因为$H$正定，$A$行满秩；所以拉格朗日矩阵<script type="math/tex">\left[\begin{matrix}H&-A^T\\-A & 0\end{matrix}\right]</script>非奇异，即其解唯一。</p>
+<h2 id="设A是m-n实满秩矩阵，a为n维实向量，求解二次规划-begin-aligned-min-quad-f-x-frac12-x-a-T-x-a-s-t-quad-Ax-b-end-aligned-以及相应的拉格朗日乘子"><a href="#设A是m-n实满秩矩阵，a为n维实向量，求解二次规划-begin-aligned-min-quad-f-x-frac12-x-a-T-x-a-s-t-quad-Ax-b-end-aligned-以及相应的拉格朗日乘子" class="headerlink" title="设A是m*n实满秩矩阵，a为n维实向量，求解二次规划\begin{aligned}&min\quad f(x)=\frac12(x-a)^T(x-a),\\&s.t.\quad Ax=b, \end{aligned}以及相应的拉格朗日乘子"></a>设A是m*n实满秩矩阵，a为n维实向量，求解二次规划<script type="math/tex">\begin{aligned}&min\quad f(x)=\frac12(x-a)^T(x-a),\\&s.t.\quad Ax=b, \end{aligned}</script>以及相应的拉格朗日乘子</h2><p>首先构造拉格朗日函数：$L(x,\lambda) = \frac12x^THx-a^Tx + \frac12a^Ta - \lambda^T(Ax-b)$，其中$H$是单位阵</p>
+<p>$\frac{\partial L(x,\lambda)}{\partial x} = Hx -a - A^T\lambda = 0$,</p>
+<p>两边乘以$H^{-1}\quad-&gt; \quad x - H^{-1}a - H^{-1}A^T\lambda = 0$,<br>两边乘以$A \quad -&gt; \quad Ax - AH^{-1}a - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b - AH^{-1}a - AH^{-1}A^T\lambda = 0$,<br>$ \quad -&gt; \quad b - Aa - AA^T\lambda = 0$,<br>$ \quad -&gt; \quad \lambda=(AA^T)^{-1}(b - Aa)$,<br>$ \quad -&gt; \quad x=a + A^T(AA^T)^{-1}(b - Aa)$.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/课程/" rel="tag"># 课程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/21/paper/EdgeCompute-03/" rel="next" title="Enhancing the User Experience in Vehicular Edge Computing Networks-An Adaptive Resource Allocation Approach">
+                <i class="fa fa-chevron-left"></i> Enhancing the User Experience in Vehicular Edge Computing Networks-An Adaptive Resource Allocation Approach
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/12/paper/EdgeCompute-04/" rel="prev" title="In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning">
+                In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="syj">
+          <p class="site-author-name" itemprop="name">syj</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BanBuDu0" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github-square"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/189284975/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/SYJ27783318" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.instagram.com/yuejunq/" target="_blank" title="Instagram">
+                  
+                    <i class="fa fa-fw fa-instagram"></i>
+                  
+                    
+                      Instagram
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-试描述一下无约束优化问题min-f-x-的最优性条件并简单证明，即一阶二阶条件"><span class="nav-number">1.</span> <span class="nav-text">1. 试描述一下无约束优化问题min f(x)的最优性条件并简单证明，即一阶二阶条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-在数值优化中，一般采用迭代法求解无约束优化问题min-f-x-的极小点，请描述一下无约束优化问题的一般算法框架"><span class="nav-number">2.</span> <span class="nav-text">2. 在数值优化中，一般采用迭代法求解无约束优化问题min f(x)的极小点，请描述一下无约束优化问题的一般算法框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-描述求解无约束最优化问题的牛顿法步骤"><span class="nav-number">3.</span> <span class="nav-text">3. 描述求解无约束最优化问题的牛顿法步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-简单一种你所知道的关于单变量最优化问题的线搜索算法"><span class="nav-number">4.</span> <span class="nav-text">4. 简单一种你所知道的关于单变量最优化问题的线搜索算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-设有非线性方程组f-1-x-x-3-1-x-2-2-1-0-f-2-x-2x-1-x-2-2"><span class="nav-number">5.</span> <span class="nav-text">5. 设有非线性方程组f_1(x) = x^3_1 - x^2_2 - 1=0\\ f_2(x)=2x_1 +x_2-2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-列出求解这个方程组的非线性最小二乘问题的数学模型"><span class="nav-number">5.1.</span> <span class="nav-text">(1). 列出求解这个方程组的非线性最小二乘问题的数学模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-写出求解该问题的高斯-牛顿法迭代公式的具体形式"><span class="nav-number">5.2.</span> <span class="nav-text">(2). 写出求解该问题的高斯-牛顿法迭代公式的具体形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-设-f-x-frac12x-THx-b-Tx-，其中-H-left-begin-matrix-4-amp-2-2-amp-4-end-matrix-right-b-left-begin-matrix-3-3-end-matrix-right"><span class="nav-number">6.</span> <span class="nav-text">6. 设$f(x) = \frac12x^THx + b^Tx$，其中$H = \left[\begin{matrix}4 &amp; 2\\2 &amp; 4  \end{matrix}\right], b = \left[ \begin{matrix}  3\\3\end{matrix}\right]$</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-证明-d-0-1-0-T-与-d-1-1-2-T-关于H共轭"><span class="nav-number">6.1.</span> <span class="nav-text">(1). 证明$d_0=(1,0)^T$与$d_1(-1,2)^T$关于H共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-以-x-0-0-0-T-为初始点，-d-0-d-1-为搜索方向，用精确线搜索求-f-x-的极小点"><span class="nav-number">6.2.</span> <span class="nav-text">(2). 以$x_0=(0,0)^T$为初始点，$d_0,d_1$为搜索方向，用精确线搜索求$f(x)$的极小点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-对于最优化问题-begin-aligned-min-quad-f-x-4x-1-3x-2-s-t-x-1-3-2-x-2-1-ge0-4-x-1-x-2-ge0-x-2-7-ge0-end-aligned-求满足KT条件的点"><span class="nav-number">7.</span> <span class="nav-text">7. 对于最优化问题\begin{aligned}min \quad f(x) &amp; = 4x_1 - 3x_2\\ s.t. &amp; -(x_1-3)^2+x_2+1 \ge0 \\ &amp;4-x_1-x_2\ge0\\&amp;x_2+7\ge0\end{aligned}求满足KT条件的点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-设二次规划-begin-aligned-min-quad-f-x-frac12x-THx-c-Tx-s-t-quad-Ax-b-end-aligned-其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性"><span class="nav-number">8.</span> <span class="nav-text">8. 设二次规划\begin{aligned}&amp;min\quad f(x)=\frac12x^THx+c^Tx\\&amp;s.t.\quad Ax=b \end{aligned}其中H为n阶对称正定矩阵，矩阵A行满秩，求其最优解并说明解的唯一性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设A是m-n实满秩矩阵，a为n维实向量，求解二次规划-begin-aligned-min-quad-f-x-frac12-x-a-T-x-a-s-t-quad-Ax-b-end-aligned-以及相应的拉格朗日乘子"><span class="nav-number">9.</span> <span class="nav-text">设A是m*n实满秩矩阵，a为n维实向量，求解二次规划\begin{aligned}&amp;min\quad f(x)=\frac12(x-a)^T(x-a),\\&amp;s.t.\quad Ax=b, \end{aligned}以及相应的拉格朗日乘子</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">syj</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
