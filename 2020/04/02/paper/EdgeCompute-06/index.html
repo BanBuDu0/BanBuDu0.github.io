@@ -94,19 +94,20 @@
 
 
 
-<meta name="description" content="1. 摘要 这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。 引言问题的引出  主要贡献">
+<meta name="description" content="1. 摘要 这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。 引言问题的引出 主要贡献本">
 <meta name="keywords" content="边缘计算,综述">
 <meta property="og:type" content="article">
 <meta property="og:title" content="A Q-Learning-Based Proactive Caching Strategy for Non-Safety Related Services in Vehicular Networks">
 <meta property="og:url" content="http://yoursite.com/2020/04/02/paper/EdgeCompute-06/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="1. 摘要 这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。 引言问题的引出  主要贡献">
+<meta property="og:description" content="1. 摘要 这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。 引言问题的引出 主要贡献本">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2020/04/02/vyWklqjTmw18YOA.jpg">
-<meta property="og:updated_time" content="2020-04-03T03:11:19.998Z">
+<meta property="og:image" content="https://i.loli.net/2020/04/03/E1vHSqMpKm2Ycdf.jpg">
+<meta property="og:updated_time" content="2020-04-03T03:18:07.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A Q-Learning-Based Proactive Caching Strategy for Non-Safety Related Services in Vehicular Networks">
-<meta name="twitter:description" content="1. 摘要 这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。 引言问题的引出  主要贡献">
+<meta name="twitter:description" content="1. 摘要 这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。 引言问题的引出 主要贡献本">
 <meta name="twitter:image" content="https://i.loli.net/2020/04/02/vyWklqjTmw18YOA.jpg">
 
 
@@ -351,7 +352,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  1k
+                  893
                 </span>
               
 
@@ -367,7 +368,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  4
+                  3
                 </span>
               
             </div>
@@ -390,8 +391,7 @@
       
         <h2 id="1-摘要"><a href="#1-摘要" class="headerlink" title="1. 摘要"></a>1. 摘要</h2><p><img src="https://i.loli.net/2020/04/02/vyWklqjTmw18YOA.jpg" alt="SharedScreenshot.jpg"></p>
 <p>这张图片展示了车联网交叉路口的某一场景。为了给车载网络的提供更好的服务，可以把内容缓存在路边单元（Roadside Unit - RSU）和其他车辆中，但是由于车辆的高移动性给这种缓存带来了挑战。本文把缓存问题建模为马尔可夫决策过程，使用LSMT和强化学习（Q learning）求解。然后本文是着眼于非安全相关的数据，一般是用于娱乐服务，视频，新闻，音乐等。</p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="问题的引出"><a href="#问题的引出" class="headerlink" title="问题的引出"></a>问题的引出</h3><div id="flowchart-0" class="flow-chart"></div>
-
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><h3 id="问题的引出"><a href="#问题的引出" class="headerlink" title="问题的引出"></a>问题的引出</h3><p><img src="https://i.loli.net/2020/04/03/E1vHSqMpKm2Ycdf.jpg" alt="SharedScreenshot.jpg"></p>
 <h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p>本文做的是在交叉路口预测车辆接下来选择哪个方向，然后通过强化学习联合考虑缓存的RSU的索引和分配缓存空间的大小。reward定义为请求数据的传输延迟。主要目标是找到一个最佳的缓存策略，使长期预期回报最小化。主要工作/创新点如下：</p>
 <ol>
 <li>使用LSTM预测车辆接下来的移动方向</li>
@@ -416,19 +416,7 @@
 <p>通过这个策略之后，agent执行N步得到所有的reward $G_n^{\pi} = t_n + r_{n+1} + … + r_N$.</p>
 <p>通过Q learning找到$\pi^*$能让$\Bbb E_{\pi}(G_n^\pi)$最大。</p>
 <h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p>数据集：<a href="https://outreach.didichuxing.com/research/opendata/" target="_blank" rel="noopener">https://outreach.didichuxing.com/research/opendata/</a> 滴滴的数据</p>
-<h2 id="体会"><a href="#体会" class="headerlink" title="体会"></a>体会</h2><p>单纯使用Q learning会导致Q表过大无法计算。<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 需求增加
-e1=>end: RSU容留有限PASS
-e2=>end: 平衡服务质量和缓存成本OK
-op1=>operation: 引入RSU
-cond=>parallel: 车辆高移动性
-op2=>operation: 机器学习算法
-op3=>operation: RSU全局缓存
-
-st(right)->op1(right)->cond
-cond(path2, right)->op2
-cond(path3, bottom)->op3
-op3->e1
-op2(right)->e2</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":"1,","line-width":2,"line-length":"50,","text-margin":"10,","font-size":12,"line-width\"":"2,"}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
+<h2 id="体会"><a href="#体会" class="headerlink" title="体会"></a>体会</h2><p>单纯使用Q learning会导致Q表过大无法计算。</p>
 
       
     </div>
