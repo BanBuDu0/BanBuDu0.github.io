@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="1. 引言现状 移动边缘计算中的优化可能会包含如下几个问题  不确定的输入无线信道和隐私政策的不同，有些信息因素很难获得 动态的决策条件通信和计算的动态性 临时隔离大多数研究只着眼于系统的一个快照，都没有考虑到长期优化  现有的RL解决方案没有细致考虑如下几个方面的问题  训练数据应该如何采集分布式或者集中式 强化学习的Agent应该部署在哪里在哪里训练用户设备（UE）、边缘端、云端 Agent的">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-01-12T08:11:23.325Z">
+<meta property="og:updated_time" content="2020-06-10T05:20:52.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="In-Edge AI :Intelligentizing Mobile Edge Computing, Caching and Communication by Federated Learning">
 <meta name="twitter:description" content="1. 引言现状 移动边缘计算中的优化可能会包含如下几个问题  不确定的输入无线信道和隐私政策的不同，有些信息因素很难获得 动态的决策条件通信和计算的动态性 临时隔离大多数研究只着眼于系统的一个快照，都没有考虑到长期优化  现有的RL解决方案没有细致考虑如下几个方面的问题  训练数据应该如何采集分布式或者集中式 强化学习的Agent应该部署在哪里在哪里训练用户设备（UE）、边缘端、云端 Agent的">
@@ -492,8 +492,8 @@
 </ol>
 <p>但是由于联邦优化的限制，<strong>FL不能超越集中式DL训练模型</strong>，但仍然可以达到接近最佳的性能</p>
 <h3 id="实用性讨论"><a href="#实用性讨论" class="headerlink" title="实用性讨论"></a>实用性讨论</h3><hr>
-<h4 id="部署的挑战"><a href="#部署的挑战" class="headerlink" title="部署的挑战"></a>部署的挑战</h4><p>学习需要长时间的训练，且DRL模型在初步探索阶段只能随机决策，导致MEC系统容易瘫痪。<br><strong>使用转移学习来促进MEC系统中的训练过程</strong></p>
-<h4 id="延迟约束"><a href="#延迟约束" class="headerlink" title="延迟约束"></a>延迟约束</h4><p><strong>DRL中的神经网络仅仅是一个只含有一层隐藏层（该隐层含有200个神经元）的多层感知机</strong>。因此，一旦对模型进行了训练，由于DRL代理中主要网络的复杂性较低，推断过程可以快速执行</p>
+<h4 id="部署的挑战"><a href="#部署的挑战" class="headerlink" title="部署的挑战"></a>部署的挑战</h4><p>学习需要长时间的训练，且DRL模型在初步探索阶段只能随机决策，导致MEC系统容易瘫痪。<br><strong>使用迁移学习来促进MEC系统中的训练过程</strong></p>
+<h4 id="延迟约束"><a href="#延迟约束" class="headerlink" title="延迟约束"></a>延迟约束</h4><p><strong>DRL中的神经网络仅仅是一个只含有一层隐藏层（该隐层含有200个神经元）的多层感知机</strong>。因此，一旦对模型进行了训练，由于DRL代理中主要网络的复杂性较低，推理过程可以快速执行</p>
 <h2 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h2><p>Xender一个月(2016年9月1日至2016年9月30日）的数据，设置了6个边缘节点</p>
 <p>对于UEs、边缘节点、云端中的DRL设置，选择Double DQN算法，选择tanh作为激活函数，优化器选择Adam。</p>
 <p>使用一个包含200个神经元的单层全连接前馈神经网络作为目标(TargetNet)和评估 (MainNet) Q网络。</p>
@@ -623,7 +623,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -634,7 +634,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -645,7 +645,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
