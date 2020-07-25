@@ -94,18 +94,20 @@
 
 
 
-<meta name="description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题">
+<meta name="description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题 两种复制的方式 st">
 <meta name="keywords" content="big data,mit6.824">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GFS">
 <meta property="og:url" content="http://yoursite.com/2020/06/25/big_data/GFS/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题">
+<meta property="og:description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题 两种复制的方式 st">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-07-03T10:18:49.810Z">
+<meta property="og:image" content="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png">
+<meta property="og:updated_time" content="2020-07-11T03:07:03.896Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GFS">
-<meta name="twitter:description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题">
+<meta name="twitter:description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题 两种复制的方式 st">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png">
 
 
 
@@ -349,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  71
+                  848
                 </span>
               
 
@@ -365,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  3
                 </span>
               
             </div>
@@ -393,7 +395,54 @@
 <li>复制(replication) -&gt; 一致性问题</li>
 <li>更好的一致性(consistency) -&gt; 性能下降</li>
 </ol>
-<p>权衡高性能和一致性问题 </p>
+<p>权衡高性能和一致性问题</p>
+<h2 id="两种复制的方式"><a href="#两种复制的方式" class="headerlink" title="两种复制的方式"></a>两种复制的方式</h2><ol>
+<li><p>state transfer</p>
+<p>primary先执行服务</p>
+<p>primary再发送新的状态（内存的里面的内容）到backups</p>
+</li>
+<li><p>replicated state mechine</p>
+<p>client发送操作到primary, primary接着直接把操作顺序推给backups</p>
+<p>所有replicas(复制)执行所有操作</p>
+</li>
+</ol>
+<h2 id="VMWare的容错虚拟机结构"><a href="#VMWare的容错虚拟机结构" class="headerlink" title="VMWare的容错虚拟机结构"></a>VMWare的容错虚拟机结构</h2><p><img src="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png" alt="2020-07-07 10-53-17屏幕截图.png"></p>
+<h2 id="脑裂"><a href="#脑裂" class="headerlink" title="脑裂"></a>脑裂</h2><p>大致可以理解为产生了两个primary。如果单单只是master ping不通primary就重新指定一个primary的话就可能会产生脑裂，因为ping不通的那个primary可能还在work只是由于网络波动无法接收到master的消息。这时同时就有两个primary，就会出现数据不一致问题。</p>
+<p>gfs防止出现脑裂是使用了lease，如果要重新指定一个新的primary必须等到lease到期才行。</p>
+<p>vmware使用共享存储来解决脑裂，当primary和backup都想成为primary的时候，他们要在共享存储上执行test-and-set原子操作，只有成功的那个才能成为primary，因为是原子操作所以只有一个会成功，另一个失败的就<strong><em>自杀</em></strong>。如果虚拟机在尝试执行原子操作时无法访问共享存储，则它会一直等到可以为止。共享存储是指-光纤通道或iSCSI磁盘阵列等，或者可以认为test-and-set服务是在另一台仲裁机器上进行，该机器分别和想成为primary的replica通信确认。</p>
+<h2 id="deterministic-replay-确定性重放"><a href="#deterministic-replay-确定性重放" class="headerlink" title="deterministic replay 确定性重放"></a>deterministic replay 确定性重放</h2><p>允许我们记录主数据库的执行并确保备份做相同的执行 的 基础技术</p>
+<h2 id="Byzantine“拜占庭式”"><a href="#Byzantine“拜占庭式”" class="headerlink" title="Byzantine“拜占庭式”"></a>Byzantine“拜占庭式”</h2><p>较大的非故障停止故障通常称为“拜占庭”</p>
+<h2 id="复制有3个主要的挑战"><a href="#复制有3个主要的挑战" class="headerlink" title="复制有3个主要的挑战"></a>复制有3个主要的挑战</h2><ol>
+<li>正确捕获所有输入和不确定性，以确保确定性地执行备份虚拟机</li>
+<li>正确地将输入和不确定性应用于备份虚拟机，</li>
+<li>做上面两条且不会降低性能</li>
+</ol>
+<h2 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h2><p>其中，</p>
+<ul>
+<li><p>C = Consistency（一致性）</p>
+<p>表示在分布式系统中，所有backup是否拥有一致的数据</p>
+</li>
+<li><p>A = Availability（可用性）</p>
+<p>表示分布式系统的高可用，少数服务器宕机的情况下也能使用</p>
+</li>
+<li><p>P = Partition tolerance（分区容错性）</p>
+<p>表示不同backup之间由于种种原因可能不能相互访问</p>
+</li>
+</ul>
+<p>CAP定理指的是分布式系统最多同时实现2点，不可能同时满足CAP3个条件。</p>
+<p>由于现实世界的原因，一般假设P是默认实现的，即不同backup之间总是可能不能相互访问的，地震、网线断了等。</p>
+<p>因此在确认了P的情况了，C和A不可能同时实现。因为，</p>
+<ol>
+<li><p>实现C</p>
+<p>primary收到写请求同时把该请求发送给backup，这时由于P，写请求不能发送到backup，为了实现C，client都需要阻塞</p>
+</li>
+</ol>
+<p>等待，就缺少了a</p>
+<ol>
+<li><p>实现A</p>
+<p>primary收到写请求同时把该请求发送给backup，且primary写完直接返回结果，这时由于P，写请求不能发送到backup，因此backup就不能保持一致性C了</p>
+</li>
+</ol>
 
       
     </div>
@@ -513,7 +562,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -524,7 +573,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -535,7 +584,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -616,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-is-distributed-storage-hard"><span class="nav-number">1.</span> <span class="nav-text">Why is distributed storage hard</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-is-distributed-storage-hard"><span class="nav-number">1.</span> <span class="nav-text">Why is distributed storage hard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种复制的方式"><span class="nav-number">2.</span> <span class="nav-text">两种复制的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VMWare的容错虚拟机结构"><span class="nav-number">3.</span> <span class="nav-text">VMWare的容错虚拟机结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脑裂"><span class="nav-number">4.</span> <span class="nav-text">脑裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deterministic-replay-确定性重放"><span class="nav-number">5.</span> <span class="nav-text">deterministic replay 确定性重放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Byzantine“拜占庭式”"><span class="nav-number">6.</span> <span class="nav-text">Byzantine“拜占庭式”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制有3个主要的挑战"><span class="nav-number">7.</span> <span class="nav-text">复制有3个主要的挑战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAP定理"><span class="nav-number">8.</span> <span class="nav-text">CAP定理</span></a></li></ol></div>
             
 
           </div>
