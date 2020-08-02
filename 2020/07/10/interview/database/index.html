@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="ACIDA: Atomicity（原子性）C: consistency（一致性）I: isolation（隔离性）如果不存在如下4个隔离级别，就是不同事务写数据没有加锁，会导致数据库的数据出现错误。 4个隔离级别，  read uncommitted（读未提交） 不同事务写数据加锁（排它锁），但是读数据不加锁。因此存在脏读，即读取了其他事务未提交的数据。  read committed（读已提交）">
+<meta name="description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
 <meta name="keywords" content="interview,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库">
 <meta property="og:url" content="http://yoursite.com/2020/07/10/interview/database/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="ACIDA: Atomicity（原子性）C: consistency（一致性）I: isolation（隔离性）如果不存在如下4个隔离级别，就是不同事务写数据没有加锁，会导致数据库的数据出现错误。 4个隔离级别，  read uncommitted（读未提交） 不同事务写数据加锁（排它锁），但是读数据不加锁。因此存在脏读，即读取了其他事务未提交的数据。  read committed（读已提交）">
+<meta property="og:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-07-10T11:12:16.509Z">
+<meta property="og:updated_time" content="2020-08-02T05:22:28.542Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库">
-<meta name="twitter:description" content="ACIDA: Atomicity（原子性）C: consistency（一致性）I: isolation（隔离性）如果不存在如下4个隔离级别，就是不同事务写数据没有加锁，会导致数据库的数据出现错误。 4个隔离级别，  read uncommitted（读未提交） 不同事务写数据加锁（排它锁），但是读数据不加锁。因此存在脏读，即读取了其他事务未提交的数据。  read committed（读已提交）">
+<meta name="twitter:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
 
 
 
@@ -349,7 +349,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  413
+                  589
                 </span>
               
 
@@ -365,7 +365,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  2
                 </span>
               
             </div>
@@ -386,7 +386,10 @@
       
 
       
-        <h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><h3 id="A-Atomicity（原子性）"><a href="#A-Atomicity（原子性）" class="headerlink" title="A: Atomicity（原子性）"></a>A: Atomicity（原子性）</h3><h3 id="C-consistency（一致性）"><a href="#C-consistency（一致性）" class="headerlink" title="C: consistency（一致性）"></a>C: consistency（一致性）</h3><h3 id="I-isolation（隔离性）"><a href="#I-isolation（隔离性）" class="headerlink" title="I: isolation（隔离性）"></a>I: isolation（隔离性）</h3><p>如果不存在如下4个隔离级别，就是不同事务<strong>写数据没有加锁</strong>，会导致数据库的数据出现错误。</p>
+        <h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><h3 id="A-Atomicity（原子性）"><a href="#A-Atomicity（原子性）" class="headerlink" title="A: Atomicity（原子性）"></a>A: Atomicity（原子性）</h3><p>事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。 </p>
+<p>回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。</p>
+<h3 id="C-consistency（一致性）"><a href="#C-consistency（一致性）" class="headerlink" title="C: consistency（一致性）"></a>C: consistency（一致性）</h3><p>数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。</p>
+<h3 id="I-isolation（隔离性）"><a href="#I-isolation（隔离性）" class="headerlink" title="I: isolation（隔离性）"></a>I: isolation（隔离性）</h3><p>如果不存在如下4个隔离级别，就是不同事务<strong>写数据没有加锁</strong>，会导致数据库的数据出现错误。</p>
 <p>4个隔离级别，</p>
 <ul>
 <li><p>read uncommitted（读未提交）</p>
@@ -402,7 +405,8 @@
 <p>　事务只能一件一件的进行，不能并发进行。解决了幻读，但是带来严重的性能问题。</p>
 </li>
 </ul>
-<h3 id="D-durability（持久性）"><a href="#D-durability（持久性）" class="headerlink" title="D: durability（持久性）"></a>D: durability（持久性）</h3>
+<h3 id="D-durability（持久性）"><a href="#D-durability（持久性）" class="headerlink" title="D: durability（持久性）"></a>D: durability（持久性）</h3><p>一旦事务提交，则其所做的修改将会永远保存到数据库中。即使系统发生崩溃，事务执行的结果也不能丢失。 使用redo log来保证持久性。</p>
+
       
     </div>
     

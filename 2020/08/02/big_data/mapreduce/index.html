@@ -103,7 +103,7 @@
 <meta property="og:description" content="MapReduce核心流程如下图所示  一次用户的任务称为一个job，每个用户的job可以分为多个task，每个task又可以分为map task和reduce task，顾名思义map task负责执行map，reduce负责执行reduce。 此外，根据集群中的角色 又可以分为master和worker，master负责管理工作——挑选空闲的worker并给他分配一个map task或者red">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2020/08/02/YCNypnBo96WU74e.png">
-<meta property="og:updated_time" content="2020-08-02T04:42:57.900Z">
+<meta property="og:updated_time" content="2020-08-02T05:36:10.518Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MapReduce总结">
 <meta name="twitter:description" content="MapReduce核心流程如下图所示  一次用户的任务称为一个job，每个用户的job可以分为多个task，每个task又可以分为map task和reduce task，顾名思义map task负责执行map，reduce负责执行reduce。 此外，根据集群中的角色 又可以分为master和worker，master负责管理工作——挑选空闲的worker并给他分配一个map task或者red">
@@ -400,13 +400,16 @@
 <li>TaskStatus——IDLE || RUNNING || COMPLETED || ERROR；</li>
 <li>DataSource——map task读取源文件的位置。</li>
 </ul>
-<p>之外还绑定一个work，指示该task的执行者。</p>
+<p>之外还绑定一个worker，指示该task的执行者。</p>
 <p>在实验中，master只负责task状态的处理，其余只要一个worker开始工作，其就会不断的向master请求task，执行task和上报task状态（完成、失败）。这里work的执行又分为map和reduce，在MapReduce的Fault Tolerance中，如果work失联了，则该work完成的所有map任务都需要重做，产生的所有中间结果需要删除；但是该work完成的reduce任务不需要重做。因为map的结果是写道中间文件中，而reduce的结果是persistence。</p>
 <h2 id="Refinements-改进"><a href="#Refinements-改进" class="headerlink" title="Refinements(改进)"></a>Refinements(改进)</h2><h3 id="Partitioning-Function"><a href="#Partitioning-Function" class="headerlink" title="Partitioning Function"></a>Partitioning Function</h3><p>map task的结果需要保存到中间文件（Intermediate files），在保存的时候需要用到一个很重要的概念——Partitioning Function分区函数。用户指定reduce task/输出文件的数量（R），将结果划分到不同的分区。在实验中分区的实现具体如下：</p>
 <p>一个map task会处理一个file，并将中间结果分区保存。</p>
 <p>在map保存中间结果的时候，将结果保存在不同的文件中，因为一个map task处理一个file,map task数量=file数量，这里的t.TaskId = 文件的ID。因此一个map的中间结果为——<strong>mr-fileID-partitionID</strong>，nReduce就是用户指定的reduce task/输出文件的数量，可以理解为分区数。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; w.nReduce; i++ &#123;</span><br><span class="line">	intermediateFileName := fmt.Sprintf(<span class="string">"mr-%v-%v"</span>, t.TaskId, i)</span><br></pre></td></tr></table></figure>
-<p>开了这nReduce个分区之后，patitioning function使用<figure class="highlight plain"><figcaption><span>mod R```。原因是为了将相同的key保存在同一个分区中， 这样后面做reduce的时候就，一个reduce task就能处理完某一个key，而不会由遗漏。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">例如，word-count中A的map结果，就都会保存在 mr-taskID-相同的partitionID中，因为都是用 A去做hash，所以所有A的中间结果的partitionID都是相同的。</span><br><span class="line"></span><br><span class="line">在做reduce task的时候，取中间结果，因为nMap = file数量，所以i = map taskID = fileID，所以一个reduce task会处理所有file/map task产生的某一个分区。</span><br><span class="line"></span><br><span class="line">```go	for i := 0; i &lt; w.nMap; i++ &#123;</span><br><span class="line">for i := 0; i &lt; w.nMap; i++ &#123;</span><br><span class="line">	// mr-%d-%d, 第一个%d指示的是哪个task生成的，因为nMap = fileNum，一个file开一个map task</span><br><span class="line">	// 第二个%d指示的是由哪个reduce task去处理该文件</span><br><span class="line">	// 这样就把不同map产生的中间结果分给不同的reduce做了</span><br><span class="line">	fileName := fmt.Sprintf(&quot;mr-%d-%d&quot;, i, t.TaskId)</span><br></pre></td></tr></table></figure></p>
+<p>开了这nReduce个分区之后，patitioning function使用hash(key) mod R。原因是为了将相同的key保存在同一个分区中， 这样后面做reduce的时候就，一个reduce task就能处理完某一个key，而不会由遗漏。</p>
+<p>例如，word-count中A的map结果，就都会保存在 mr-taskID-相同的partitionID中，因为都是用 A去做hash，所以所有A的中间结果的partitionID都是相同的。</p>
+<p>在做reduce task的时候，取中间结果，因为nMap = file数量，所以i = map taskID = fileID，所以一个reduce task会处理所有file/map task产生的某一个分区。</p>
+<figure class="highlight go"><figcaption><span>for i :</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; w.nMap; i++ &#123;</span><br><span class="line">	<span class="comment">// mr-%d-%d, 第一个%d指示的是哪个task生成的，因为nMap = fileNum，一个file开一个map task</span></span><br><span class="line">	<span class="comment">// 第二个%d指示的是由哪个reduce task去处理该文件</span></span><br><span class="line">	<span class="comment">// 这样就把不同map产生的中间结果分给不同的reduce做了</span></span><br><span class="line">	fileName := fmt.Sprintf(<span class="string">"mr-%d-%d"</span>, i, t.TaskId)</span><br></pre></td></tr></table></figure>
 <p>这样保存中间结果还有一个好处，就是如果某个map task失败了，master会将该task重置为IDLE 等待新的work来执行，新的work执行之后产生的中间结果和之前失败的work产生的中间结果命名方式是相同的——mr-fileID-partitionID，所以会覆盖写，不用再做删除失败的中间结果的操作。</p>
 <h3 id="Ordering-Guarantees-——-sort"><a href="#Ordering-Guarantees-——-sort" class="headerlink" title="Ordering Guarantees —— sort"></a>Ordering Guarantees —— sort</h3><p>此外，做reduce之前还有一步是对中间结果的key做<strong>sort</strong>。对中间结果做排序的原因，论文的说明如下:</p>
 <blockquote>
