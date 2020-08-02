@@ -103,7 +103,7 @@
 <meta property="og:description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题 两种复制的方式 st">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png">
-<meta property="og:updated_time" content="2020-07-11T03:07:03.896Z">
+<meta property="og:updated_time" content="2020-08-02T01:46:41.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GFS">
 <meta name="twitter:description" content="Why is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高性能和一致性问题 两种复制的方式 st">
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  848
+                  1k
                 </span>
               
 
@@ -443,6 +443,12 @@
 <p>primary收到写请求同时把该请求发送给backup，且primary写完直接返回结果，这时由于P，写请求不能发送到backup，因此backup就不能保持一致性C了</p>
 </li>
 </ol>
+<h2 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h2><p>突然想到之前实现MapReduce的时候，每个worker在做reduce的时候都需要先根据intermediate的key sort一下。这是为什么呢？</p>
+<p>回去看论文发现原文说明如下</p>
+<blockquote>
+<p>When a reduce worker has read all intermediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together. The sorting is needed because typically many different keys map to the same reduce task</p>
+<p>当reduce worker读取了所有中间数据时，它将按中间键对其进行排序，以便将所有出现的相同键分组在一起。之所以需要进行排序，是因为通常有许多不同的键映射到同一个reduce任务。</p>
+</blockquote>
 
       
     </div>
@@ -562,7 +568,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -665,7 +671,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-is-distributed-storage-hard"><span class="nav-number">1.</span> <span class="nav-text">Why is distributed storage hard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种复制的方式"><span class="nav-number">2.</span> <span class="nav-text">两种复制的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VMWare的容错虚拟机结构"><span class="nav-number">3.</span> <span class="nav-text">VMWare的容错虚拟机结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脑裂"><span class="nav-number">4.</span> <span class="nav-text">脑裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deterministic-replay-确定性重放"><span class="nav-number">5.</span> <span class="nav-text">deterministic replay 确定性重放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Byzantine“拜占庭式”"><span class="nav-number">6.</span> <span class="nav-text">Byzantine“拜占庭式”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制有3个主要的挑战"><span class="nav-number">7.</span> <span class="nav-text">复制有3个主要的挑战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAP定理"><span class="nav-number">8.</span> <span class="nav-text">CAP定理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-is-distributed-storage-hard"><span class="nav-number">1.</span> <span class="nav-text">Why is distributed storage hard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两种复制的方式"><span class="nav-number">2.</span> <span class="nav-text">两种复制的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VMWare的容错虚拟机结构"><span class="nav-number">3.</span> <span class="nav-text">VMWare的容错虚拟机结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脑裂"><span class="nav-number">4.</span> <span class="nav-text">脑裂</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deterministic-replay-确定性重放"><span class="nav-number">5.</span> <span class="nav-text">deterministic replay 确定性重放</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Byzantine“拜占庭式”"><span class="nav-number">6.</span> <span class="nav-text">Byzantine“拜占庭式”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复制有3个主要的挑战"><span class="nav-number">7.</span> <span class="nav-text">复制有3个主要的挑战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAP定理"><span class="nav-number">8.</span> <span class="nav-text">CAP定理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce"><span class="nav-number">9.</span> <span class="nav-text">MapReduce</span></a></li></ol></div>
             
 
           </div>

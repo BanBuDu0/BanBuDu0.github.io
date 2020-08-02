@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="边缘计算,DRL,">
+  <meta name="keywords" content="big data,mit6.824,">
 
 
 
@@ -94,45 +94,20 @@
 
 
 
-<meta name="keywords" content="边缘计算,DRL">
+<meta name="description" content="MapReduce核心流程如下图所示  一次用户的任务称为一个job，每个用户的job可以分为多个task，每个task又可以分为map task和reduce task，顾名思义map task负责执行map，reduce负责执行reduce。 此外，根据集群中的角色 又可以分为master和worker，master负责管理工作——挑选空闲的worker并给他分配一个map task或者red">
+<meta name="keywords" content="big data,mit6.824">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Caching Transient Data for Internet of Things A Deep Reinforcement Learning Approach">
-<meta property="og:url" content="http://yoursite.com/2020/07/05/paper/EdgeCompute-08/index.html">
+<meta property="og:title" content="MapReduce总结">
+<meta property="og:url" content="http://yoursite.com/2020/08/02/big_data/mapreduce/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
+<meta property="og:description" content="MapReduce核心流程如下图所示  一次用户的任务称为一个job，每个用户的job可以分为多个task，每个task又可以分为map task和reduce task，顾名思义map task负责执行map，reduce负责执行reduce。 此外，根据集群中的角色 又可以分为master和worker，master负责管理工作——挑选空闲的worker并给他分配一个map task或者red">
 <meta property="og:locale" content="zh">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/NQ72f3ZEAvDlj1c.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/Yg6p8X5k2AT4aCt.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/jei3Jlm1QXBZoFv.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/9OGkPszSpUaCjAh.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/sAR2OPEb3JuGhgv.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/IVjLZqvRbn4CYxd.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/cL5t9y32e4FbxXs.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/9eqN7UyntVFdxiL.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/7hARlKD1eNGbUJf.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/sCcyqJnfa2YxvFG.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/RlvJkuFIMYW8SxN.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/92Du68qeXjnKfrB.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/w1K2m9TgitnZQCx.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/ER27FK1nGcT3xqt.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/AkNWITonMZpHD2v.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/ExYBNdRkFKvoLhX.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/ETHSY29zItyVgMr.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/r6qbZ5uFhAl7ViK.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/igYWhcb5XaP48M1.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/Mlq5nSJhixDCKkP.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/lpa93udW7BHzo6t.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/thmWBdOnpkgA7ZJ.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/7WyG3IrHjsqR19f.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/eFhn9sVuJqA3iLx.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/yei1YFxEBUQVaA7.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/srl8ZtJ7e6wqR3P.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/PZnYv58gMUlzWyR.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/KtRhoPSDMXl9iJx.png">
-<meta property="og:image" content="https://i.loli.net/2020/07/05/J4MqiFS7H2QTeKm.png">
-<meta property="og:updated_time" content="2020-07-05T12:13:49.823Z">
+<meta property="og:image" content="https://i.loli.net/2020/08/02/YCNypnBo96WU74e.png">
+<meta property="og:updated_time" content="2020-08-02T04:42:57.900Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Caching Transient Data for Internet of Things A Deep Reinforcement Learning Approach">
-<meta name="twitter:image" content="https://i.loli.net/2020/07/05/NQ72f3ZEAvDlj1c.png">
+<meta name="twitter:title" content="MapReduce总结">
+<meta name="twitter:description" content="MapReduce核心流程如下图所示  一次用户的任务称为一个job，每个用户的job可以分为多个task，每个task又可以分为map task和reduce task，顾名思义map task负责执行map，reduce负责执行reduce。 此外，根据集群中的角色 又可以分为master和worker，master负责管理工作——挑选空闲的worker并给他分配一个map task或者red">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/02/YCNypnBo96WU74e.png">
 
 
 
@@ -161,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/07/05/paper/EdgeCompute-08/">
+  <link rel="canonical" href="http://yoursite.com/2020/08/02/big_data/mapreduce/">
 
 
 
 
 
-  <title>Caching Transient Data for Internet of Things A Deep Reinforcement Learning Approach | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <title>MapReduce总结 | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
 
@@ -290,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/05/paper/EdgeCompute-08/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/02/big_data/mapreduce/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="syj">
@@ -307,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Caching Transient Data for Internet of Things A Deep Reinforcement Learning Approach</h1>
+          <h1 class="post-title" itemprop="name headline">MapReduce总结</h1>
         
 
         <div class="post-meta">
@@ -320,8 +295,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-05T19:57:19+08:00">
-                2020-07-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-02T09:45:38+08:00">
+                2020-08-02
               </time>
             
 
@@ -343,8 +318,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/论文/" itemprop="url" rel="index">
-                    <span itemprop="name">论文</span>
+                  <a href="/categories/big-data/" itemprop="url" rel="index">
+                    <span itemprop="name">big data</span>
                   </a>
                 </span>
 
@@ -376,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  0
+                  1.2k
                 </span>
               
 
@@ -392,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  1
+                  4
                 </span>
               
             </div>
@@ -413,7 +388,35 @@
       
 
       
-        <p><img src="https://i.loli.net/2020/07/05/NQ72f3ZEAvDlj1c.png" alt="幻灯片2.PNG"><br><img src="https://i.loli.net/2020/07/05/Yg6p8X5k2AT4aCt.png" alt="幻灯片3.PNG"><br><img src="https://i.loli.net/2020/07/05/jei3Jlm1QXBZoFv.png" alt="幻灯片4.PNG"><br><img src="https://i.loli.net/2020/07/05/9OGkPszSpUaCjAh.png" alt="幻灯片5.PNG"><br><img src="https://i.loli.net/2020/07/05/sAR2OPEb3JuGhgv.png" alt="幻灯片6.PNG"><br><img src="https://i.loli.net/2020/07/05/IVjLZqvRbn4CYxd.png" alt="幻灯片7.PNG"><br><img src="https://i.loli.net/2020/07/05/cL5t9y32e4FbxXs.png" alt="幻灯片8.PNG"><br><img src="https://i.loli.net/2020/07/05/9eqN7UyntVFdxiL.png" alt="幻灯片9.PNG"><br><img src="https://i.loli.net/2020/07/05/7hARlKD1eNGbUJf.png" alt="幻灯片10.PNG"><br><img src="https://i.loli.net/2020/07/05/sCcyqJnfa2YxvFG.png" alt="幻灯片11.PNG"><br><img src="https://i.loli.net/2020/07/05/RlvJkuFIMYW8SxN.png" alt="幻灯片12.PNG"><br><img src="https://i.loli.net/2020/07/05/92Du68qeXjnKfrB.png" alt="幻灯片13.PNG"><br><img src="https://i.loli.net/2020/07/05/w1K2m9TgitnZQCx.png" alt="幻灯片14.PNG"><br><img src="https://i.loli.net/2020/07/05/ER27FK1nGcT3xqt.png" alt="幻灯片15.PNG"><br><img src="https://i.loli.net/2020/07/05/AkNWITonMZpHD2v.png" alt="幻灯片16.PNG"><br><img src="https://i.loli.net/2020/07/05/ExYBNdRkFKvoLhX.png" alt="幻灯片17.PNG"><br><img src="https://i.loli.net/2020/07/05/ETHSY29zItyVgMr.png" alt="幻灯片18.PNG"><br><img src="https://i.loli.net/2020/07/05/r6qbZ5uFhAl7ViK.png" alt="幻灯片19.PNG"><br><img src="https://i.loli.net/2020/07/05/igYWhcb5XaP48M1.png" alt="幻灯片20.PNG"><br><img src="https://i.loli.net/2020/07/05/Mlq5nSJhixDCKkP.png" alt="幻灯片21.PNG"><br><img src="https://i.loli.net/2020/07/05/lpa93udW7BHzo6t.png" alt="幻灯片21.PNG"><br><img src="https://i.loli.net/2020/07/05/thmWBdOnpkgA7ZJ.png" alt="幻灯片23.PNG"><br><img src="https://i.loli.net/2020/07/05/7WyG3IrHjsqR19f.png" alt="幻灯片24.PNG"><br><img src="https://i.loli.net/2020/07/05/eFhn9sVuJqA3iLx.png" alt="幻灯片25.PNG"><br><img src="https://i.loli.net/2020/07/05/yei1YFxEBUQVaA7.png" alt="幻灯片26.PNG"><br><img src="https://i.loli.net/2020/07/05/srl8ZtJ7e6wqR3P.png" alt="幻灯片27.PNG"><br><img src="https://i.loli.net/2020/07/05/PZnYv58gMUlzWyR.png" alt="幻灯片28.PNG"><br><img src="https://i.loli.net/2020/07/05/KtRhoPSDMXl9iJx.png" alt="幻灯片29.PNG"><br><img src="https://i.loli.net/2020/07/05/J4MqiFS7H2QTeKm.png" alt="幻灯片30.PNG"></p>
+        <p>MapReduce核心流程如下图所示</p>
+<p><img src="https://i.loli.net/2020/08/02/YCNypnBo96WU74e.png" alt="1596332861(1).jpg"></p>
+<p>一次用户的任务称为一个job，每个用户的job可以分为多个task，每个task又可以分为map task和reduce task，顾名思义map task负责执行map，reduce负责执行reduce。</p>
+<p>此外，根据集群中的角色 又可以分为master和worker，master负责管理工作——挑选空闲的worker并给他分配一个map task或者reduce task。先看一下task的数据结构</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> MyTaskPhase <span class="keyword">int</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	MapPhase    MyTaskPhase = <span class="number">0</span></span><br><span class="line">	ReducePhase MyTaskPhase = <span class="number">1</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">type</span> Status <span class="keyword">int</span></span><br><span class="line"><span class="keyword">type</span> Task <span class="keyword">struct</span> &#123;</span><br><span class="line">	TaskId        <span class="keyword">int</span></span><br><span class="line">	WorkerId      <span class="keyword">int</span></span><br><span class="line">	DataSource    <span class="keyword">string</span></span><br><span class="line">	TaskPhase     MyTaskPhase</span><br><span class="line">	TaskStartTime time.Time</span><br><span class="line">	TaskStatus    Status</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个task除了其metadata，如</p>
+<ul>
+<li>TaskPhase——该task所处的阶段（map or reduce）；</li>
+<li>TaskStartTime——task起始时间，当worker取该task时才开始计时，用来计算一个task是否超时；</li>
+<li>TaskStatus——IDLE || RUNNING || COMPLETED || ERROR；</li>
+<li>DataSource——map task读取源文件的位置。</li>
+</ul>
+<p>之外还绑定一个work，指示该task的执行者。</p>
+<p>在实验中，master只负责task状态的处理，其余只要一个worker开始工作，其就会不断的向master请求task，执行task和上报task状态（完成、失败）。这里work的执行又分为map和reduce，在MapReduce的Fault Tolerance中，如果work失联了，则该work完成的所有map任务都需要重做，产生的所有中间结果需要删除；但是该work完成的reduce任务不需要重做。因为map的结果是写道中间文件中，而reduce的结果是persistence。</p>
+<h2 id="Refinements-改进"><a href="#Refinements-改进" class="headerlink" title="Refinements(改进)"></a>Refinements(改进)</h2><h3 id="Partitioning-Function"><a href="#Partitioning-Function" class="headerlink" title="Partitioning Function"></a>Partitioning Function</h3><p>map task的结果需要保存到中间文件（Intermediate files），在保存的时候需要用到一个很重要的概念——Partitioning Function分区函数。用户指定reduce task/输出文件的数量（R），将结果划分到不同的分区。在实验中分区的实现具体如下：</p>
+<p>一个map task会处理一个file，并将中间结果分区保存。</p>
+<p>在map保存中间结果的时候，将结果保存在不同的文件中，因为一个map task处理一个file,map task数量=file数量，这里的t.TaskId = 文件的ID。因此一个map的中间结果为——<strong>mr-fileID-partitionID</strong>，nReduce就是用户指定的reduce task/输出文件的数量，可以理解为分区数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; w.nReduce; i++ &#123;</span><br><span class="line">	intermediateFileName := fmt.Sprintf(<span class="string">"mr-%v-%v"</span>, t.TaskId, i)</span><br></pre></td></tr></table></figure>
+<p>开了这nReduce个分区之后，patitioning function使用<figure class="highlight plain"><figcaption><span>mod R```。原因是为了将相同的key保存在同一个分区中， 这样后面做reduce的时候就，一个reduce task就能处理完某一个key，而不会由遗漏。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">例如，word-count中A的map结果，就都会保存在 mr-taskID-相同的partitionID中，因为都是用 A去做hash，所以所有A的中间结果的partitionID都是相同的。</span><br><span class="line"></span><br><span class="line">在做reduce task的时候，取中间结果，因为nMap = file数量，所以i = map taskID = fileID，所以一个reduce task会处理所有file/map task产生的某一个分区。</span><br><span class="line"></span><br><span class="line">```go	for i := 0; i &lt; w.nMap; i++ &#123;</span><br><span class="line">for i := 0; i &lt; w.nMap; i++ &#123;</span><br><span class="line">	// mr-%d-%d, 第一个%d指示的是哪个task生成的，因为nMap = fileNum，一个file开一个map task</span><br><span class="line">	// 第二个%d指示的是由哪个reduce task去处理该文件</span><br><span class="line">	// 这样就把不同map产生的中间结果分给不同的reduce做了</span><br><span class="line">	fileName := fmt.Sprintf(&quot;mr-%d-%d&quot;, i, t.TaskId)</span><br></pre></td></tr></table></figure></p>
+<p>这样保存中间结果还有一个好处，就是如果某个map task失败了，master会将该task重置为IDLE 等待新的work来执行，新的work执行之后产生的中间结果和之前失败的work产生的中间结果命名方式是相同的——mr-fileID-partitionID，所以会覆盖写，不用再做删除失败的中间结果的操作。</p>
+<h3 id="Ordering-Guarantees-——-sort"><a href="#Ordering-Guarantees-——-sort" class="headerlink" title="Ordering Guarantees —— sort"></a>Ordering Guarantees —— sort</h3><p>此外，做reduce之前还有一步是对中间结果的key做<strong>sort</strong>。对中间结果做排序的原因，论文的说明如下:</p>
+<blockquote>
+<p>When a reduce worker has read all intermediate data, it sorts it by the intermediate keys so that all occurrences of the same key are grouped together. The sorting is needed because typically many different keys map to the same reduce task</p>
+<p>当reduce worker读取了所有中间数据时，它将按中间键对其进行排序，以便将所有出现的相同键分组在一起。之所以需要进行排序，是因为通常有许多不同的键映射到同一个reduce任务。</p>
+</blockquote>
+<p>例如word-count，排序之后相同key的结果都在一起，方便统计最后的结果。</p>
+<h3 id="Combiner-Function"><a href="#Combiner-Function" class="headerlink" title="Combiner Function"></a>Combiner Function</h3><p>在论文里还有一点改进讲的是<strong>Combiner Function</strong>，即在map和reduce之间加入combiner函数，在map之后在数据保存为中间结果之前对中间结果进行部分合并之后再保存。原文指出，Combiner Function一般和reduce函数相同（代码），Combiner Function和reduce唯一不同的就是两者的输出结果保存，Combiner Function保存为中间文件（Intermediate files），reduce保存到最终输出文件（final output file）。</p>
+<p>本节以上的内容好像都是hadoop mapreduce shuffle里的东西，但是我还没具体看过hadoop，以上是从mapreduce原始论文总结的。</p>
+<p><a href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf" target="_blank" rel="noopener">MapRedue论文</a></p>
 
       
     </div>
@@ -431,9 +434,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/边缘计算/" rel="tag"># 边缘计算</a>
+            <a href="/tags/big-data/" rel="tag"># big data</a>
           
-            <a href="/tags/DRL/" rel="tag"># DRL</a>
+            <a href="/tags/mit6-824/" rel="tag"># mit6.824</a>
           
         </div>
       
@@ -446,8 +449,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/25/big_data/GFS/" rel="next" title="GFS">
-                <i class="fa fa-chevron-left"></i> GFS
+              <a href="/2020/07/18/big_data/MIT6.824/" rel="next" title="MIT6.824">
+                <i class="fa fa-chevron-left"></i> MIT6.824
               </a>
             
           </div>
@@ -455,10 +458,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/07/10/code/code/" rel="prev" title="Code">
-                Code <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -510,8 +509,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="syj">
           <p class="site-author-name" itemprop="name">syj</p>
@@ -617,6 +625,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Refinements-改进"><span class="nav-number">1.</span> <span class="nav-text">Refinements(改进)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Partitioning-Function"><span class="nav-number">1.1.</span> <span class="nav-text">Partitioning Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ordering-Guarantees-——-sort"><span class="nav-number">1.2.</span> <span class="nav-text">Ordering Guarantees —— sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Combiner-Function"><span class="nav-number">1.3.</span> <span class="nav-text">Combiner Function</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
