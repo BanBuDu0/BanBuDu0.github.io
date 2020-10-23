@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-08-02T05:22:28.542Z">
+<meta property="og:updated_time" content="2020-09-06T07:48:23.374Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库">
 <meta name="twitter:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
@@ -349,7 +349,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  589
+                  699
                 </span>
               
 
@@ -405,6 +405,7 @@
 <p>　事务只能一件一件的进行，不能并发进行。解决了幻读，但是带来严重的性能问题。</p>
 </li>
 </ul>
+<p>在<strong>读已提交</strong>和<strong>可重复读</strong>下，mysql都会创建视图（consistent read view, 一致性读视图），不同的是，读已提交视图是在每个SQL语句开始执行的时候创建的，所以同一个事务内两次相同的查询可能会查到不同的数据；而可重复读是在事务启动的时候创建的，整个事务存在期间都使用该视图。</p>
 <h3 id="D-durability（持久性）"><a href="#D-durability（持久性）" class="headerlink" title="D: durability（持久性）"></a>D: durability（持久性）</h3><p>一旦事务提交，则其所做的修改将会永远保存到数据库中。即使系统发生崩溃，事务执行的结果也不能丢失。 使用redo log来保证持久性。</p>
 
       

@@ -102,10 +102,12 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="Lab 2实现raft lab 2a实现raft中的leader选举和心跳（leader和其他server之间保持连接的心跳）功能  发送和接收RequestVote RPCs 设计log entry的数据结构 开始阶段就起一个goroutine周期性进行leader选举任务 修改RequestVote()给自己或他人投票 实现AppendEntries RPC结构，leader定期发送实现心跳；">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-08-02T07:49:17.365Z">
+<meta property="og:image" content="https://i.loli.net/2020/08/18/B2zGsEOlMfgRjy3.png">
+<meta property="og:updated_time" content="2020-10-23T07:11:32.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MIT6.824">
 <meta name="twitter:description" content="Lab 2实现raft lab 2a实现raft中的leader选举和心跳（leader和其他server之间保持连接的心跳）功能  发送和接收RequestVote RPCs 设计log entry的数据结构 开始阶段就起一个goroutine周期性进行leader选举任务 修改RequestVote()给自己或他人投票 实现AppendEntries RPC结构，leader定期发送实现心跳；">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/18/B2zGsEOlMfgRjy3.png">
 
 
 
@@ -349,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  679
+                  2.1k
                 </span>
               
 
@@ -365,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  2
+                  9
                 </span>
               
             </div>
@@ -401,10 +403,99 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Raft <span class="keyword">struct</span> &#123;</span><br><span class="line">	mu          sync.Mutex          <span class="comment">// Lock to protect shared access to this peer's state</span></span><br><span class="line">	peers       []*labrpc.ClientEnd <span class="comment">// RPC end points of all peers</span></span><br><span class="line">	persister   *Persister          <span class="comment">// Object to hold this peer's persisted state</span></span><br><span class="line">	me          <span class="keyword">int</span>                 <span class="comment">// this peer's index into peers[]</span></span><br><span class="line">	dead        <span class="keyword">int32</span>               <span class="comment">// set by Kill()</span></span><br><span class="line">	halfPeerNum <span class="keyword">int32</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//2A</span></span><br><span class="line">	stopCh       <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line">	mRole        Role <span class="comment">// 当前角色</span></span><br><span class="line">	currentTerm  <span class="keyword">int</span> <span class="comment">// 当前term</span></span><br><span class="line">	votedFor     <span class="keyword">int</span> <span class="comment">// =-1 表示为空,投票给</span></span><br><span class="line">	electionTime *time.Timer <span class="comment">//选举超时时间</span></span><br><span class="line">	appendTime   *time.Timer <span class="comment">//心跳包发送周期</span></span><br><span class="line">	logs         []Entry <span class="comment">// 暂定string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>上图是2A的数据结构。</p>
 <p>stopCh，是坑1，官方的测试文件在2a的测试1结束后不会关闭原来的goroutine，导致测试2的时候出现混乱，所以加入stopCh在Kill()函数执行的时候关闭该chan，退出竞选leader和发送心跳包，如下面的代码所示。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//election leader</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.stopCh:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.electionTime.C:</span><br><span class="line">            rf.startElection()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// heartbeats</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.stopCh:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.appendTime.C:</span><br><span class="line">            rf.mu.Lock()</span><br><span class="line">            <span class="keyword">if</span> rf.mRole == LEADER &#123;</span><br><span class="line">                rf.callAppendEntries(<span class="literal">true</span>)</span><br><span class="line">                rf.appendTime.Reset(HeartBeatTimeout)</span><br><span class="line">            &#125;</span><br><span class="line">            rf.mu.Unlock()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//election leader</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.stopCh:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.electionTime.C:</span><br><span class="line">            rf.startElection()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line"><span class="comment">// heartbeats</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> &#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.stopCh:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">case</span> &lt;-rf.appendTime.C:</span><br><span class="line">            rf.mu.Lock()</span><br><span class="line">            <span class="keyword">if</span> rf.mRole == LEADER &#123;</span><br><span class="line">                rf.callAppendEntries(<span class="literal">true</span>)</span><br><span class="line">                rf.appendTime.Reset(HeartBeatTimeout)</span><br><span class="line">            &#125;</span><br><span class="line">            rf.mu.Unlock()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;()</span><br></pre></td></tr></table></figure>
 <p>上面的代码也是lab 2a的主要func，Make raft的时候，除了初始化参数，剩下的就是上面的两个goroutine。其中，electionTime按照论文所示随机在一个区间内选取，这样做可以避免CANDIDATE一直投票给自己。raft结构中，一个很重要的参数就是Term，raft根据Term来判断当前处于哪个阶段，在处理rpc的时候，只要收到Term比自己大的rpc，就立刻修改自己的Term为较大的值，并转换自己的角色为FOLLOWER。坑2就在这里，我第一次做的时候在RequestVote()这个func，只按照论文图2讲的，if receivedTerm &lt; currentTerm的时候返回false，然后lab2A的测试2就死活过不去。卡在了leader失联后，两个follower都去竞选leader，然后他们都投票给自己，一直没法获得大多数（&gt;=halfPeerNum）的投票，造成死循环。后来的改进在在这里加上判断</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> receivedTerm &lt; currentTerm&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;  <span class="keyword">else</span> <span class="keyword">if</span> receivedTerm &gt; currentTerm&#123;</span><br><span class="line">    rf.currentTerm = receivedTerm</span><br><span class="line">    change to follower</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如果收到了Term大于自己的，就马上把自己变回follower，这也是文章说的使用随机选取可以避免split votes的关键。</p>
+<h3 id="lab-2b"><a href="#lab-2b" class="headerlink" title="lab 2b"></a>lab 2b</h3><p>raft保证了一下属性来保证其一致性</p>
+<ol>
+<li><p>Election Safety：一个term只有一个leader</p>
+</li>
+<li><p>Leader Append-Only：leader的log不会删除或覆盖，只会添加写</p>
+</li>
+<li><p>Log Matching：相同index和term的两个log，那么这两个server该log和其之前的log全都相同</p>
+<ol>
+<li><p>相同index和term的两个log，他们存有相同的commend（他们相同）</p>
+<blockquote>
+<p>If two entries in different logs have the same index and term, then they store the same command  # fig3</p>
+</blockquote>
+</li>
+<li><p>相同index和term的两个log，他们之前的logs全都相同</p>
+<blockquote>
+<p>If two entries in different logs have the same index and term, then the logs are identical in all preceding entries # fig3</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>Leader Completeness：如果一个log在某个term被提交了(committed)，那么之后的leader（term更高的leader）的logs里面都会有该log</p>
+</li>
+<li>State Machine Safety：如果server apply某一index上的log，那么其他server不会在相同index apply不同的log</li>
+</ol>
+<h4 id="错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失"><a href="#错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失" class="headerlink" title="错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失"></a>错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失</h4><p>假设有3个server[1,2,3]，其中1是leader，系统正常运行。然后2失联了，这时[1,3]正常系统仍可以正常运行（append entries）。但是2在失联期间不断尝试elect leader，导致其Term变的比其他两个server要大。当2重新上线的时候，2 startElection，其他两个server收到Term比自己大的都重新变回follower。这时，竞选leader的条件为论文图2 requestVote RPC #2</p>
+<blockquote>
+<p>If <strong>1.</strong> votedFor is null or candidateId, and <strong>2.</strong> candidate’s log is at least as up-to-date as receiver’s log  # fig 2</p>
+</blockquote>
+<p>condition1比较简单：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">condition1 := rf.votedFor == <span class="number">-1</span> || rf.votedFor == args.CandidateId</span><br></pre></td></tr></table></figure>
+<p>condition1可以根据论文 <strong>5.4.1 Election restriction</strong> 最后一段</p>
+<blockquote>
+<p>If the logs have last entries with different terms, then the log with the later term is more up-to-date. If the logs end with the same term, then whichever log is longer is more up-to-date  # 5.4.1</p>
+</blockquote>
+<p>当最后一条log的Term不同时，Term大的up-to-date；当最后一条log的Term相同时，log更长的up-to-date。由此可以condition2:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">condition2 := args.LastLogTerm &gt;= rf.logEntries[lastLogIndex].Term || (args.LastLogTerm == rf.logEntries[lastLogIndex].Term &amp;&amp; args.LastLogIndex &gt;= lastLogIndex)</span><br></pre></td></tr></table></figure>
+<p>这样写是错的，因为2失联-重连后其没有被 append entry 所以 LastLogTerm 未变，[1,3]由于一直正常运行其 Term 未变所以LastLogTerm 也未变，这就导致2重连后满足 || 的前半部分，直接就可以当选为leader了。</p>
+<p>正确的写法如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">condition2 := !(args.LastLogTerm &lt; rf.logEntries[lastLogIndex].Term ||</span><br><span class="line">                (args.LastLogTerm == rf.logEntries[lastLogIndex].Term &amp;&amp; args.LastLogIndex &lt; lastLogIndex))</span><br></pre></td></tr></table></figure>
+<p>只要Requester的LastLogTerm比自己的小或当Requester的LastLogTerm和我相同但是它的lastLogIndex比我小，我就拒绝投票给他；此外都可以投票给他</p>
+<h4 id="错误2"><a href="#错误2" class="headerlink" title="错误2"></a>错误2</h4><p><img src="https://i.loli.net/2020/08/18/B2zGsEOlMfgRjy3.png" alt="微信图片_20200818195549.png"></p>
+<p>当我的 leader 还活着的时候，follower 又开始竞选，然后此时发起竞选的 follower 只要再获得另一个 follower 的投票就可以当选 leader。刚开始还以为是 electionTime (选举超时间隔) 处理错了，后来发现是 append entry reply 处理错了。收到 append entry reply，如果1. 返回 false</p>
+<blockquote>
+<p>After a rejection, the leader decrements nextIndex and retries the AppendEntries RPC # 5.3</p>
+</blockquote>
+<p>leader 应当减一 nextIndex[peer]；如果2. 返回 true，</p>
+<blockquote>
+<p>If successful: update nextIndex and matchIndex for follower  # fig 2</p>
+</blockquote>
+<p>leader更新相应的 nextIndex[peer] 和 matchIndex[peer]，具体的更新方式为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//base on students-guide-to-raft</span></span><br><span class="line">rf.matchIndex[i] = args.PrevLogIndex + <span class="built_in">len</span>(args.Entries)</span><br><span class="line">rf.nextIndex[i] = rf.matchIndex[i] + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>这里如果使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matchIndex = nextIndex - <span class="number">1</span>, or matchIndex = <span class="built_in">len</span>(log)</span><br></pre></td></tr></table></figure>
+<p>是不安全的，因为在append entries期间，client可能会发过来新的log。</p>
+<blockquote>
+<p>This is <em>not</em> safe, because both of those values could have been updated since when you sent the RPC. # students-guide-to-raft</p>
+</blockquote>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>此外还有很多恼人的小bug，多半是编码出错或论文理解不清楚。这里mark一下论文中一些参数的作用。</p>
+<ol>
+<li><p>nextIndex数组</p>
+<p>记录了每个server下一个log应该追加的位置</p>
+</li>
+<li><p>matchIndex数组</p>
+<p>每个server当前log数组中最后一个log的index(len(log) - 1)</p>
+</li>
+<li><p>lastApplied</p>
+<p>记录了上次apply到自己的state mechine的log的index</p>
+</li>
+<li><p>commitIndex</p>
+<p>最高的已经被commit的log的index。leader会检查一个log是否被复制到了大多数的server，如果是，则设置commit = 该log的Index。该操作通过检查matchIndex，从(len(log) - 1)即最后一个log往前数，如果大多数peer的matchIndex都大于该一个index，则认为该index的log及其之前的log都被复制到了大多数的server # Log Matching。更新了commitIndex，就得检查lastApplied是否小于commitIndex，如果是，则表示把已经commit却没有apply到state mechine的log apply一下。具体的apply操作就是往applyCh里面写数据</p>
+</li>
+<li><p>applyCh</p>
+<p>当要apply log到本地的state machine时，往该chan写数据</p>
+</li>
+<li><p>PrevLogIndex</p>
+<p>AppendEntries RPC传递的参数，leader每次向follower append entries的时候，prevLogIndex = nextIndex[peer] - 1，表示要添加的index前一个index的log，即peer的最后一个log是否和leader匹配，如果不匹配，再根据 # fig 2做相关操作。</p>
+<ol>
+<li>如果我(follower)的最后一个Log都不是prevLogIndex, 即leader的prevLogIndex超出了我的最大logIndex 或 在prevLogIndex这个位置我和leader的log的term不一致，则 # fig 2 AppendEntries RPC # 2，doesn’t match，返回错误</li>
+<li>至少在prevLogIndex对上了，然后就检查传过来的logs和我本地prevLogIndex之后的log有没有不同，如果这段log发现有不同，就删除该不同的log和之后的logs，然后把传过来的logs加上。 # fig 2 AppendEntries RPC # 3 4</li>
+</ol>
+</li>
+</ol>
+<h4 id="QA"><a href="#QA" class="headerlink" title="QA"></a>QA</h4><p>Raft Q-A中有一个很有意思的问题，如果leader发送的两个append entries RPC，1 = [c2, c3]，2 = [c2, c3, c4, c5]。如果RPC2肯定比RPC1晚发出的，但是如果peer先收到RPC2，再收到RPC1那岂不是会用RPC1覆盖RPC2吗。</p>
+<p>根据 # fig 2 AppendEntries RPC # 3</p>
+<blockquote>
+<p>If an existing entry conflicts with a new one (same index but different terms), delete the existing entry and all that follow it </p>
+</blockquote>
+<p>只有当发现log有冲突的时候才覆盖冲突log之后的log。这里如果先收到RPC2，则不会检测到log冲突，即不会覆盖log</p>
+<p>Lab2A搭好了整个raft的框架之后，2b代码量稍微少一点，但是加入了log之后整个系统复杂了很多，推荐多看几遍论文和raft-QA和raft-students-guide</p>
 
       
     </div>
@@ -627,7 +718,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-2"><span class="nav-number">1.</span> <span class="nav-text">Lab 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2a"><span class="nav-number">1.1.</span> <span class="nav-text">lab 2a</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-2"><span class="nav-number">1.</span> <span class="nav-text">Lab 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2a"><span class="nav-number">1.1.</span> <span class="nav-text">lab 2a</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2b"><span class="nav-number">1.2.</span> <span class="nav-text">lab 2b</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失"><span class="nav-number">1.2.1.</span> <span class="nav-text">错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#错误2"><span class="nav-number">1.2.2.</span> <span class="nav-text">错误2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">1.2.3.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QA"><span class="nav-number">1.2.4.</span> <span class="nav-text">QA</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
