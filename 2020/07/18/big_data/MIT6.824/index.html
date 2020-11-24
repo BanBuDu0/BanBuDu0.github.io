@@ -103,7 +103,7 @@
 <meta property="og:description" content="Lab 2实现raft lab 2a实现raft中的leader选举和心跳（leader和其他server之间保持连接的心跳）功能  发送和接收RequestVote RPCs 设计log entry的数据结构 开始阶段就起一个goroutine周期性进行leader选举任务 修改RequestVote()给自己或他人投票 实现AppendEntries RPC结构，leader定期发送实现心跳；">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2020/08/18/B2zGsEOlMfgRjy3.png">
-<meta property="og:updated_time" content="2020-10-23T07:11:32.519Z">
+<meta property="og:updated_time" content="2020-11-23T07:11:44.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MIT6.824">
 <meta name="twitter:description" content="Lab 2实现raft lab 2a实现raft中的leader选举和心跳（leader和其他server之间保持连接的心跳）功能  发送和接收RequestVote RPCs 设计log entry的数据结构 开始阶段就起一个goroutine周期性进行leader选举任务 修改RequestVote()给自己或他人投票 实现AppendEntries RPC结构，leader定期发送实现心跳；">
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  2.1k
+                  3.5k
                 </span>
               
 
@@ -367,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  9
+                  14
                 </span>
               
             </div>
@@ -496,7 +496,40 @@
 </blockquote>
 <p>只有当发现log有冲突的时候才覆盖冲突log之后的log。这里如果先收到RPC2，则不会检测到log冲突，即不会覆盖log</p>
 <p>Lab2A搭好了整个raft的框架之后，2b代码量稍微少一点，但是加入了log之后整个系统复杂了很多，推荐多看几遍论文和raft-QA和raft-students-guide</p>
-
+<h3 id="lab-2c"><a href="#lab-2c" class="headerlink" title="lab 2c"></a>lab 2c</h3><p>本来以为lab 2c只是简单地持久化一下，没啥难度，但是后来导致我调了一个星期的BUG。首先如果lab 2a和lab 2b做的好的话，lab 2c的主要内容就只是编写两个persist函数。然后在每个Persistent state发生改变的时候调用persist函数，在Make raft的时候调用读persist函数就可以了。但是加入persist之后，暴露了之前写的代码的BUG。</p>
+<h4 id="首先是Test-2C-Figure-8-unreliable-这个测试总是有10-的几率报错"><a href="#首先是Test-2C-Figure-8-unreliable-这个测试总是有10-的几率报错" class="headerlink" title="首先是Test (2C): Figure 8 (unreliable)这个测试总是有10%的几率报错"></a>首先是Test (2C): Figure 8 (unreliable)这个测试总是有10%的几率报错</h4><blockquote>
+<p>apply error: commit index=40 server=3 7132 != server=4 2195</p>
+</blockquote>
+<p>一开始以为是自己做了3B（把所有取日志长度都修改为做snapshot之后的长度）之后出现的BUG，导致在检查snapshot和install snapshot上花了很长的时间。最后未果。之后打了这个test 1万条的log慢慢查看，发现错误是发生在测试代码中所有服务恢复之前，即在不可靠的网络环境中没有得到一致。观察日志发现，刚开的时候，每个raft server都apply了相同的3条日志，然后进入不可靠的网络环境。这样至少每个server的nextIndex都是4以上了(nextIndex从1开始)，但是中间某一时刻发现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2020/11/16 18:16:10 1 AppendEntries Reply from peer: 3, reply: &#123;Term:29 Success:false ConflictIndex:1 ConflictTerm:1&#125;</span><br><span class="line">2020/11/16 18:16:10 1 peer: 3 not match, nextIndex: 1</span><br><span class="line">2020/11/16 18:16:10 1 send AppendEntries RPC to 3, nextIndex = [21 29 21 1 29], prevLogIndex = 0, commitIndex = 15， log len: 28</span><br></pre></td></tr></table></figure>
+<p>server 3的nextIndex重新变成了1，这就是错误的开端。而变成1的原因是触发了append entries的加速日志恢复，把ConflictIndex设为了1。于是，重新检查日志加速恢复的代码，和students-guide-to-raft的描述，发现我把</p>
+<blockquote>
+<p>Upon receiving a conflict response, the leader should first search its log for <code>conflictTerm</code></p>
+</blockquote>
+<p>这里说的搜索conflictTerm在代码里写成了reply.Term…。</p>
+<p>此外，在最开始找不到错误，重新翻了几遍students-guide-to-raft之后发现，Term confusion里面对于收到RPC reply的时候term不同的情况下操作我也没有做。如果reply收到的term大于自己的term，这个是全局有效的，自己立马转变为follower。此外，还要检查</p>
+<blockquote>
+<p>then to compare the current term with the term you sent in your original RPC. If the two are different, drop the reply and return.</p>
+</blockquote>
+<p>当前的term和发送RPC的term是否相同，如果不同的话直接丢弃该RPC。</p>
+<blockquote>
+<p>And <em>not</em> doing it leads down a long, winding path of blood, sweat, tears and despair.</p>
+</blockquote>
+<p>…</p>
+<p>本来以为到这里应该皆大欢喜没BUG了，但是我之前觉得</p>
+<blockquote>
+<p>Test (2B): leader backs up quickly over incorrect follower logs</p>
+</blockquote>
+<p>这个测试比官网上的都慢就想着改进一波。做的改进是每次在Start的时候就启动一轮append entries，而不是等到timeout之后再做append entries。这个改动也倒是lab 3C的测试2偶尔会报错。错误原因是follower偶尔会收到非leader的append entries RPC，然后根据这个非leader的RPC改了自己的log导致不一致。但是检查代码的时候发现每次发送调用callAppendEntries()函数之前都会检查是否是leader。又因为同一个Term，raft保证了不会出现脑裂，收到RPC的时候Term比自己小的直接拒绝，这说明发送append entries RPC过来的非leader的Term至少是up-to-date的。有点没想明白，但是之后在要发送RPC之前再检查一遍是否leader，就不报错了。</p>
+<h2 id="lab3B"><a href="#lab3B" class="headerlink" title="lab3B"></a>lab3B</h2><h3 id="3B思考"><a href="#3B思考" class="headerlink" title="3B思考"></a>3B思考</h3><p>3B要做的事是实现raft的日志压缩功能。大概分以下几个步骤：</p>
+<ol>
+<li>kv server检测raft的日志大小，当日志大小达到maxraftstate的时候就压缩本地raft的日志</li>
+<li>如果 raft follower 发现自己log存在conflict，然后来leader这里取log的时候发现leader的log已经被压缩了，这时leader就要发送InstallSnapshot RPC。</li>
+</ol>
+<p>对于1这点，kv server在什么时候检测呢，单独再开一个go routine检测肯定不划算，go routine的检测间隔也不好控制。因此，可以在log增加的时候检测，即raft将某一条log apply的时候，在kv server这边就是apply chan里面又读到内容的时候。</p>
+<p>对于2，leader什么时候发送InstallSnapshot RPC呢——如果发现 prevLogIndex &lt; LastIncludeIndex 的时候，就表示follower需要的log已经被做成快照了，这时候就需要leader发送InstallSnapshot RPC了。这里需要注意的是发送InstallSnapshot RPC的是raft模块，收到该RPC的raft完成snapshot之后还需要通知其kv server更新 db。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h4 id="如果有3个server-1-2-3-。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。"><a href="#如果有3个server-1-2-3-。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。" class="headerlink" title="如果有3个server[1, 2, 3]。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。"></a>如果有3个server[1, 2, 3]。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。</h4><p>在第6张最后有一个解决方案，如果raft确信现在有leader存在的情况下，他会直接丢弃所有RequestVote RPC。怎么确信有leader存在呢，论文里说到的是，从收到leader的心跳到最低ElectionTimeout这段时间都是确信有leader的，即在<script type="math/tex">[getHeartbeat, getHeartbeat + minElectionTimeout]</script>这个区间收到RequestVote RPC都直接丢弃。</p>
+<h3 id="如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常"><a href="#如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常" class="headerlink" title="如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常"></a>如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常</h3>
       
     </div>
     
@@ -615,7 +648,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -718,7 +751,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-2"><span class="nav-number">1.</span> <span class="nav-text">Lab 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2a"><span class="nav-number">1.1.</span> <span class="nav-text">lab 2a</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2b"><span class="nav-number">1.2.</span> <span class="nav-text">lab 2b</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失"><span class="nav-number">1.2.1.</span> <span class="nav-text">错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#错误2"><span class="nav-number">1.2.2.</span> <span class="nav-text">错误2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">1.2.3.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QA"><span class="nav-number">1.2.4.</span> <span class="nav-text">QA</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lab-2"><span class="nav-number">1.</span> <span class="nav-text">Lab 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2a"><span class="nav-number">1.1.</span> <span class="nav-text">lab 2a</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2b"><span class="nav-number">1.2.</span> <span class="nav-text">lab 2b</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失"><span class="nav-number">1.2.1.</span> <span class="nav-text">错误1：一个失联的follower重新上线后，马上当选为leader，导致其失联期间的log丢失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#错误2"><span class="nav-number">1.2.2.</span> <span class="nav-text">错误2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">1.2.3.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#QA"><span class="nav-number">1.2.4.</span> <span class="nav-text">QA</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-2c"><span class="nav-number">1.3.</span> <span class="nav-text">lab 2c</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#首先是Test-2C-Figure-8-unreliable-这个测试总是有10-的几率报错"><span class="nav-number">1.3.1.</span> <span class="nav-text">首先是Test (2C): Figure 8 (unreliable)这个测试总是有10%的几率报错</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lab3B"><span class="nav-number">2.</span> <span class="nav-text">lab3B</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3B思考"><span class="nav-number">2.1.</span> <span class="nav-text">3B思考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思考"><span class="nav-number">3.</span> <span class="nav-text">思考</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如果有3个server-1-2-3-。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。"><span class="nav-number">3.0.1.</span> <span class="nav-text">如果有3个server[1, 2, 3]。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常"><span class="nav-number">3.1.</span> <span class="nav-text">如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常</span></a></li></ol></div>
             
 
           </div>
