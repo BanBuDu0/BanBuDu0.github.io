@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="动态规划动态规划算法实质上是用空间换时间的算法，使用能接受的额外空间来提高运行效率。 使用动态规划必须满足两个条件：  无后效性 或者可以称其为马尔可夫性质，即当前的状态只和当前状态的前一个状态有关，而与前一个状态之前的所有状态都无关。可以说某一状态是其之前所有状态的总结。  最优子结构 如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性">
+<meta name="description" content="动态规划动态规划算法实质上是用空间换时间的算法，使用能接受的额外空间来提高运行效率。 使用动态规划必须满足两个条件：  无后效性 或者可以称其为马尔可夫性质，即当前的状态只和当前状态的前一个状态有关，而与前一个状态之前的所有状态都无关。可以说某一状态是其之前所有状态的总结。  最优子结构 如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性   二叉树">
 <meta name="keywords" content="code,algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Code">
 <meta property="og:url" content="http://yoursite.com/2020/07/10/code/code/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="动态规划动态规划算法实质上是用空间换时间的算法，使用能接受的额外空间来提高运行效率。 使用动态规划必须满足两个条件：  无后效性 或者可以称其为马尔可夫性质，即当前的状态只和当前状态的前一个状态有关，而与前一个状态之前的所有状态都无关。可以说某一状态是其之前所有状态的总结。  最优子结构 如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性">
+<meta property="og:description" content="动态规划动态规划算法实质上是用空间换时间的算法，使用能接受的额外空间来提高运行效率。 使用动态规划必须满足两个条件：  无后效性 或者可以称其为马尔可夫性质，即当前的状态只和当前状态的前一个状态有关，而与前一个状态之前的所有状态都无关。可以说某一状态是其之前所有状态的总结。  最优子结构 如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性   二叉树">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-08-02T05:02:25.253Z">
+<meta property="og:updated_time" content="2020-12-02T06:10:12.680Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Code">
-<meta name="twitter:description" content="动态规划动态规划算法实质上是用空间换时间的算法，使用能接受的额外空间来提高运行效率。 使用动态规划必须满足两个条件：  无后效性 或者可以称其为马尔可夫性质，即当前的状态只和当前状态的前一个状态有关，而与前一个状态之前的所有状态都无关。可以说某一状态是其之前所有状态的总结。  最优子结构 如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性">
+<meta name="twitter:description" content="动态规划动态规划算法实质上是用空间换时间的算法，使用能接受的额外空间来提高运行效率。 使用动态规划必须满足两个条件：  无后效性 或者可以称其为马尔可夫性质，即当前的状态只和当前状态的前一个状态有关，而与前一个状态之前的所有状态都无关。可以说某一状态是其之前所有状态的总结。  最优子结构 如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性   二叉树">
 
 
 
@@ -349,7 +349,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  179
+                  327
                 </span>
               
 
@@ -396,6 +396,9 @@
 <p>如果一个问题最优的解决方案可以通过最优它的子问题的解决方案来获取，那么这个问题就用最优子结构的属性</p>
 </li>
 </ol>
+<h2 id="二叉树非递归遍历"><a href="#二叉树非递归遍历" class="headerlink" title="二叉树非递归遍历"></a>二叉树非递归遍历</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Preorder</span><span class="params">(Node bt)</span></span>&#123;</span><br><span class="line">    Stack s;</span><br><span class="line">    Node p;</span><br><span class="line">    Push(s, bt);</span><br><span class="line">    <span class="keyword">while</span>(!s.isEmpty())&#123;</span><br><span class="line">        Pop(s, p);</span><br><span class="line">        visit(p);</span><br><span class="line">        <span class="keyword">if</span>(p.left != null)&#123;</span><br><span class="line">            Push(s, p.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p.right != null)&#123;</span><br><span class="line">            Push(s, p.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Inorder</span><span class="params">(Node bt)</span></span>&#123;</span><br><span class="line">    Stack s;</span><br><span class="line">    Node p = bt;</span><br><span class="line">    <span class="keyword">while</span>(!s.isEmpty() || p != null)&#123;</span><br><span class="line">        <span class="keyword">while</span>(p != null)&#123;</span><br><span class="line">            Push(s, p);</span><br><span class="line">            p = p.left;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!s.isEmpty())&#123;</span><br><span class="line">            Pop(s, p);</span><br><span class="line">            visit(p);</span><br><span class="line">            p = p.right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Postorder</span><span class="params">(Node bt)</span></span>&#123;</span><br><span class="line">    Stack s1, s2;</span><br><span class="line">    Node p;</span><br><span class="line">    Push(s1, bt);</span><br><span class="line">    <span class="keyword">while</span>(!s1.isEmpty())&#123;</span><br><span class="line">        Pop(s1, p);</span><br><span class="line">        Push(s2, p);</span><br><span class="line">        <span class="keyword">if</span>(p.left != null)&#123;</span><br><span class="line">            Push(s1, p.left);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(p.right != null)&#123;</span><br><span class="line">            Push(s1, p.right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(!s2.isEmpty())&#123;</span><br><span class="line">        Pop(s2, p);</span><br><span class="line">        visit(p);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -537,7 +540,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -618,7 +621,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划"><span class="nav-number">1.</span> <span class="nav-text">动态规划</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划"><span class="nav-number">1.</span> <span class="nav-text">动态规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉树非递归遍历"><span class="nav-number">2.</span> <span class="nav-text">二叉树非递归遍历</span></a></li></ol></div>
             
 
           </div>

@@ -94,18 +94,21 @@
 
 
 
-<meta name="description" content="Spanner假设有多个跨地理位置的数据中心。 关心的瓶颈是离开数据中心之后的网络、光纤的速度。 读写事务用MVCC和两阶段锁，使用两阶段锁来保证，耗时10-100毫秒左右。 只读事务只读事务比读写事务快很多（10倍）。只读事务的一个优化是读取离自己最近的server的数据，但是这样会导致的问题是离自己最近的server可能不是up-to-date。spanner的解决方案是使用始终来解决。spa">
+<meta name="description" content="Distribution SystemWhy is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高">
 <meta name="keywords" content="big data,mit6.824">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Distribution System">
 <meta property="og:url" content="http://yoursite.com/2020/06/25/big_data/distribution_system/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="Spanner假设有多个跨地理位置的数据中心。 关心的瓶颈是离开数据中心之后的网络、光纤的速度。 读写事务用MVCC和两阶段锁，使用两阶段锁来保证，耗时10-100毫秒左右。 只读事务只读事务比读写事务快很多（10倍）。只读事务的一个优化是读取离自己最近的server的数据，但是这样会导致的问题是离自己最近的server可能不是up-to-date。spanner的解决方案是使用始终来解决。spa">
+<meta property="og:description" content="Distribution SystemWhy is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-10-24T13:12:42.085Z">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-c25f04c93d2fb5f750aca96b4fe5b858_720w.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png">
+<meta property="og:updated_time" content="2020-12-02T06:10:12.678Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Distribution System">
-<meta name="twitter:description" content="Spanner假设有多个跨地理位置的数据中心。 关心的瓶颈是离开数据中心之后的网络、光纤的速度。 读写事务用MVCC和两阶段锁，使用两阶段锁来保证，耗时10-100毫秒左右。 只读事务只读事务比读写事务快很多（10倍）。只读事务的一个优化是读取离自己最近的server的数据，但是这样会导致的问题是离自己最近的server可能不是up-to-date。spanner的解决方案是使用始终来解决。spa">
+<meta name="twitter:description" content="Distribution SystemWhy is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高">
+<meta name="twitter:image" content="https://pic1.zhimg.com/80/v2-c25f04c93d2fb5f750aca96b4fe5b858_720w.jpg">
 
 
 
@@ -349,7 +352,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  647
+                  3.3k
                 </span>
               
 
@@ -365,7 +368,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  2
+                  12
                 </span>
               
             </div>
@@ -386,7 +389,120 @@
       
 
       
-        <h2 id="Spanner"><a href="#Spanner" class="headerlink" title="Spanner"></a>Spanner</h2><p>假设有多个跨地理位置的数据中心。</p>
+        <h2 id="Distribution-System"><a href="#Distribution-System" class="headerlink" title="Distribution System"></a>Distribution System</h2><h3 id="Why-is-distributed-storage-hard"><a href="#Why-is-distributed-storage-hard" class="headerlink" title="Why is distributed storage hard"></a>Why is distributed storage hard</h3><ol>
+<li>高性能(high performance) -&gt; 数据分发到多个服务器上</li>
+<li>很多服务器 -&gt; 容错能力</li>
+<li>容错(fault tolerance) -&gt; 复制</li>
+<li>复制(replication) -&gt; 一致性问题</li>
+<li>更好的一致性(consistency) -&gt; 性能下降</li>
+</ol>
+<p>权衡高性能和一致性问题</p>
+<h3 id="deterministic-replay-确定性重放"><a href="#deterministic-replay-确定性重放" class="headerlink" title="deterministic replay 确定性重放"></a>deterministic replay 确定性重放</h3><p>允许我们记录主数据库的执行并确保备份做相同的执行 的 基础技术</p>
+<h3 id="Byzantine“拜占庭式”"><a href="#Byzantine“拜占庭式”" class="headerlink" title="Byzantine“拜占庭式”"></a>Byzantine“拜占庭式”</h3><p>较大的非故障停止故障通常称为“拜占庭”或者说拜占庭<strong>错误模型</strong>。</p>
+<p>拜占庭故障，即错误节点可以做任意事情（不受protocol限制），比如不响应、发送错误信息、对不同节点发送不同决定、不同错误节点联合起来干坏事等等。总之就是说，没有节点会出现比这更严重的错误，拜占庭是分布式错误的上限。</p>
+<p>raft, paxos都是非拜占庭式，只能处理fail-stop方式的服务器宕机（下限），不能处理拜占庭式。</p>
+<h3 id="复制有3个主要的挑战"><a href="#复制有3个主要的挑战" class="headerlink" title="复制有3个主要的挑战"></a>复制有3个主要的挑战</h3><ol>
+<li>正确捕获所有输入和不确定性，以确保确定性地执行备份虚拟机</li>
+<li>正确地将输入和不确定性应用于备份虚拟机，</li>
+<li>做上面两条且不会降低性能</li>
+</ol>
+<h3 id="CAP定理"><a href="#CAP定理" class="headerlink" title="CAP定理"></a>CAP定理</h3><p>其中，</p>
+<ul>
+<li><p>C = Consistency（一致性）</p>
+<p>表示在分布式系统中，所有backup是否拥有一致的数据</p>
+</li>
+<li><p>A = Availability（可用性）</p>
+<p>表示分布式系统的高可用，少数服务器宕机的情况下也能使用</p>
+</li>
+<li><p>P = Partition tolerance（分区容错性）</p>
+<p>表示不同backup之间由于种种原因可能不能相互访问</p>
+</li>
+</ul>
+<p>CAP定理指的是分布式系统最多同时实现2点，不可能同时满足CAP3个条件。</p>
+<p>由于现实世界的原因，一般假设P是默认实现的，即不同backup之间总是可能不能相互访问的，地震、网线断了等。</p>
+<p>因此在确认了P的情况了，C和A不可能同时实现。因为，</p>
+<ol>
+<li><p>实现C</p>
+<p>primary收到写请求同时把该请求发送给backup，这时由于P，写请求不能发送到backup，为了实现C，client都需要阻塞</p>
+</li>
+</ol>
+<p>等待，就缺少了a</p>
+<ol>
+<li><p>实现A</p>
+<p>primary收到写请求同时把该请求发送给backup，且primary写完直接返回结果，这时由于P，写请求不能发送到backup，因此backup就不能保持一致性C了</p>
+</li>
+</ol>
+<h3 id="Copy-on-write"><a href="#Copy-on-write" class="headerlink" title="Copy-on-write"></a>Copy-on-write</h3><p>写入时复制（英语：Copy-on-write，简称COW）是一种计算机程序设计领域的优化策略。其核心思想是，如果有多个调用者（callers）同时请求相同资源（如内存或磁盘上的数据存储），他们会共同获取相同的指针指向相同的资源，直到某个调用者试图修改资源的内容时，系统才会真正复制一份专用副本（private copy）给该调用者，而其他调用者所见到的最初的资源仍然保持不变。</p>
+<h2 id="GFS"><a href="#GFS" class="headerlink" title="GFS"></a>GFS</h2><p>GFS被设计成只在一个数据中心运行，单个GFS只存在于单个数据中心的单个机房里</p>
+<ol>
+<li>可靠的运行，拥有容错能力</li>
+<li>顺序写</li>
+<li>可伸缩</li>
+</ol>
+<p>Master节点用来管理文件和Chunk的信息，而Chunk服务器用来存储实际的数据。管理和实际存储分离。Master节点知道每一个文件对应的所有的Chunk的ID，因此client访问需要先向Master节点查询对应的Chunk在哪个服务器上，之后可以直接从Chunk服务器读取对应的Chunk数据。</p>
+<p>Master里面有两个table</p>
+<ul>
+<li>文件名到Chunk Handle数组的对应，即文件对应了哪些Chunk（NV，non-volatile）</li>
+<li>第二个表单记录了Chunk Handle到Chunk数据的对应关系(V，volatile)<ul>
+<li>每个Chunk存储在哪些服务器上(NV)</li>
+<li>每个Chunk当前的版本号(NV)</li>
+<li>哪个Chunk服务器是primary(V)</li>
+<li>lease信息，主Chunk只能在特定的租约时间内担任主Chunk(V)</li>
+</ul>
+</li>
+</ul>
+<p>Master节点会同时将上述数据存储在磁盘上，log, checkpoint —- on disk</p>
+<p>学生提问：从哪个Chunk服务器读取数据重要吗？<br>Robert教授：是也不是。概念上讲，它们都是副本。实际上，你可能已经注意到，或者我们之前也说过，不同Chunk服务器上的数据并不一定完全相同。应用程序应该要能够容忍这种情况。所以，实际上，如果从不同的Chunk服务器读取数据，可能会略微不同。GFS论文提到，客户端会尝试从同一个机架或者同一个交换机上的服务器读取数据。</p>
+<h3 id="读"><a href="#读" class="headerlink" title="读"></a>读</h3><ol>
+<li>client先从Master获取读文件的Chunk server的信息（文件都保存在那些Chunk server上）</li>
+<li>client会选择一个网络上最近的服务器读取，同时client还会缓存Chunk和服务器的对应关系</li>
+</ol>
+<h3 id="写"><a href="#写" class="headerlink" title="写"></a>写</h3><p>GFS写数据只能写Primary chunk server。每个Chunk可能同时有多个副本，最新的副本是指，副本中保存的版本号与Master中记录的Chunk的版本号一致，client首先需要跟Master通信，Master给出client追加写数据的Primary chunk server。当客户端想要对文件进行追加，但是又不知道文件尾的Chunk对应的Primary在哪时，Master会等所有存储了最新Chunk版本的服务器集合完成，然后挑选一个作为Primary，其他的作为Secondary。</p>
+<p>在知道了谁是Primary chunk server之后，客户端会将要追加的数据发送给Primary和Secondary服务器，这些服务器会将数据写入到一个临时位置。所以最开始，这些数据不会追加到文件中。</p>
+<ul>
+<li>客户端向Master询问哪个chunk server持有lease（哪个是Primary chunk server）以及其他副本的位置</li>
+<li>客户端将数据推送到所有副本（优化版是发送给离自己最近的chunk server，再由chunk server发送到其他chunk server）， 每个块服务器将数据存储在内部LRU缓冲区高速缓存中，这里就把数据流和控制流分开了</li>
+<li>当所有的服务器都返回确认消息说，已经有了要追加的数据，客户端会向Primary chunk server发送一条消息说，你和所有的Secondary服务器都有了要追加的数据，现在我想将这个数据追加到这个文件中</li>
+<li>Primary会通知所有的Secondary服务器也将客户端要追加的数据写入在它们自己存储的Chunk末尾</li>
+<li>只有所有的Secondary服务器都成功将数据写入，并将“yes”回复给了Primary，Primary才会向客户端返回写入成功</li>
+</ul>
+<p>学生提问：什么时候版本号会增加？<br>Robert教授：版本号只在Master节点认为Chunk没有Primary时才会增加。在一个正常的流程中，如果对于一个Chunk来说，已经存在了Primary，那么Master节点会记住已经有一个Primary和一些Secondary，Master不会重新选择Primary，也不会增加版本号。它只会告诉客户端说这是Primary，并不会变更版本号。</p>
+<p>GFS使用lease来防止chunk server的脑裂问题</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>GFS不是强一致的系统</p>
+<p><img src="https://pic1.zhimg.com/80/v2-c25f04c93d2fb5f750aca96b4fe5b858_720w.jpg" alt="aaa"></p>
+<p>但是由于GFS就是谷歌在特定时期特定背景下的产物。谷歌搜索业务的高速发展，GFS的设计目标就是应对巨量的数据。GFS设计目标：</p>
+<ol>
+<li>big,  fast</li>
+<li>Global (over a single data center): any client can read any file.</li>
+<li>Allows sharing of data among applications</li>
+<li>Automatic recovery from failures(自动恢复能力)</li>
+<li>single data center per deployment</li>
+</ol>
+<p>如果想把GFS改进成强一致性，可以从以下几个角度考虑：</p>
+<ul>
+<li>Primary检测重复的请求（Raft lab3A）</li>
+<li>对于Secondary来说，如果Primay要求Secondary执行一个操作，Secondary必须要执行而不是只返回一个错误给Primary，返回错误的Secondary需要被删除。</li>
+<li>当Primary要求Secondary追加数据时，直到Primary确信所有的Secondary都能执行数据追加之前，Secondary必须小心不要将数据暴露给读请求(大多数返回true，才能commit一个entry)</li>
+<li>新的Primary上任时，需要显式的与Secondary进行同步，以确保操作历史的结尾是相同的（append entries）</li>
+<li>Secondary读数据过时问题，1. 读也走Primay。2. Secondary增加lease机制确保数据最新</li>
+</ul>
+<h2 id="VMWare-FT"><a href="#VMWare-FT" class="headerlink" title="VMWare-FT"></a>VMWare-FT</h2><p>VMWare-FT的容错虚拟机结构：</p>
+<p><img src="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png" alt="2020-07-07 10-53-17屏幕截图.png"></p>
+<p>通过共享存储来解决脑裂——在共享存储上争用锁</p>
+<h3 id="脑裂"><a href="#脑裂" class="headerlink" title="脑裂"></a>脑裂</h3><p>大致可以理解为产生了两个primary。如果单单只是master ping不通primary就重新指定一个primary的话就可能会产生脑裂，因为ping不通的那个primary可能还在work只是由于网络波动无法接收到master的消息。这时同时就有两个primary，就会出现数据不一致问题。</p>
+<p>gfs防止出现脑裂是使用了lease，如果要重新指定一个新的primary必须等到lease到期才行。</p>
+<p>vmware使用共享存储来解决脑裂，当primary和backup都想成为primary的时候，他们要在共享存储上执行test-and-set原子操作，只有成功的那个才能成为primary，因为是原子操作所以只有一个会成功，另一个失败的就<strong><em>自杀</em></strong>。如果虚拟机在尝试执行原子操作时无法访问共享存储，则它会一直等到可以为止。共享存储是指-光纤通道或iSCSI磁盘阵列等，或者可以认为test-and-set服务是在另一台仲裁机器上进行，该机器分别和想成为primary的replica通信确认。</p>
+<h3 id="两种复制的方式"><a href="#两种复制的方式" class="headerlink" title="两种复制的方式"></a>两种复制的方式</h3><ol>
+<li><p>state transfer</p>
+<p>primary先执行服务</p>
+<p>primary再发送新的状态（内存的里面的内容）到backups</p>
+</li>
+<li><p>replicated state mechine</p>
+<p>client发送操作到primary, primary接着直接把操作顺序推给backups</p>
+<p>所有replicas(复制)执行所有操作</p>
+</li>
+</ol>
+<h2 id="Amazon-Aurora"><a href="#Amazon-Aurora" class="headerlink" title="Amazon Aurora"></a>Amazon Aurora</h2><h2 id="Spanner"><a href="#Spanner" class="headerlink" title="Spanner"></a>Spanner</h2><p>假设有多个跨地理位置的数据中心。</p>
 <p>关心的瓶颈是离开数据中心之后的网络、光纤的速度。</p>
 <h3 id="读写事务"><a href="#读写事务" class="headerlink" title="读写事务"></a>读写事务</h3><p>用MVCC和两阶段锁，使用两阶段锁来保证，耗时10-100毫秒左右。</p>
 <h3 id="只读事务"><a href="#只读事务" class="headerlink" title="只读事务"></a>只读事务</h3><p>只读事务比读写事务快很多（10倍）。只读事务的一个优化是读取离自己最近的server的数据，但是这样会导致的问题是离自己最近的server可能不是up-to-date。spanner的解决方案是使用始终来解决。spanner的每个事务都由全局时间戳（是一个时间范围，包含真实时刻），只读事务的时间戳在事务启动的时候赋予。因此，如果只读事务在最近的server读数据时和数据的时间戳相差过大（即改server的数据不是up-to-date），该只读事务会阻塞，直到server更新数据的时间戳。</p>
@@ -400,11 +516,28 @@
 <p>假设事件$e_i$的commit时间为$s_i = TT.now().latest$。则Spanner保证了在$TT.after(s_i)$之后的Client都可以读到$e_i$的修改。</p>
 <h2 id="FaRM"><a href="#FaRM" class="headerlink" title="FaRM"></a>FaRM</h2><p>假设只有一个数据中心，不是跨地理数据中心的，但是事务执行非常快，比spanner快100倍。</p>
 <p>主要关心的瓶颈是CPU时间。因此本文强调的使用DRAM和RDMA，都是为了减少CPU争用。</p>
-<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><ul>
-<li>sharding</li>
-<li>store data in RAM</li>
-<li>non-volatile RAM scheme，非易失性RAM，断电也不会丢失RAM里面的数据</li>
-</ul>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><ol>
+<li><p>sharding，把数据分片成多份，每次都是并行运算</p>
+</li>
+<li><p>store data in RAM</p>
+</li>
+<li><p>non-volatile RAM scheme，非易失性RAM，断电也不会丢失RAM里面的数据，这样和第二点加起来才OK。</p>
+</li>
+<li><p>RDMA，远程直接数据存取，不用通过CPU中断</p>
+</li>
+<li><p>kernel bypass，应用层（用户层）的代码可以直接访问网络协议栈，不用通过内核态</p>
+</li>
+</ol>
+<h3 id="关于2、3点，store-data-in-non-volatile-RAM-trick"><a href="#关于2、3点，store-data-in-non-volatile-RAM-trick" class="headerlink" title="关于2、3点，store data in non-volatile RAM trick"></a>关于2、3点，store data in non-volatile RAM <strong><em>trick</em></strong></h3><p>FaRM的做法是在每个机架放个大电源。。。</p>
+<p>如果遇到断电啥的，就启用预备的电源，同时发出警告和保存RAM的数据到磁盘。</p>
+<p>所以这种trick只能适用于断电的情况，其他物理磁盘故障啥的导致机器重启，还是会丢失RAM的数据。</p>
+<p>所以FaRM把每个副本分成很多片。</p>
+<h3 id="乐观锁控制机制"><a href="#乐观锁控制机制" class="headerlink" title="乐观锁控制机制"></a>乐观锁控制机制</h3><h2 id="Memcache-in-FB"><a href="#Memcache-in-FB" class="headerlink" title="Memcache in FB"></a>Memcache in FB</h2><p>获得performance有两种途径:</p>
+<ol>
+<li>partition</li>
+<li>replication</li>
+</ol>
+<p>lease</p>
 
       
     </div>
@@ -437,8 +570,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/25/big_data/GFS/" rel="next" title="GFS">
-                <i class="fa fa-chevron-left"></i> GFS
+              <a href="/2020/05/27/paper/EdgeCompute-07/" rel="next" title="DeepCachNet A Proactive Caching Framework Based on Deep Learning in Cellular Networks">
+                <i class="fa fa-chevron-left"></i> DeepCachNet A Proactive Caching Framework Based on Deep Learning in Cellular Networks
               </a>
             
           </div>
@@ -546,7 +679,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -627,7 +760,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Spanner"><span class="nav-number">1.</span> <span class="nav-text">Spanner</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读写事务"><span class="nav-number">1.1.</span> <span class="nav-text">读写事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只读事务"><span class="nav-number">1.2.</span> <span class="nav-text">只读事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于True-Time-API"><span class="nav-number">1.3.</span> <span class="nav-text">关于True Time API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FaRM"><span class="nav-number">2.</span> <span class="nav-text">FaRM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#性能"><span class="nav-number">2.1.</span> <span class="nav-text">性能</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Distribution-System"><span class="nav-number">1.</span> <span class="nav-text">Distribution System</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-is-distributed-storage-hard"><span class="nav-number">1.1.</span> <span class="nav-text">Why is distributed storage hard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deterministic-replay-确定性重放"><span class="nav-number">1.2.</span> <span class="nav-text">deterministic replay 确定性重放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Byzantine“拜占庭式”"><span class="nav-number">1.3.</span> <span class="nav-text">Byzantine“拜占庭式”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制有3个主要的挑战"><span class="nav-number">1.4.</span> <span class="nav-text">复制有3个主要的挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP定理"><span class="nav-number">1.5.</span> <span class="nav-text">CAP定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy-on-write"><span class="nav-number">1.6.</span> <span class="nav-text">Copy-on-write</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GFS"><span class="nav-number">2.</span> <span class="nav-text">GFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读"><span class="nav-number">2.1.</span> <span class="nav-text">读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写"><span class="nav-number">2.2.</span> <span class="nav-text">写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">2.3.</span> <span class="nav-text">最后</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VMWare-FT"><span class="nav-number">3.</span> <span class="nav-text">VMWare-FT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脑裂"><span class="nav-number">3.1.</span> <span class="nav-text">脑裂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两种复制的方式"><span class="nav-number">3.2.</span> <span class="nav-text">两种复制的方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Amazon-Aurora"><span class="nav-number">4.</span> <span class="nav-text">Amazon Aurora</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spanner"><span class="nav-number">5.</span> <span class="nav-text">Spanner</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#读写事务"><span class="nav-number">5.1.</span> <span class="nav-text">读写事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只读事务"><span class="nav-number">5.2.</span> <span class="nav-text">只读事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于True-Time-API"><span class="nav-number">5.3.</span> <span class="nav-text">关于True Time API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FaRM"><span class="nav-number">6.</span> <span class="nav-text">FaRM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#性能"><span class="nav-number">6.1.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于2、3点，store-data-in-non-volatile-RAM-trick"><span class="nav-number">6.2.</span> <span class="nav-text">关于2、3点，store data in non-volatile RAM trick</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁控制机制"><span class="nav-number">6.3.</span> <span class="nav-text">乐观锁控制机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memcache-in-FB"><span class="nav-number">7.</span> <span class="nav-text">Memcache in FB</span></a></li></ol></div>
             
 
           </div>
