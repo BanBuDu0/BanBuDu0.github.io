@@ -104,7 +104,7 @@
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://pic1.zhimg.com/80/v2-c25f04c93d2fb5f750aca96b4fe5b858_720w.jpg">
 <meta property="og:image" content="https://i.loli.net/2020/07/07/GJ6H9lnEjBLMtOv.png">
-<meta property="og:updated_time" content="2020-12-02T10:44:22.610Z">
+<meta property="og:updated_time" content="2020-12-03T12:20:18.449Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Distribution System">
 <meta name="twitter:description" content="Distribution SystemWhy is distributed storage hard 高性能(high performance) -&amp;gt; 数据分发到多个服务器上 很多服务器 -&amp;gt; 容错能力 容错(fault tolerance) -&amp;gt; 复制 复制(replication) -&amp;gt; 一致性问题 更好的一致性(consistency) -&amp;gt; 性能下降  权衡高">
@@ -423,11 +423,8 @@
 <p>因此在确认了P的情况了，C和A不可能同时实现。因为，</p>
 <ol>
 <li><p>实现C</p>
-<p>primary收到写请求同时把该请求发送给backup，这时由于P，写请求不能发送到backup，为了实现C，client都需要阻塞</p>
+<p>primary收到写请求同时把该请求发送给backup，这时由于P，写请求不能发送到backup，为了实现C，client都需要阻塞等待，就缺少了a</p>
 </li>
-</ol>
-<p>等待，就缺少了a</p>
-<ol>
 <li><p>实现A</p>
 <p>primary收到写请求同时把该请求发送给backup，且primary写完直接返回结果，这时由于P，写请求不能发送到backup，因此backup就不能保持一致性C了</p>
 </li>
@@ -505,7 +502,7 @@
 <h2 id="Spanner"><a href="#Spanner" class="headerlink" title="Spanner"></a>Spanner</h2><p>假设有多个跨地理位置的数据中心。</p>
 <p>关心的瓶颈是离开数据中心之后的网络、光纤的速度。</p>
 <h3 id="读写事务"><a href="#读写事务" class="headerlink" title="读写事务"></a>读写事务</h3><p>用MVCC和两阶段锁，使用两阶段锁来保证，耗时10-100毫秒左右。</p>
-<h3 id="只读事务"><a href="#只读事务" class="headerlink" title="只读事务"></a>只读事务</h3><p>只读事务比读写事务快很多（10倍）。只读事务的一个优化是读取离自己最近的server的数据，但是这样会导致的问题是离自己最近的server可能不是up-to-date。spanner的解决方案是使用始终来解决。spanner的每个事务都由全局时间戳（是一个时间范围，包含真实时刻），只读事务的时间戳在事务启动的时候赋予。因此，如果只读事务在最近的server读数据时和数据的时间戳相差过大（即改server的数据不是up-to-date），该只读事务会阻塞，直到server更新数据的时间戳。</p>
+<h3 id="只读事务"><a href="#只读事务" class="headerlink" title="只读事务"></a>只读事务</h3><p>只读事务比读写事务快很多（10倍）。只读事务的一个优化是读取离自己最近的server的数据，但是这样会导致的问题是离自己最近的server可能不是up-to-date。spanner的解决方案是使用原子时钟来解决。spanner的每个事务都由全局时间戳（是一个时间范围，包含真实时刻），只读事务的时间戳在事务启动的时候赋予。因此，如果只读事务在最近的server读数据时和数据的时间戳相差过大（即改server的数据不是up-to-date），该只读事务会阻塞，直到server更新数据的时间戳。</p>
 <blockquote>
 <p>这里如果是一个较早commit的数据，那这个数据的时间戳不应该是commit的时候的时间戳吗。那这样的话后面的读事务岂不是时间戳都相差过大了。</p>
 <p>我猜测，这里这个paxos server每次和leader通信的时候都会更新每个数据的时间戳，因为使用了MVCC在管理数据，所以每次和leader同步的时候每个数据都更新一个版本的时间戳（不管数据有没有改变）。</p>
