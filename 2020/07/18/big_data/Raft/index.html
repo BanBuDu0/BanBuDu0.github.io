@@ -103,7 +103,7 @@
 <meta property="og:description" content="Lab 2实现raft lab 2a实现raft中的leader选举和心跳（leader和其他server之间保持连接的心跳）功能  发送和接收RequestVote RPCs 设计log entry的数据结构 开始阶段就起一个goroutine周期性进行leader选举任务 修改RequestVote()给自己或他人投票 实现AppendEntries RPC结构，leader定期发送实现心跳；">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2020/08/18/B2zGsEOlMfgRjy3.png">
-<meta property="og:updated_time" content="2020-11-27T07:12:23.503Z">
+<meta property="og:updated_time" content="2020-12-19T08:15:52.554Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Raft">
 <meta name="twitter:description" content="Lab 2实现raft lab 2a实现raft中的leader选举和心跳（leader和其他server之间保持连接的心跳）功能  发送和接收RequestVote RPCs 设计log entry的数据结构 开始阶段就起一个goroutine周期性进行leader选举任务 修改RequestVote()给自己或他人投票 实现AppendEntries RPC结构，leader定期发送实现心跳；">
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  3.5k
+                  3.6k
                 </span>
               
 
@@ -367,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  14
+                  15
                 </span>
               
             </div>
@@ -528,6 +528,21 @@
 </ol>
 <p>对于1这点，kv server在什么时候检测呢，单独再开一个go routine检测肯定不划算，go routine的检测间隔也不好控制。因此，可以在log增加的时候检测，即raft将某一条log apply的时候，在kv server这边就是apply chan里面又读到内容的时候。</p>
 <p>对于2，leader什么时候发送InstallSnapshot RPC呢——如果发现 prevLogIndex &lt; LastIncludeIndex 的时候，就表示follower需要的log已经被做成快照了，这时候就需要leader发送InstallSnapshot RPC了。这里需要注意的是发送InstallSnapshot RPC的是raft模块，收到该RPC的raft完成snapshot之后还需要通知其kv server更新 db。</p>
+<p>3B snapshot 具体步骤如下：</p>
+<ol>
+<li>KVServer收到Apply时去检测当前RaftStateSize(RaftState包含currentTerm、voteFor、LogEntries、LastIndudeTerm、LastIndudeIndex)，如果大于阈值则出发KVServer doSnapshot</li>
+<li>KVServer将自己的DB和clientLastSeq Encode之后和lastApplyIndex一起发送给Raft</li>
+<li>Raft收到之后根据lastApplyIndex阶段logEntries，并更新LastIncludedIndex和LastIncludedTerm</li>
+<li>Raft将RaftState和KVServer传过来的数据一起保存</li>
+</ol>
+<blockquote>
+<p>上述是Leader会干的事，Leader做完Snapshot之后，Follower的nextIndex可能在LogEntries里找不到了，这时触发InstallSnapshot RPC</p>
+</blockquote>
+<ol>
+<li>使用InstallSnapshot RPC来代替AppendEntries RPC</li>
+<li>Follower收到InstallSnapshot RPC之后根据情况更改RaftState，并通过Chan Apply到Follower的KVServer</li>
+<li>KVServer读到数据后更新自己的DB和clientLastSeq </li>
+</ol>
 <h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><h4 id="如果有3个server-1-2-3-。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。"><a href="#如果有3个server-1-2-3-。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。" class="headerlink" title="如果有3个server[1, 2, 3]。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。"></a>如果有3个server[1, 2, 3]。开始1为leader，3个节点的Log都是up-to-date，所有节点都能正常通信。然后，1和3之间不能通信了。这是如果在一段时间内都没有Start操作，即没有新的Log进来，那么由于1，3的log都是新的，他们都可以当选leader。因此就会在1和3之间一直摇摆leader。</h4><p>在第6张最后有一个解决方案，如果raft确信现在有leader存在的情况下，他会直接丢弃所有RequestVote RPC。怎么确信有leader存在呢，论文里说到的是，从收到leader的心跳到最低ElectionTimeout这段时间都是确信有leader的，即在<script type="math/tex">[getHeartbeat, getHeartbeat + minElectionTimeout]</script>这个区间收到RequestVote RPC都直接丢弃。</p>
 <h3 id="如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常"><a href="#如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常" class="headerlink" title="如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常"></a>如果某一个follower一直连不上，那么他会一直增大自己的term参与竞选，导致其连上的时候term非常大，扰乱正常</h3>
       

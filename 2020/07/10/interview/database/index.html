@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="SYJ BLOG">
 <meta property="og:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-12-02T06:10:12.683Z">
+<meta property="og:updated_time" content="2020-12-14T08:34:10.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库">
 <meta name="twitter:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
@@ -349,7 +349,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  1.3k
+                  1.4k
                 </span>
               
 
@@ -419,6 +419,11 @@
 <p>这样在全表扫描冷数据的时候就不会把yang区的数据替换出去。</p>
 <h2 id="MySQL回表优化之Multi-Range-Read-优化"><a href="#MySQL回表优化之Multi-Range-Read-优化" class="headerlink" title="MySQL回表优化之Multi-Range Read 优化"></a>MySQL回表优化之Multi-Range Read 优化</h2><p>MySQL的非聚集索引如果没用到覆盖索引的话会回表，即非聚集索引B+树叶子节点保存的是主键的值，要通过这个值再去主键索引上找数据。这里即使再非聚集索引上使用范围查询是循序查找，取出主键值之后，主键值也会变成随机的，再回表的话就得在主键索引上做随机查询，徒增性能损耗。</p>
 <p>MySQL的优化方式是，在非聚集索引上的范围查询取出主键值之后，先把这些主键值缓存在read_rnd_buffer中，如果read_rnd_buffer满了，先对缓存的主键值排序，之后再回主键索引上查找。这样就可以利用B+树顺序查找的优点优化性能。</p>
+<h2 id="MySQL之索引下推"><a href="#MySQL之索引下推" class="headerlink" title="MySQL之索引下推"></a>MySQL之索引下推</h2><p>我们知道MySQL的最左匹配原则，但是最左匹配在匹配到范围索引的时候（like，＞，＜，between），就会停止继续向右匹配，如下：</p>
+<blockquote>
+<p>select * from tuser where name like ‘张%’ and age=10 and ismale=1;</p>
+</blockquote>
+<p>表中有联合索引（name, age）。如果没有索引下推，只能从like找到的数据一个个回表，再比对字段值判断是否符合。如果使用了索引下推，就可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
 
       
     </div>
@@ -641,7 +646,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACID"><span class="nav-number">1.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Atomicity（原子性）"><span class="nav-number">1.1.</span> <span class="nav-text">A: Atomicity（原子性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-consistency（一致性）"><span class="nav-number">1.2.</span> <span class="nav-text">C: consistency（一致性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-isolation（隔离性）"><span class="nav-number">1.3.</span> <span class="nav-text">I: isolation（隔离性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-durability（持久性）"><span class="nav-number">1.4.</span> <span class="nav-text">D: durability（持久性）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-内存管理之LRU机制"><span class="nav-number">2.</span> <span class="nav-text">MySQL 内存管理之LRU机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL回表优化之Multi-Range-Read-优化"><span class="nav-number">3.</span> <span class="nav-text">MySQL回表优化之Multi-Range Read 优化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACID"><span class="nav-number">1.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Atomicity（原子性）"><span class="nav-number">1.1.</span> <span class="nav-text">A: Atomicity（原子性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-consistency（一致性）"><span class="nav-number">1.2.</span> <span class="nav-text">C: consistency（一致性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-isolation（隔离性）"><span class="nav-number">1.3.</span> <span class="nav-text">I: isolation（隔离性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-durability（持久性）"><span class="nav-number">1.4.</span> <span class="nav-text">D: durability（持久性）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-内存管理之LRU机制"><span class="nav-number">2.</span> <span class="nav-text">MySQL 内存管理之LRU机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL回表优化之Multi-Range-Read-优化"><span class="nav-number">3.</span> <span class="nav-text">MySQL回表优化之Multi-Range Read 优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL之索引下推"><span class="nav-number">4.</span> <span class="nav-text">MySQL之索引下推</span></a></li></ol></div>
             
 
           </div>
