@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="interview,backend,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="TCP 可以看到TCP头部最少20个字节，IP头部最少也是20个字节。 其中控制位：  ACK：该位为 1时，「确认应答」的字段变为有效，TCP 规定除了最初建立连接时的 SYN 包之外该位必须设置为 1 。 RST：该位为 1 时，表示 TCP 连接中出现异常必须强制断开连接。 SYN：该位为 1 时，表示希望建立连接，并在其「序列号」的字段进行序列号初始值的设定。 FIN：该位为 1 时，表示">
+<meta name="keywords" content="interview,backend">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后端面试题-网络">
+<meta property="og:url" content="http://yoursite.com/2020/11/27/interview/backend-network/index.html">
+<meta property="og:site_name" content="SYJ BLOG">
+<meta property="og:description" content="TCP 可以看到TCP头部最少20个字节，IP头部最少也是20个字节。 其中控制位：  ACK：该位为 1时，「确认应答」的字段变为有效，TCP 规定除了最初建立连接时的 SYN 包之外该位必须设置为 1 。 RST：该位为 1 时，表示 TCP 连接中出现异常必须强制断开连接。 SYN：该位为 1 时，表示希望建立连接，并在其「序列号」的字段进行序列号初始值的设定。 FIN：该位为 1 时，表示">
+<meta property="og:locale" content="zh">
+<meta property="og:image" content="https://i.loli.net/2020/11/27/tLiXH4vY5lkcR2J.png">
+<meta property="og:updated_time" content="2021-01-24T11:52:20.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="后端面试题-网络">
+<meta name="twitter:description" content="TCP 可以看到TCP头部最少20个字节，IP头部最少也是20个字节。 其中控制位：  ACK：该位为 1时，「确认应答」的字段变为有效，TCP 规定除了最初建立连接时的 SYN 包之外该位必须设置为 1 。 RST：该位为 1 时，表示 TCP 连接中出现异常必须强制断开连接。 SYN：该位为 1 时，表示希望建立连接，并在其「序列号」的字段进行序列号初始值的设定。 FIN：该位为 1 时，表示">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/27/tLiXH4vY5lkcR2J.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/11/27/interview/backend-network/">
+
+
+
+
+
+  <title>后端面试题-网络 | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SYJ BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">War never changes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/27/interview/backend-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="syj">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SYJ BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">后端面试题-网络</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-27T14:48:30+08:00">
+                2020-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/interview/" itemprop="url" rel="index">
+                    <span itemprop="name">interview</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article</span>
+                
+                <span title="Words count in article">
+                  2.5k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time</span>
+                
+                <span title="Reading time">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><p><img src="https://i.loli.net/2020/11/27/tLiXH4vY5lkcR2J.png" alt="tcp.png"></p>
+<p>可以看到TCP头部最少20个字节，IP头部最少也是20个字节。</p>
+<p>其中控制位：</p>
+<ul>
+<li>ACK：该位为 <code>1</code>时，「确认应答」的字段变为有效，TCP 规定除了最初建立连接时的 <code>SYN</code> 包之外该位必须设置为 <code>1</code> 。</li>
+<li>RST：该位为 <code>1</code> 时，表示 TCP 连接中出现异常必须强制断开连接。</li>
+<li>SYN：该位为 <code>1</code> 时，表示希望建立连接，并在其「序列号」的字段进行序列号初始值的设定。</li>
+<li>FIN：该位为 <code>1</code> 时，表示今后不会再有数据发送，希望断开连接。当通信结束希望断开连接时，通信双方的主机之间就可以相互交换 <code>FIN</code> 位置为 1 的 TCP 段。</li>
+</ul>
+<p><code>IP</code> 层是「不可靠」的，它不保证网络包的交付、不保证网络包的按序交付、也不保证网络包中的数据的完整性。TCP 是一个工作在<strong>传输层</strong>的<strong>可靠</strong>数据传输的服务，它能确保接收端接收的网络包是<strong>无损坏、无间隔、非冗余和按序的</strong>。TCP 是<strong>面向连接的、可靠的、基于字节流</strong>的传输层通信协议。</p>
+<ul>
+<li><strong>面向连接</strong>：一定是「一对一」才能连接，不能像 UDP 协议 可以一个主机同时向多个主机发送消息</li>
+<li><strong>可靠的</strong>：无论的网络链路中出现了怎样的链路变化，TCP 都可以保证一个报文一定能够到达接收端</li>
+<li><strong>字节流</strong>：消息是「没有边界」的，所以无论我们消息有多大都可以进行传输。并且消息是「有序的」，当「前一个」消息没有收到的时候，即使它先收到了后面的字节已经收到，那么也不能扔给应用层去处理，同时对「重复」的报文会自动丢弃</li>
+</ul>
+<h4 id="TCP4元组"><a href="#TCP4元组" class="headerlink" title="TCP4元组"></a>TCP4元组</h4><p>源地址，源端口，目的地址，目的端口。</p>
+<p>源地址和目的地址的字段（32位）是在 IP 头部中，作用是通过 IP 协议发送报文给对方主机。 源端口和目的端口的字段（16位）是在 TCP 头部中，作用是告诉 TCP 协议应该把报文发给哪个进程。</p>
+<h4 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h4><p><strong><em>连接</em></strong>：用于保证可靠性和流量控制维护的某些状态信息，这些信息的组合，包括Socket、序列号和窗口大小称为连接</p>
+<p>其中socket由目标IP和端口组成，指示了连接的另一头的地址。序列号用来解决乱序传输。窗口大小用来做流量控制</p>
+<h4 id="3次握手"><a href="#3次握手" class="headerlink" title="3次握手"></a>3次握手</h4><p>最开始，客户端处于close状态，服务端处于listen状态（监听自己某端口）</p>
+<ol>
+<li>客户端随机初始化<code>序列号</code>，置<code>SYN</code>为1，表示 SYN报文，该报文不包含应用层数据，之后客户端处于<strong>SYN-SENT</strong>状态</li>
+<li>服务端收到SYN报文之后也初始化<code>序列号</code>，把<code>确认应答号</code>置为客户端传过来的序列号+1，再置<code>SYN</code>和<code>ACK</code>为1，该报文也不包含数据，之后服务端处于<strong>SYN-RCVD</strong>状态</li>
+<li>客户端置<code>ACK</code>为1，<code>确认应答号</code>填入服务端的序列号+1，本次报文可以携带数据，之后客户端处于<strong>ESTABLISHED</strong>状态</li>
+</ol>
+<blockquote>
+<p><em>The principle reason for the three-way handshake is to prevent old duplicate connection initiations from causing confusion.</em></p>
+</blockquote>
+<p>三次握手的<strong>首要原因是为了防止旧的重复连接初始化造成混乱。</strong></p>
+<p>在两次握手之后，客户端如果发现收到的序列号是过时的序列号就可以发送<code>RST</code>，终止这次连接。</p>
+<h4 id="TCP可靠传输"><a href="#TCP可靠传输" class="headerlink" title="TCP可靠传输"></a>TCP可靠传输</h4><ul>
+<li>校验和</li>
+<li>序列号</li>
+<li>确认应答</li>
+<li>超时重传</li>
+<li>连接管理</li>
+<li>流量控制</li>
+<li>拥塞控制</li>
+</ul>
+<p>序列号是TCP可靠传输的关键因素，序列号的作用：</p>
+<ul>
+<li>接收方可以去除重复的数据；</li>
+<li>接收方可以根据数据包的序列号按序接收；</li>
+<li>可以标识发送出去的数据包中， 哪些是已经被对方收到的；</li>
+</ul>
+<p>序列号$ ISN = M + Hash (localhost, localport, remotehost, remoteport)$</p>
+<h4 id="为什么客户端和服务器需要不同的seq呢，可以直接在seq上加个1，把收到的seq置为相同的不久行了吗，为什么我服务器端要单独发送自己的seq呢"><a href="#为什么客户端和服务器需要不同的seq呢，可以直接在seq上加个1，把收到的seq置为相同的不久行了吗，为什么我服务器端要单独发送自己的seq呢" class="headerlink" title="为什么客户端和服务器需要不同的seq呢，可以直接在seq上加个1，把收到的seq置为相同的不久行了吗，为什么我服务器端要单独发送自己的seq呢"></a>为什么客户端和服务器需要不同的seq呢，可以直接在seq上加个1，把收到的seq置为相同的不久行了吗，为什么我服务器端要单独发送自己的seq呢</h4><p>我的理解是，TCP三次握手使用序列号的重要原因是防止旧的重复连接初始化造成混乱，客户端发送他自己的seq，服务器ack这个seq表示我认可你这个连接(你不是旧连接，我将和你建立连接)，服务端发送自己的seq，也表示期望建立当前这个seq的连接。</p>
+<h4 id="4次挥手"><a href="#4次挥手" class="headerlink" title="4次挥手"></a>4次挥手</h4><p>双方都可以主动断开连接，假设客户端发起断开连接</p>
+<ul>
+<li>置<code>FIN</code>为1，客户端进入<strong>FIN_WAIT_1</strong>状态</li>
+<li>服务端收到<code>FIN</code>后回复<code>ACK</code>，服务器进入<strong>CLOSED_WAIT</strong>状态，客户端收到<code>ACK</code>之后进入<strong>FIN_WAIT_2</strong>，等待服务器发送<code>FIN</code></li>
+<li>服务器发送<code>FIN</code>，进入<strong>LAST_ACK</strong>状态</li>
+<li>客户端收到<code>FIN</code>，回复一个<code>ACK</code>，并进入<code>TIME_WAIT</code>状态，服务器在收到这个<code>ACK</code>之后进入<code>CLOSE</code>状态</li>
+<li>最后客户端在经过2MSL之后进入<code>CLOSE</code>状态</li>
+</ul>
+<p><strong>需要四次挥手的原因是</strong>，关闭连接时，客户端向服务端发送 <code>FIN</code> 时，仅仅表示客户端不再发送数据了但是还能接收数据。服务器收到客户端的 <code>FIN</code> 报文时，先回一个 <code>ACK</code> 应答报文，而服务端可能还有数据需要处理和发送，等服务端不再发送数据时，才发送 <code>FIN</code> 报文给客户端来表示同意现在关闭连接。</p>
+<p><code>MSL</code> 是 Maximum Segment Lifetime，<strong>报文最大生存时间</strong>，任何报文在网络上存在的最长时间。</p>
+<p>IP 头中有一个 <code>TTL</code> 字段，是 IP 数据报可以经过的最大路由数，每经过一个处理他的路由器此值就减 1，当此值为 0 则数据报将被丢弃，同时发送 ICMP 报文通知源主机。</p>
+<p>最后客户端要等待2MSL。等待2MSL</p>
+<ul>
+<li><p><em>原因一：防止旧连接的数据包</em></p>
+<p>如果没有等待2MSL马上进入<code>CLOSE</code>状态，之后相同端口的TCP被复用，这是可能会收到上次连接的过期报文</p>
+</li>
+<li><p><em>原因二：保证连接正确关闭</em></p>
+<blockquote>
+<p><em>TIME-WAIT - represents waiting for enough time to pass to be sure the remote TCP received the acknowledgment of its connection termination request.</em></p>
+</blockquote>
+<p>如果服务端没有收到客户端的ACK，会超时重传FIN，那么客户端再次接到重传的FIN，会再次发送ACK，这一来一回就是2MSL。确保服务端也可以正常关闭连接。</p>
+</li>
+</ul>
+<h4 id="TCP可靠传输-1"><a href="#TCP可靠传输-1" class="headerlink" title="TCP可靠传输"></a>TCP可靠传输</h4><ul>
+<li>校验</li>
+<li>序号</li>
+<li>确认</li>
+<li>重传</li>
+</ul>
+<h4 id="TCP拥塞控制"><a href="#TCP拥塞控制" class="headerlink" title="TCP拥塞控制"></a>TCP拥塞控制</h4><p>拥塞控制控制的是整个网络的拥塞，流量控制控制的是发送端的发送速率。</p>
+<ul>
+<li><p>慢开始和拥塞避免</p>
+<p>慢开始表示，拥塞窗口（cwnd）刚开始的时候等于1，然后在没有碰到阈值(ssthresh)和网络拥塞之前呈指数增长（每次加一倍）。达到ssthresh时执行拥塞避免，即cwnd呈线性增长（每次加1）。发送方检测到超时事件时执行拥塞处理，ssthresh=cwnd/2,cwnd=1，然后重新开始慢开始。</p>
+</li>
+<li><p>快重传和快恢复</p>
+<p>快重传对应了TCP重传机制中的快速重传。慢开始和拥塞避免是在发生超时事件的时候才开始处理网络拥塞（ssthresh=cwnd/2,cwnd=1），而快重传是在连续收到三个重复的确认应答号之后开始处理网络拥塞。收到三个重复的确认应答号之后开始处理网络拥塞，即快恢复。ssthresh=cwnd/2,cwnd=cwnd/2，然后开始拥塞避免（cwnd线性增加，每次加1）</p>
+</li>
+</ul>
+<p>数据在链路层会被分成数据帧，最大帧长度是1500字节，1500就是MTU(max transmission unit)能达到的最大值，MTU是由硬件规定的。而MSS(Maximum Segment Size)是TCP分段的最大大小，为MTU减去40个字节的IP和TCP包头。</p>
+<h3 id="键入网址发生什么"><a href="#键入网址发生什么" class="headerlink" title="键入网址发生什么"></a>键入网址发生什么</h3><ol>
+<li><p>浏览器解析URL，解析出来WEB服务器和文件的路径。</p>
+</li>
+<li><p>根据1解析出来的信息生成HTTP请求报文。</p>
+</li>
+<li><p>查询WEB服务器的IP地址（DNS）</p>
+</li>
+<li><p>操作系统协议栈——TCP，TCP是基于进程到进程的通信</p>
+<ul>
+<li>三次握手</li>
+<li>按照MSS将HTTP报文分割成报文段</li>
+</ul>
+</li>
+<li><p>操作系统协议栈——IP，将数据分装成数据包，IP是基于机器到机器的通信</p>
+<p>源IP——多网卡可以通过路由表查询</p>
+<p>目标IP——DNS解析得到</p>
+<p>在 IP 协议里面需要有<strong>源地址 IP</strong> 和 <strong>目标地址 IP</strong>，然后根据路由表查看具体怎么走</p>
+</li>
+<li><p>操作系统协议栈——MAC</p>
+<p>源MAC，网卡固件中获取</p>
+<p>目标MAC，使用ARP（地址解析协议）在以太网中广播获得，先是查看ARP缓存</p>
+</li>
+<li><p>网卡——将数据包转化为电信号</p>
+</li>
+<li><p>交换机，交换机工作在MAC层</p>
+</li>
+<li><p>路由器，基于IP层设计，MAC 头部的作用就是将包送达路由器，因此路由器会丢弃MAC 头部</p>
+</li>
+</ol>
+<h3 id="限流算法"><a href="#限流算法" class="headerlink" title="限流算法"></a>限流算法</h3><ul>
+<li>固定窗口算法</li>
+<li>滑动窗口算法</li>
+<li>令牌桶算法</li>
+<li>漏桶算法</li>
+</ul>
+<h3 id="路由选择协议"><a href="#路由选择协议" class="headerlink" title="路由选择协议"></a>路由选择协议</h3><ul>
+<li><p>RIP<br> 基于距离矢量算法，选择跳数少的，可能会产生无限计数的问题。设置最大距离为16跳，或者传播死亡信息（直接传播挂掉的网络为距离为16跳），或者不回传距离信息，来解决无限计数问题。</p>
+</li>
+<li><p>OSPF<br> 链路状态型路由协议，每个路由器上都有一个当前网络的拓扑结构，给每一个路由赋予一个权重，并选择总代价最小的路由</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/interview/" rel="tag"># interview</a>
+          
+            <a href="/tags/backend/" rel="tag"># backend</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/02/big_data/mapreduce/" rel="next" title="MapReduce总结">
+                <i class="fa fa-chevron-left"></i> MapReduce总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/02/big_data/spanner/" rel="prev" title="Spanner翻译">
+                Spanner翻译 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="syj">
+          <p class="site-author-name" itemprop="name">syj</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BanBuDu0" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github-square"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/189284975/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/SYJ27783318" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.instagram.com/yuejunq/" target="_blank" title="Instagram">
+                  
+                    <i class="fa fa-fw fa-instagram"></i>
+                  
+                    
+                      Instagram
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP4元组"><span class="nav-number">1.1.</span> <span class="nav-text">TCP4元组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP连接"><span class="nav-number">1.2.</span> <span class="nav-text">TCP连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3次握手"><span class="nav-number">1.3.</span> <span class="nav-text">3次握手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP可靠传输"><span class="nav-number">1.4.</span> <span class="nav-text">TCP可靠传输</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么客户端和服务器需要不同的seq呢，可以直接在seq上加个1，把收到的seq置为相同的不久行了吗，为什么我服务器端要单独发送自己的seq呢"><span class="nav-number">1.5.</span> <span class="nav-text">为什么客户端和服务器需要不同的seq呢，可以直接在seq上加个1，把收到的seq置为相同的不久行了吗，为什么我服务器端要单独发送自己的seq呢</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4次挥手"><span class="nav-number">1.6.</span> <span class="nav-text">4次挥手</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP可靠传输-1"><span class="nav-number">1.7.</span> <span class="nav-text">TCP可靠传输</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TCP拥塞控制"><span class="nav-number">1.8.</span> <span class="nav-text">TCP拥塞控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键入网址发生什么"><span class="nav-number">2.</span> <span class="nav-text">键入网址发生什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#限流算法"><span class="nav-number">3.</span> <span class="nav-text">限流算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由选择协议"><span class="nav-number">4.</span> <span class="nav-text">路由选择协议</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">syj</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

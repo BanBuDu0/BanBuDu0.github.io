@@ -94,18 +94,20 @@
 
 
 
-<meta name="description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
+<meta name="description" content="MySQLACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isola">
 <meta name="keywords" content="interview,database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库">
 <meta property="og:url" content="http://yoursite.com/2020/07/10/interview/database/index.html">
 <meta property="og:site_name" content="SYJ BLOG">
-<meta property="og:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
+<meta property="og:description" content="MySQLACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isola">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2020-12-14T08:34:10.871Z">
+<meta property="og:image" content="https://i.loli.net/2021/02/07/PONBYTESk1GoyUz.png">
+<meta property="og:updated_time" content="2021-02-07T11:49:45.970Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库">
-<meta name="twitter:description" content="ACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isolation（">
+<meta name="twitter:description" content="MySQLACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isola">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/07/PONBYTESk1GoyUz.png">
 
 
 
@@ -349,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  1.4k
+                  3.8k
                 </span>
               
 
@@ -365,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  4
+                  13
                 </span>
               
             </div>
@@ -386,10 +388,10 @@
       
 
       
-        <h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><h3 id="A-Atomicity（原子性）"><a href="#A-Atomicity（原子性）" class="headerlink" title="A: Atomicity（原子性）"></a>A: Atomicity（原子性）</h3><p>事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。 </p>
+        <h2 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h2><h3 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h3><h4 id="A-Atomicity（原子性）"><a href="#A-Atomicity（原子性）" class="headerlink" title="A: Atomicity（原子性）"></a>A: Atomicity（原子性）</h4><p>事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。 </p>
 <p>回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。</p>
-<h3 id="C-consistency（一致性）"><a href="#C-consistency（一致性）" class="headerlink" title="C: consistency（一致性）"></a>C: consistency（一致性）</h3><p>数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。</p>
-<h3 id="I-isolation（隔离性）"><a href="#I-isolation（隔离性）" class="headerlink" title="I: isolation（隔离性）"></a>I: isolation（隔离性）</h3><p>如果不存在如下4个隔离级别，就是不同事务<strong>写数据没有加锁</strong>，会导致数据库的数据出现错误。</p>
+<h4 id="C-consistency（一致性）"><a href="#C-consistency（一致性）" class="headerlink" title="C: consistency（一致性）"></a>C: consistency（一致性）</h4><p>数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。</p>
+<h4 id="I-isolation（隔离性）"><a href="#I-isolation（隔离性）" class="headerlink" title="I: isolation（隔离性）"></a>I: isolation（隔离性）</h4><p>如果不存在如下4个隔离级别，就是不同事务<strong>写数据没有加锁</strong>，会导致数据库的数据出现错误。</p>
 <p>4个隔离级别，</p>
 <ul>
 <li><p>read uncommitted（读未提交）</p>
@@ -406,8 +408,8 @@
 </li>
 </ul>
 <p>在<strong>读已提交</strong>和<strong>可重复读</strong>下，MySQL 都会创建视图（consistent read view, 一致性读视图），不同的是，读已提交视图是在每个SQL语句开始执行的时候创建的，所以同一个事务内两次相同的查询可能会查到不同的数据；而可重复读是在事务启动的时候创建的，整个事务存在期间都使用该视图。</p>
-<h3 id="D-durability（持久性）"><a href="#D-durability（持久性）" class="headerlink" title="D: durability（持久性）"></a>D: durability（持久性）</h3><p>一旦事务提交，则其所做的修改将会永远保存到数据库中。即使系统发生崩溃，事务执行的结果也不能丢失。 使用redo log来保证持久性。</p>
-<h2 id="MySQL-内存管理之LRU机制"><a href="#MySQL-内存管理之LRU机制" class="headerlink" title="MySQL 内存管理之LRU机制"></a>MySQL 内存管理之LRU机制</h2><p>在WAL机制中，InnoDB 内存的一个作用，是保存更新的结果，再配合 redo log，就避免了随机写盘。此外，MySQL Buffer pool的命中率和性能息息相关，为了提高Buffer pool的命中率，MySQL使用LRU管理内存。但是使用基础的LRU会有一个问题，就是执行冷数据的全表扫描的时候，会把所有热数据都替换出去，使内存命中率急剧下降。因此，MySQL对LRU做了改进：将LRU链表按照5:3分成yang区和old区。表头5/8的数据是yang区，之后的是old区。</p>
+<h4 id="D-durability（持久性）"><a href="#D-durability（持久性）" class="headerlink" title="D: durability（持久性）"></a>D: durability（持久性）</h4><p>一旦事务提交，则其所做的修改将会永远保存到数据库中。即使系统发生崩溃，事务执行的结果也不能丢失。 使用redo log来保证持久性。</p>
+<h3 id="MySQL-内存管理之LRU机制"><a href="#MySQL-内存管理之LRU机制" class="headerlink" title="MySQL 内存管理之LRU机制"></a>MySQL 内存管理之LRU机制</h3><p>在WAL机制中，InnoDB 内存的一个作用，是保存更新的结果，再配合 redo log，就避免了随机写盘。此外，MySQL Buffer pool的命中率和性能息息相关，为了提高Buffer pool的命中率，MySQL使用LRU管理内存。但是使用基础的LRU会有一个问题，就是执行冷数据的全表扫描的时候，会把所有热数据都替换出去，使内存命中率急剧下降。因此，MySQL对LRU做了改进：将LRU链表按照5:3分成yang区和old区。表头5/8的数据是yang区，之后的是old区。</p>
 <ul>
 <li><p>处于yang区的数据访问和LRU算法相同。</p>
 </li>
@@ -417,13 +419,89 @@
 </li>
 </ul>
 <p>这样在全表扫描冷数据的时候就不会把yang区的数据替换出去。</p>
-<h2 id="MySQL回表优化之Multi-Range-Read-优化"><a href="#MySQL回表优化之Multi-Range-Read-优化" class="headerlink" title="MySQL回表优化之Multi-Range Read 优化"></a>MySQL回表优化之Multi-Range Read 优化</h2><p>MySQL的非聚集索引如果没用到覆盖索引的话会回表，即非聚集索引B+树叶子节点保存的是主键的值，要通过这个值再去主键索引上找数据。这里即使再非聚集索引上使用范围查询是循序查找，取出主键值之后，主键值也会变成随机的，再回表的话就得在主键索引上做随机查询，徒增性能损耗。</p>
+<h3 id="MySQL回表优化之Multi-Range-Read-优化"><a href="#MySQL回表优化之Multi-Range-Read-优化" class="headerlink" title="MySQL回表优化之Multi-Range Read 优化"></a>MySQL回表优化之Multi-Range Read 优化</h3><p>MySQL的非聚集索引如果没用到覆盖索引的话会回表，即非聚集索引B+树叶子节点保存的是主键的值，要通过这个值再去主键索引上找数据。这里即使再非聚集索引上使用范围查询是循序查找，取出主键值之后，主键值也会变成随机的，再回表的话就得在主键索引上做随机查询，徒增性能损耗。</p>
 <p>MySQL的优化方式是，在非聚集索引上的范围查询取出主键值之后，先把这些主键值缓存在read_rnd_buffer中，如果read_rnd_buffer满了，先对缓存的主键值排序，之后再回主键索引上查找。这样就可以利用B+树顺序查找的优点优化性能。</p>
-<h2 id="MySQL之索引下推"><a href="#MySQL之索引下推" class="headerlink" title="MySQL之索引下推"></a>MySQL之索引下推</h2><p>我们知道MySQL的最左匹配原则，但是最左匹配在匹配到范围索引的时候（like，＞，＜，between），就会停止继续向右匹配，如下：</p>
+<h3 id="MySQL之索引下推"><a href="#MySQL之索引下推" class="headerlink" title="MySQL之索引下推"></a>MySQL之索引下推</h3><p>我们知道MySQL的最左匹配原则，但是最左匹配在匹配到范围索引的时候（like（非字符串索引的最左 M 个字符），＞，＜，between），就会停止继续向右匹配，如下：</p>
 <blockquote>
 <p>select * from tuser where name like ‘张%’ and age=10 and ismale=1;</p>
 </blockquote>
 <p>表中有联合索引（name, age）。如果没有索引下推，只能从like找到的数据一个个回表，再比对字段值判断是否符合。如果使用了索引下推，就可以在索引遍历过程中，对索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数。</p>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><h3 id="数据结构与对象"><a href="#数据结构与对象" class="headerlink" title="数据结构与对象"></a>数据结构与对象</h3><h4 id="Redis-SDS空间预分配策略"><a href="#Redis-SDS空间预分配策略" class="headerlink" title="Redis SDS空间预分配策略"></a>Redis SDS空间预分配策略</h4><p>对SDS修改后，如果SDS的长度小于1MB，则会分配和len长度相等的未使用空间，即设置free = len，并分配2len的空间；如果SDS的长度大于等于1MB，则会分配1MB的未使用空间。<br>惰性空间释放，即SDS缩短buf内的字符串时不会立即释放空间，而是把未使用的空间记录到free中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span>&#123;</span></span><br><span class="line">  <span class="keyword">int</span> len;</span><br><span class="line">  <span class="keyword">int</span> <span class="built_in">free</span>;</span><br><span class="line">  <span class="keyword">char</span> buf[];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Redis链表"><a href="#Redis链表" class="headerlink" title="Redis链表"></a>Redis链表</h4><p>redis的链表使用头插法，使用murmurhash2计算hash</p>
+<h4 id="Redis字典"><a href="#Redis字典" class="headerlink" title="Redis字典"></a>Redis字典</h4><p>哈希表rehash<strong>扩容策略</strong>是，ht[1]的size为大于等于ht[0].used * 2的第一个2的幂。当目前没有BGSAVE或者BGREWRITEAOF命令执行，且哈希表的负载因子大于等于1；或者正在执行BGSAVE或者BGREWRITEAOF，且哈希表的负载因子大于等于5时会自动开始哈希表的rehash。</p>
+<p>rehash时需要将ht[0]的所有数据rehash到ht[1]，这个过程不是一次性完成的，而是分步多次进行的，<strong>渐进式rehash</strong>。在渐进式rehash时，所有新添加的k-v都保存到ht[1]中，而查找、删除、更新等操作会在两个表上进行。</p>
+<h4 id="Redis跳表"><a href="#Redis跳表" class="headerlink" title="Redis跳表"></a>Redis跳表</h4><p>Redis只在两个地方用到了跳表，</p>
+<ol>
+<li><p>是有序集合键</p>
+</li>
+<li><p>是集群节点中用作内部数据结构</p>
+</li>
+</ol>
+<p>每次创建新的跳表节点的时候都会随机生成一个1-32之间的值作为level数组的大小，表示层的高度。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span>&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span>&#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span></span><br><span class="line">    <span class="keyword">int</span> span; <span class="comment">//与下一个节点的距离，用来计算节点在跳表中的排位</span></span><br><span class="line">  &#125; level[];</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span></span><br><span class="line">  <span class="keyword">double</span> score; <span class="comment">// 根据score排序</span></span><br><span class="line">  robj  *obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span>&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span></span><br><span class="line">  <span class="keyword">long</span> length; <span class="comment">//表中节点的数量</span></span><br><span class="line">  <span class="keyword">int</span> level; <span class="comment">//表中层数最大的节点的层数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="整数集合"><a href="#整数集合" class="headerlink" title="整数集合"></a>整数集合</h4><p>整数集合保证不会出现重复的元素</p>
+<h4 id="压缩链表"><a href="#压缩链表" class="headerlink" title="压缩链表"></a>压缩链表</h4><p>压缩链表是列表键和哈希键的底层实现之一。当列表键只包含少量列表项，并且列表项是小整数值或比较短的字符串时，会使用压缩列表来实现。当哈希键只包含少量键值对，且键和值是小整数值或比较短的字符串时，会使用压缩链表来实现哈希键。</p>
+<h4 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h4><p>Redis包含5种类型的对象，分别是<strong>字符串对象、列表对象、哈希对象、集合对象和有序集合对象</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisObject</span>&#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> type: <span class="number">4</span>; <span class="comment">//类型</span></span><br><span class="line">    <span class="keyword">unsigned</span> encoding: <span class="number">4</span>; <span class="comment">//编码</span></span><br><span class="line">    <span class="keyword">int</span> refcount; <span class="comment">//引用计数</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> lru; <span class="comment">//对象最后一次被命令程序访问的时间</span></span><br><span class="line">    <span class="keyword">void</span> *ptr; <span class="comment">//指向底层实现数据结构的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/02/07/PONBYTESk1GoyUz.png" alt="5.png"></p>
+<h5 id="字符串对象-string"><a href="#字符串对象-string" class="headerlink" title="字符串对象(string)"></a>字符串对象(string)</h5><p>字符串对象的编码可以是int, raw, embstr。Redis使用对象来表示数据库中的键和值，键总是一个字符串对象。对于字符串对象，如果保存的时是整数值且可以用long保存，那么字符串对象的编码为int；如果字符串对象保存的是字符串值，且长度大于32字节，则使用RAW（SDS）来保存，如果长度小于等于32字节则使用EMBSTR编码的SDS来保存。</p>
+<h5 id="列表对象-list"><a href="#列表对象-list" class="headerlink" title="列表对象(list)"></a>列表对象(list)</h5><p>列表对象的编码可以是ziplist和linkedlist，当满足以下两个条件的时候才会采用ziplist编码：</p>
+<ol>
+<li>列表对象保存的所有字符串元素的长度都小于64个字节</li>
+<li>列表对象保存的元素数量小于512个</li>
+</ol>
+<h5 id="哈希对象-hash"><a href="#哈希对象-hash" class="headerlink" title="哈希对象(hash)"></a>哈希对象(hash)</h5><p>哈希对象的编码可以是ziplist和hashtable，当满足以下两个条件的时候才会采用ziplist编码：</p>
+<ol>
+<li>哈希对象保存的所有键值对的键和值的字符串的长度都小于64个字节</li>
+<li>列表对象保存的键值对数量数量小于512个</li>
+</ol>
+<h5 id="集合对象-set"><a href="#集合对象-set" class="headerlink" title="集合对象(set)"></a>集合对象(set)</h5><p>集合对象的编码可以是intset和hashtable，当满足以下两个条件的时候才会采用intset编码：</p>
+<ol>
+<li>集合对象保存的所有元素都哦是整数值</li>
+<li>集合对象保存的元素数量不超过512个</li>
+</ol>
+<p>使用hashtable时，字典的每个键都是一个字符串对象，每个字符串对象包含了一个集合元素，而字典的值全部被设置为null。</p>
+<h5 id="有序集合对象-zset"><a href="#有序集合对象-zset" class="headerlink" title="有序集合对象(zset)"></a>有序集合对象(zset)</h5><p>有序集合对象的编码可以是ziplist和skiplist。使用ziplist时，第一个节点保存元素的成员，第二个节点保存元素的分值。而使用skiplist编码的时候，会同时创建一个跳表和一个字典，跳表用来做ZRANK, ZRANGE等范围型操作，字典的键保存了元素的成员值保存了元素的分值，可以用O(1)查找元素的分值。当满足以下两个条件的时候才会采用ziplist编码：</p>
+<ol>
+<li>有序集合保存的元素数量小于128个</li>
+<li>有序集合保存的所有元素成员的长度都小于64字节</li>
+</ol>
+<h5 id="内存回收"><a href="#内存回收" class="headerlink" title="内存回收"></a>内存回收</h5><p>引用计数法，使用redisObject中的refcount。然而refcount除了引用计数之外还有对象共享的作用。Redis在初始化的时候会创建一万个字符串对象，包含从0-9999的所有整数值，当需要用到的时候直接引用，refcount+1。Redis只对包含整数值的字符串对象进行共享。</p>
+<h3 id="单机数据库"><a href="#单机数据库" class="headerlink" title="单机数据库"></a>单机数据库</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisServer</span>&#123;</span></span><br><span class="line">    redisDB *db;</span><br><span class="line">    <span class="keyword">int</span> dbnum; <span class="comment">//服务器的数据库数量</span></span><br><span class="line">    </span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">saveparam</span> *<span class="title">saveparams</span>;</span> <span class="comment">//执行RDB保存条件的数组，例如save 900 1，900秒内至少进行了1次修改</span></span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> dirty; <span class="comment">//修改计数器，距离上一次SAVE或BGSAVE之后对数据库做了多少次的修改</span></span><br><span class="line">    <span class="keyword">time_t</span> lastsave; <span class="comment">//上一次执行保存的时间</span></span><br><span class="line">    </span><br><span class="line">    sds aof_buf <span class="comment">//AOF缓存区</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">redisDB</span>&#123;</span></span><br><span class="line">    dict *dict; <span class="comment">//数据库键空间，保存着数据库中的所有键值对</span></span><br><span class="line">    dict *expires; <span class="comment">//过期字典，保存着键的过期时间</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Redis初始默认会创建16个db。</p>
+<h4 id="设置键的过期时间"><a href="#设置键的过期时间" class="headerlink" title="设置键的过期时间"></a>设置键的过期时间</h4><p>EXPIRE(剩余秒数), PEXPIRE(剩余毫秒数), EXPIREAT(指定秒级时间戳), PEXPIREAT(指定毫秒级时间戳)。这四种设置过期时间最后都是通过PEXPIREAT来实现的。</p>
+<p>过期键删除策略有以下三种：</p>
+<ol>
+<li>定时删除</li>
+<li>惰性删除</li>
+<li>定期删除</li>
+</ol>
+<p>Redis采用的时惰性删除和定期删除两种策略结合。定期删除是每当Redis的服务器周期性的执行<strong>serverCron</strong>函数时，会在规定的时间内从数据库的expires字典中随机检查一部分键的过期时间，并删除其中的过期键。</p>
+<h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><p>RDB将某个时间点上的数据库状态保存到一个RDB文件中，RDB文件是一个经过压缩的二进制文件。通过SAVE和BGSAVE两个命令来实现，其中SAVE会阻塞Redis服务器进程直到RDB文件创建完成；而BGSAVE会派生一个子进程，由子进程负责创建RDB文件，父进程继续处理请求。</p>
+<p>通过使用save配置，来定义BGSAVE的执行条件。例如<strong>save 900 1</strong>，表示900秒内至少有1次数据库的修改。<strong>serverCron</strong>每隔100毫秒执行一次，会检查saveparams中的条件是否达到，达到了就执行BGSAVE。</p>
+<h4 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h4><p>如果开启了AOF，则服务器在执行完一个写命令后，会将写命令追加到服务器的aof_buf的末尾。</p>
+<h5 id="服务器进程"><a href="#服务器进程" class="headerlink" title="服务器进程"></a>服务器进程</h5><p>Redis的服务器进程就是一个循环，类似如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">eventLoop</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 处理文件事件，接收命令请求以及发送命令回复</span></span><br><span class="line">        processFileEvents()</span><br><span class="line">        <span class="comment"># 处理时间事件</span></span><br><span class="line">        processTimeEvents()</span><br><span class="line">        <span class="comment"># 考虑是否将AOF缓冲区中的内容写入和保存到AOF文件中</span></span><br><span class="line">        flushAppendOnlyFile()</span><br></pre></td></tr></table></figure>
+<p>flushAppendOnlyFile有三种不同的flush aof缓冲区方式：</p>
+<ol>
+<li>always，将AOF缓存区内容写入AOF文件，并同步（fsync）</li>
+<li>everysec，如果上次AOF文件（页缓存）同步的事件超过一秒，则同步</li>
+<li>no，将aof缓冲区的内容写入AOF文件（操作系统页缓存（page cache）），不进行同步</li>
+</ol>
+<p>AOF重写是开一个子进程，因此在重写过程中来的数据的写入操作会导致重写后的AOF和服务器数据的不一致，为此Redis设置了AOF重写缓冲区，在服务器创建子进程的时候开始使用，当Redis执行完一个写命令后，会同时将这个写命令发送到AOF重写缓冲区和AOF缓冲区。</p>
+<h4 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h4><p>事件包括<strong>文件事件和时间事件</strong>两类。服务器与客户端的通信会产生文件事件，时间事件比如serverCron等。</p>
+<p>serverCron平均100毫秒执行一次，主要工作包括：</p>
+<ul>
+<li>更新服务器的各类统计信息</li>
+<li>清除过期键</li>
+<li>关闭和清理连接失效的客户端</li>
+<li>尝试进行RDB或AOF</li>
+<li>如果是主服务器，对从服务器执行定期同步</li>
+<li>如果处于集群模式，对集群进行定期同步和连接测试</li>
+</ul>
+<p>对之前的eventLoop进行重新描述，Redis的主循环如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    init_server()</span><br><span class="line">    <span class="keyword">while</span> server_is_not_shutdown():</span><br><span class="line">        aeProcessEvents()</span><br><span class="line">    clean_server()</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aeProcessEvents</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#获取到达时间离当前时间最接近的时间事件</span></span><br><span class="line">    time_event = aeSearchNearestTimer()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#计算最接近的时间事件距离到达还有多少毫秒</span></span><br><span class="line">    remaind_ms = time_event.when - unix_ts_now()</span><br><span class="line">   </span><br><span class="line">    <span class="comment">#如果事件已经到达，则置为0</span></span><br><span class="line">    <span class="keyword">if</span> remaind_ms &lt; <span class="number">0</span>:</span><br><span class="line">        remaind_ms = <span class="number">0</span></span><br><span class="line">    timeval = create_timeval_with_ms(remaind_ms)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#阻塞并等待文件事件产生，最大等待时间由timeval决定</span></span><br><span class="line">    <span class="comment">#如果timeval为0，则aeApiPoll马上返回，不阻塞</span></span><br><span class="line">    aeApiPoll(timeval)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#如果timeval为0，则不等待文件事件，直接执行时间事件</span></span><br><span class="line">    processFileEvents()</span><br><span class="line">    processTimeEvents()</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -543,7 +621,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -554,7 +632,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -646,7 +724,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACID"><span class="nav-number">1.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Atomicity（原子性）"><span class="nav-number">1.1.</span> <span class="nav-text">A: Atomicity（原子性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-consistency（一致性）"><span class="nav-number">1.2.</span> <span class="nav-text">C: consistency（一致性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-isolation（隔离性）"><span class="nav-number">1.3.</span> <span class="nav-text">I: isolation（隔离性）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-durability（持久性）"><span class="nav-number">1.4.</span> <span class="nav-text">D: durability（持久性）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-内存管理之LRU机制"><span class="nav-number">2.</span> <span class="nav-text">MySQL 内存管理之LRU机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL回表优化之Multi-Range-Read-优化"><span class="nav-number">3.</span> <span class="nav-text">MySQL回表优化之Multi-Range Read 优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL之索引下推"><span class="nav-number">4.</span> <span class="nav-text">MySQL之索引下推</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL"><span class="nav-number">1.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ACID"><span class="nav-number">1.1.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-Atomicity（原子性）"><span class="nav-number">1.1.1.</span> <span class="nav-text">A: Atomicity（原子性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-consistency（一致性）"><span class="nav-number">1.1.2.</span> <span class="nav-text">C: consistency（一致性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#I-isolation（隔离性）"><span class="nav-number">1.1.3.</span> <span class="nav-text">I: isolation（隔离性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#D-durability（持久性）"><span class="nav-number">1.1.4.</span> <span class="nav-text">D: durability（持久性）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-内存管理之LRU机制"><span class="nav-number">1.2.</span> <span class="nav-text">MySQL 内存管理之LRU机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL回表优化之Multi-Range-Read-优化"><span class="nav-number">1.3.</span> <span class="nav-text">MySQL回表优化之Multi-Range Read 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL之索引下推"><span class="nav-number">1.4.</span> <span class="nav-text">MySQL之索引下推</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-number">2.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构与对象"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构与对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-SDS空间预分配策略"><span class="nav-number">2.1.1.</span> <span class="nav-text">Redis SDS空间预分配策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis链表"><span class="nav-number">2.1.2.</span> <span class="nav-text">Redis链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis字典"><span class="nav-number">2.1.3.</span> <span class="nav-text">Redis字典</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis跳表"><span class="nav-number">2.1.4.</span> <span class="nav-text">Redis跳表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#整数集合"><span class="nav-number">2.1.5.</span> <span class="nav-text">整数集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#压缩链表"><span class="nav-number">2.1.6.</span> <span class="nav-text">压缩链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象"><span class="nav-number">2.1.7.</span> <span class="nav-text">对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字符串对象-string"><span class="nav-number">2.1.7.1.</span> <span class="nav-text">字符串对象(string)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#列表对象-list"><span class="nav-number">2.1.7.2.</span> <span class="nav-text">列表对象(list)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#哈希对象-hash"><span class="nav-number">2.1.7.3.</span> <span class="nav-text">哈希对象(hash)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#集合对象-set"><span class="nav-number">2.1.7.4.</span> <span class="nav-text">集合对象(set)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#有序集合对象-zset"><span class="nav-number">2.1.7.5.</span> <span class="nav-text">有序集合对象(zset)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#内存回收"><span class="nav-number">2.1.7.6.</span> <span class="nav-text">内存回收</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单机数据库"><span class="nav-number">2.2.</span> <span class="nav-text">单机数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置键的过期时间"><span class="nav-number">2.2.1.</span> <span class="nav-text">设置键的过期时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB"><span class="nav-number">2.2.2.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF"><span class="nav-number">2.2.3.</span> <span class="nav-text">AOF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务器进程"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">服务器进程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事件"><span class="nav-number">2.2.4.</span> <span class="nav-text">事件</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -669,7 +747,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

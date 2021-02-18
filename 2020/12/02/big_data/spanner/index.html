@@ -105,7 +105,7 @@
 <meta property="og:image" content="https://i.loli.net/2020/12/02/Cix7IOa5gKZ6FhG.png">
 <meta property="og:image" content="https://i.loli.net/2020/12/02/eI3kB5sHJ6gzhOW.png">
 <meta property="og:image" content="https://i.loli.net/2020/12/02/phK3iGIkUSjME2Z.png">
-<meta property="og:updated_time" content="2020-12-19T12:32:48.555Z">
+<meta property="og:updated_time" content="2021-01-20T13:44:52.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spanner翻译">
 <meta name="twitter:description" content="今天我想聊一聊Spanner，谈论Spanner的原因是，这是一个少见的示例——一个系统在（广泛分离在互联网上的/不同数据中心的）数据上提供了分布式事务。我几乎没在生产系统中见过，当然这是非常可取的（指拥有事务功能），程序员非常喜欢事务，同时在网络上分离数据（为了容错和确保有一个数据的备份保存在用户附近）也是非常可取的。 实现Spanner至少有两个取巧的办法，1. 是它们运行两阶段提交(two-">
@@ -407,17 +407,17 @@
 <p><img src="https://i.loli.net/2020/12/02/eI3kB5sHJ6gzhOW.png" alt="p2.png"></p>
 <p>Spanner使用两阶段提交和两阶段锁（two-phase locking），几乎和上周阅读的教科书描述的一样，但是和教科书最大的不同在于参与者(participants)和事务管理者(transaction manager)是独立的机器，参与者和事务管理者都是Paxos replicated groups of servers(Paxos复制组服务器)，这样是为了增加容错能力，这意味着存储X分片的三个副本是Paxos group，Y也一样。我们想象一下对于这三台服务器中的服务器来说，DC2中的server是X分片的Paxos leader，DC1中的server是Y分片的Paxos leader。如下图所示<br><img src="https://i.loli.net/2020/12/02/phK3iGIkUSjME2Z.png" alt="p3.png"></p>
 <p>因此，发生的第一件事就是client选择了一个唯一的transaction ID，这个ID将被携带在所有的消息上，以便系统知道所有不同的操作都与同一个事物相关联。尽管如此，client要做的第一件事就是，实际上代码读写X，读写Y，代码必须组织成事务代码，必须先进行所有读，然后在最后，基本上同时将所有写操作作为commit的一部分。所以client 为了做更好的读，结果证明它为了持有锁，就像上周读的一样。</p>
-<p>每次你读写一个数据项，负责它的server必须关联一个该数据项的lock，该locks（读锁）且仅在Spanner leader中维护。因此，当client事务想要读取X，发送读X请求给X分片的leader，该分片的leader返回X的当前值，并在X上加锁。当然，如果已经加了锁，那么您不会响应客户端（这里的锁应该是说写锁），直到任何当前持有该锁的事务通过commit释放锁。然后该分片的leader将X的值返回给client。</p>
+<p>每次你读写一个数据项，负责它的server必须关联一个该数据项的lock，且该lock仅在Spanner leader中维护。因此，当client事务想要读取X，发送读X请求给X分片的leader，该分片的leader返回X的当前值，并在X上加锁。当然，如果已经加了锁，那么您不会响应客户端（这里的锁应该是说写锁），直到任何当前持有该锁的事务通过commit释放锁。然后该分片的leader将X的值返回给client。</p>
 <p>client需要读取Y，这次很幸运，因为，假设client在DC1中，那么Y分片的leader就在本地，那么读取速度将会快很多，读请求在Paxos leader上的Y上加锁，然后返回。好吧，现在所有内部读取的client，内部计算并弄清楚想要写入什么值到X和Y，所以现在client要发送其想要写入的已经更新的值的记录，并且在事务即将结束的时候一次完成所有操作。</p>
-<p>之后所以它做的第一件事就是选着一个Paxos group作为事务协调者。因为它提前选择了我们，所以它会发送哪个Paxos group担任事务协调者的标识。（这里是client选择一个事务协调者吗？）让我们假设Y的leader为事务协调者。然后，client发送更新数据，它想要写X，发送一个额外的写X请求到DC2（该请求附带X的新值和事务协调者的标识）。当每个写入值得Paxos leader接收到它得写请求，它发送prepare消息到其follower，并将其写入Paxos日志中，我使用P代表它进入Paxos log。因为它承诺能够执行尚未崩溃或失去锁的事务。所以它通过Paxos发送prepare消息日志，当其从follower处得到大多数的回复时，该Paxos leader发送yes到事务协调者。同时，client也发送Y到Y的Paxos leader，该server在Paxos group内执行和上面一样的操作。然后该Paxos leader发送给同一个机器上（可能时同一个程序）的事务协调者yes。当事务协调者从此事务涉及到所有数据分片的不同的leader得到回应时，如果所有返回都是yes，那么事务协调者可以commit，此外不能commit。</p>
+<p>之后所以它做的第一件事就是选择一个Paxos group作为事务协调者。因为它提前选择了我们，所以它会发送哪个Paxos group担任事务协调者的标识。（这里是client选择一个事务协调者吗？）让我们假设Y的leader为事务协调者。然后，client发送更新数据，它想要写X，发送一个额外的写X请求到DC2（该请求附带X的新值和事务协调者的标识）。当每个写入值的Paxos leader接收到它得写请求，它发送prepare消息到其follower，并将其写入Paxos日志中，我使用P代表它进入Paxos log。因为它承诺能够执行尚未崩溃或失去锁的事务。所以它通过Paxos发送prepare消息日志，当其从follower处得到大多数的回复时，该Paxos leader发送yes到事务协调者。同时，client也发送Y到Y的Paxos leader，该server在Paxos group内执行和上面一样的操作。然后该Paxos leader发送给同一个机器上（可能时同一个程序）的事务协调者yes。当事务协调者从此事务涉及到所有数据分片的不同的leader得到回应时，如果所有返回都是yes，那么事务协调者可以commit，此外不能commit。</p>
 <p>假设事务协调者决定commit，这是事务协调者向其Paxos follower发送一条commit消息，说看啊，请记住我们永久在事务日志中commit这笔事务。然后事务协调者同时告诉其他涉及到的Paxos leader，那么他们也可以commit。事务协调者可能不会将commit消息发送给其他Paxos leader，直到它在日志中被安全地提交为止，所以事务协调者不会忘记其决定，一旦这些commit消息已经被commit到不同分片的Paxos log，这些分片中的每一个实际上执行写操作，替换被写数据，然后在该数据项上释放锁以供其他事务使用，然后事务结束。</p>
 <p>还有一些需要注意的地方，到目前为止的设计只涉及读写事务，一是locking确保了serializability。两个事务使用同一数据造成冲突，其中一个在进行之前必须完全等待另一个释放锁。所以，Spanner使用完全标准的two-phase locking来获得serializability和完全标准的two-phase commit来获得分布式事务。</p>
 <p>two-phase commit被广泛的厌恶，因为如果事务协调者fail或者无法访问了，那么任何它管理的事务都会无限阻塞，直到该事务管理者重新上线，他们用锁来阻塞，所以人们通常在现实世界中不愿意使用two-phase commit（因为其阻塞）。Spanner解决了这个问题，通过复制事务协调者来解决这个问题。事务协调者本身就是Paxos复制状态机就，所以它所做的一切，例如记住是否已经commit，通过Paxos log来复制。因此即使leader fails，即使这个leader正在管理事务，因为其复制，它的任一replica都可以接管leader，接管事务协调功能。它们会有它们的规则，如果事务协调者决定commit，任何接管的leader能够在其log中看到commitment，然后能够立刻告诉另一个事务参与者，two-phase commit已经committed。所以这有效地消除了two-phase commit的问题（如果发生故障，它可以阻塞持有锁的进程）。这确实很重要，因为此问题基本上使two-phase commit对于任何类型的大型系统而言都是完全不可接受的，因为大型系统的许多部分可能会失败。</p>
 <p>另一件需要注意的事是，这个图表中有巨量的消息，这意味着其中许多是跨数据中心的，其中一些信息在和另一个数据中心分片之间或在客户端分片之间传输需要花费几毫秒的时间，而在一个您知道计算需要几纳秒的世界中，这是相当严重的花费。实际上你可以从表6中看出，表6描述了Spanner的副本部署在USA的不同地方下的性能，东西海岸的两个数据中心大约需要100毫秒的时间来完成涉及不同副本的事务，这是十分长的时间，十分之一秒。这或许看起来没有和糟糕，因为系统的吞吐量可能非常高因为其分片和并行运行许多无冲突的事务。但是它对于单独的事务延迟非常重要，我的意思是说100毫秒可能比人类注意到的要少，但是如果你需要做几个，只是说生成网页或执行人为指令，这就开始变得浪费时间了，您明显开始感到烦恼。</p>
 <p>在另一方面，从Spanner的许多用途来看，所有副本都可能在同一城市或整个城镇中，这是您可以看到在表3中事务执行更快的原因。表3中的数据中心都在附近，所以是14毫秒而不是100毫秒。但是，这些读写事务的速度足够慢，以至于我们会向尽可能地避免花销，这将带我们去只读事务，事实证明，如果您不写，那就是事先知道事务中的所有操作都是保证会被读取，然后Spanner的速度就会大大提高，精简得多，消息密集型则要少的多，对于只读事务。</p>
-<h3 id="只读事务"><a href="#只读事务" class="headerlink" title="只读事务"></a>只读事务</h3><p>好的，所以只读事务，这是一个新话题。尽管只读事务依赖于读写事务中的某些信息，但他们的设计完全不同。Spanner省去了两大成本，这是只读事务，设计消除了读写事务中的两大成本。首先正如我提到的，<strong>只读事务从本地副本读数据</strong>。因此，如果您有副本，只要client需要、事务需要的数据的副本在本地数据中心，您可以从该数据中心读取数据，这可能只需要1毫秒的时间，而不是跨城市的几十毫秒的时间。因此，它可以读取本地副本，但节点，你知道的这里存在的危险是任何给定的副本都可能不是最新的，这必须得有另一个故事。而另一个大的节省是，<strong>只读设计不使用锁，不使用两阶段提交</strong>，我的意思是不需要事务协调器。这避免了跨数据中心或跨数据中心向Paxos leader发送信息的行为，而且因为没有锁，这不仅使只读事务更快，而且避免了阻塞读写事务，因为他们不必等待只读事务的锁。我的意思是这样预览为什么这对他们很重要，图3和图6显示了只读事务对于读写事务十倍的延迟提升，因此，主要的唯一设计是提交因素使延迟增加十倍，和几乎肯定的是复杂性要低很多，吞吐率也要高很多，而最大的挑战找到一种方法来对这种提高的效率和正确性进行平方。</p>
-<p>所以，他们有两个主要的，正确的约束条件，他们想要采用只读事务，首先是他们喜欢所有事务仍然需要序列化（serializable）（尽管系统可以并行地执行事务，一堆并发事务同时产生两种返回给客户端的值以及对数据库的修改，一堆并发事务的结果必须与某些一次或串行执行这些事务相同。并且对于只读事务，从本质上讲，它意味着只读事务的所有读取全部必须有效的整齐的放在，所有的在此之前能被看到的事务的写入和它一定不能看到任何在此之后的事务的写入。）</p>
-<p>所以我们需要一种合适的方法来整齐地读取只读事务和读写事务之间的所有读取。另一个约束是，他们想要外部一致性，这意味着相当于我们之前看到过的Linearizability。如果一项事务提交完成，而另一项事务在此事务完成的<strong>real time</strong>之后开始，那么第二项事务需要看到第一项事务的完成的写入。事务，即使是只读事务也不应该看到过时的数据。</p>
+<h3 id="只读事务"><a href="#只读事务" class="headerlink" title="只读事务"></a>只读事务</h3><p>好的，所以只读事务，这是一个新话题。尽管只读事务依赖于读写事务中的某些信息，但他们的设计完全不同。Spanner省去了两大成本，这是只读事务，设计消除了读写事务中的两大成本。首先正如我提到的，<strong>只读事务从本地副本读数据</strong>。因此，如果您有副本，只要client需要、事务需要的数据的副本在本地数据中心，您可以从该数据中心读取数据，这可能只需要1毫秒的时间，而不是跨城市的几十毫秒的时间。因此，它可以读取本地副本，但节点，你知道的这里存在的危险是任何给定的副本都可能不是最新的，这必须得有另一个故事。而另一个大的节省是，<strong>只读设计不使用锁，不使用两阶段提交</strong>，我的意思是不需要事务协调器。这避免了跨数据中心或跨数据中心向Paxos leader发送信息的行为，而且因为没有锁，这不仅使只读事务更快，而且避免了阻塞读写事务，因为他们不必等待只读事务的锁。我的意思是这样预览为什么这对他们很重要，图3和图6显示了只读事务对于读写事务十倍的延迟提升，因此，主要的唯一设计是提交因素使延迟增加十倍，和几乎肯定的是复杂性要低很多，吞吐率也要高很多，而最大的挑战找到一种方法来对这种提高的效率和正确性进行平衡。</p>
+<p>所以，他们有两个主要的，正确的约束条件，他们想要采用只读事务，首先是他们喜欢所有事务仍然需要<strong>序列化（serializable）</strong>（尽管系统可以并行地执行事务，一堆并发事务同时产生两种返回给客户端的值以及对数据库的修改，一堆并发事务的结果必须与某些一次或串行执行这些事务相同。并且对于只读事务，从本质上讲，它意味着只读事务的所有读取全部必须有效的整齐的放在，所有的在此之前能被看到的事务的写入和它一定不能看到任何在此之后的事务的写入。）</p>
+<p>所以我们需要一种合适的方法来整齐地读取只读事务和读写事务之间的所有读取。另一个约束是，他们想要<strong>外部一致性</strong>，这意味着相当于我们之前看到过的Linearizability。如果一项事务提交完成，而另一项事务在此事务完成的<strong>real time</strong>之后开始，那么第二项事务需要看到第一项事务的完成的写入。事务，即使是只读事务也不应该看到过时的数据。</p>
 <p>好的，所以这实际上都不是什么特别令人惊讶的事，而是标准的数据库，例如MySQL，能被配置为提供这种一致性，因此在某种程度上的一致性，如果您不了解的话，这就是你期望的一个简单的系统的一致性。你拥有它可以使程序员的更容易产生正确的答案，否则你可能得不到这种一致性，因为程序员可能负责围绕数据库可能提供的异常进行某种编程。所以，这是正确性的黄金标准。</p>
 <p>好吧，让我来谈一谈只读事务如何运作，这是一个复杂的故事，所以我想首先要谈一下的是，考虑如果我们绝对做最愚蠢的事情会发生什么，只读事务没有做其他任何特殊的事情来达到一致性，但只读取最新的数据副本，因此每次只读事务进行读取，我们可以查看本地副本然后找到当前最新副本，那将是直接的非常低的开销，所以我们需要了解为什么它不起作用。所以这是一个为什么不读取最近的值。我们可以想象事务简单地读取X和Y，然后打印它们</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    print X, Y</span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
@@ -426,7 +426,7 @@
 <p>假设T3运行在慢的计算机上，因此其事务较长。因此，T3将会看到不同的值，X为T2写入，Y为T1写入（？这里老师应该是讲反了）假设它在数据库中使用最简单的读取最新值的可疑程序，它不是序列化（serializable），因为我们知道任何serial顺序都必须现有T1然后才有T2，其中有两个地方T3可以加入。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">T1  T3(1)  T2 T3(2)</span><br></pre></td></tr></table></figure>
 <p>这里T3(1)应该看不到T2的更新，T3(2)应该要看到T2的X写入。所以上述是简单的读事务是错的。我们真正在寻找的是当然是我们的事务要么在T3(1)读取两个值，要么在T3(2)读取两个值。所以拓展到这一点的方法有点复杂。</p>
-<h3 id="SNAPSHOT-ISOLATION"><a href="#SNAPSHOT-ISOLATION" class="headerlink" title="SNAPSHOT ISOLATION"></a>SNAPSHOT ISOLATION</h3><p>首先第一个Big idea是快照隔离。我要描述的方式是让我们想象一下所有涉及的计算机具有同步时钟（synchronized clock），这就是说你知道它们都有一个时钟，时钟会产生时间。因此假设所有计算机都假定即使这不是真的，所有涉及的计算机都已经同步时间。此外，让我们想象一下，为每个事务分配了特定时间的时间戳。这些时间戳 取自同步时钟，读写事务的时间戳是其commit时的real time。只读事务的时间戳等于其Start time。所以每一次都有时间戳，我们将设计我们的系统或快照隔离系统被设计为好像要获取就像所有事务都按时间戳顺序执行一样，所有我们将为每个事务分配一个时间戳，然后我们将安排执行，就好像事务按照该顺序执行那样获得结果，因此给定时间戳时间戳，我们需要一个实现，这样的实现可以很容易遵守时间戳。基本上，您知道在每个事务中都显示时间戳形式的数据。</p>
+<h3 id="SNAPSHOT-ISOLATION"><a href="#SNAPSHOT-ISOLATION" class="headerlink" title="SNAPSHOT ISOLATION"></a>SNAPSHOT ISOLATION</h3><p>首先<strong><em>第一个Big idea是快照隔离</em></strong>。我要描述的方式是让我们想象一下所有涉及的计算机具有同步时钟（synchronized clock），这就是说你知道它们都有一个时钟，时钟会产生时间。因此假设所有计算机都假定即使这不是真的，所有涉及的计算机都已经同步时间。此外，让我们想象一下，为每个事务分配了特定时间的时间戳。这些时间戳 取自同步时钟，读写事务的时间戳是其commit时的real time。只读事务的时间戳等于其Start time。所以每一次都有时间戳，我们将设计我们的系统或快照隔离系统被设计为好像要获取就像所有事务都按时间戳顺序执行一样，所有我们将为每个事务分配一个时间戳，然后我们将安排执行，就好像事务按照该顺序执行那样获得结果，因此给定时间戳时间戳，我们需要一个实现，这样的实现可以很容易遵守时间戳。基本上，您知道在每个事务中都显示时间戳形式的数据。</p>
 <p>好的，这样运作的方式，用于只读事务，也就是说，每个副本在存储数据时实际上具有多个版本的数据（MVCC）。因此，我们有多版本数据库，每个数据库记录都有，你知道的可能它已经被写过几次了，但是每次都有一个单独的记录副本，记录了每个与写入它的事务的时间戳相关联的信息。然后是，只读事务的基本策略，当它们在只读事务中进行读取时，已经为这个已读事务分配了时间戳（只读事务开始时分配），所以它伴随着它的读请求加上时间戳和任何存储了事务需要的数据的副本的服务器，它将查看其多版本数据库并找到记录，这条记录被要求其最久的时间（highest time）仍小于读事务的时间戳。因此这意味着，只读事务看到的数据是截止到目前为止的时间戳的数据。所以，这是用于只读事务的快照隔离的想法，因此Spanner的读写事务为自己分配commit时候的时间戳，但除此之外，它们以锁定和两阶段提交的常规方式工作。而只读事务访问数据库中的多个版本并获取您已知的小于只读事务时间戳的最新版本。这将为我们带来的好处是，您知道只读事务将看到所有的之前时间戳的读写事务的写入，看不到之后时间戳的读写事务的写入。</p>
 <p>好的，具体是怎么实现隔离的呢，我们来举个例子。我们之前有一个失败的serializability。接下来我向你展示快照隔离技术，来让只读事务获得serializability。我们有两个读写事务T1, T2，和一个只读事务T3。T1和T2就像之前那样写数据然后commit。但是现在它们在commit的时候给自己分配时间戳，因此除了两阶段提交和两阶段锁外，这些读写事务还会分配一个时间戳。所以让我们想象一下在commit T1的时候的time为10，commit T1的时候的time为20，下面使用@后加上时间戳表示。然后，我们的Spanner数据库存储系统将会保存，当事务T1进行写操作时，它们将存储一种新的，而不是覆盖当前值，它们只是要添加一个带有时间戳的record的新副本，因此数据库将存储一条新的记录，表明X在时间戳10的值假设为9，Y的值为11，即X@10=9，Y@10=11。相似的，T2 commit的时间戳为20，数据库将会记录一组新的数据，X@20=8，Y@20=12。所以现在我们在不同时间有每个记录的两个副本。然后T3开始，如下在中间读X，在T2后面读Y。当T3开始时，它会通过观察现在的时间选择一个时间戳。让我们假设T3 start的 real time晚于T1的时间戳（commit时的时间戳），在T2的时间戳之前，假设其时间戳为15。这意味着当它向拥有X的本地副本（local replica）发送X的读请求，该请求会伴随着时间戳=15，说请给我时间戳=15时的最新数据。当然已执行的T2任然时X的最新值，但是当前我们能看到的最新版本的数据是T1。所以R_x = 9。之后T2 commit，T3进行了第二次读取R_y，其附带的时间戳还是15，但是现在server有两个记录了（时间戳为10和20）,但是有序读请求附带的是时间戳=15，因此R_y = 11。这就是X的读取基本上是在T1和T2中间的时候进行的，但是因为我们记住了一个时间戳，把并且让数据库保留了多版本的数据，因此Y的读取也好像是在同一时间发生的。现在，你会看到这实际上是在模拟串行执行（serial）。T1-&gt;T3-&gt;T2。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">T1@10 W_x=9 W_y=11 C</span><br><span class="line">T2@20                    W_x=8 W_y=12 C</span><br><span class="line">T3@15             R_x=9              R_y=11</span><br></pre></td></tr></table></figure>
@@ -435,7 +435,7 @@
 <p>问：外部一致性（如时间戳），是否始终意味着强一致性？</p>
 <p>答：YES，如果强一致性，人们常说的强一致性，就是Linearizability，我相信Linearizability的定义和外部一致性是相同的。</p>
 </blockquote>
-<p>另一个问题是，这样做(MVCC)为什么不会使存储空间爆炸。答案使肯定的，这肯定使存储空间爆炸了，原因是存储系统必须保留多个副本，这些记录最近已经被修改多次，这绝对会造成磁盘存储空间和内存更大的消耗，这也想增加了一层薄记层，现在知道查找必须考虑时间戳和key。我认为存储费用并没有那么高，因为系统会丢弃旧纪录，paper没有明说丢弃旧版本记录的策略。好吧，但是它肯定会丢弃旧纪录，如果多版本记录的唯一原因是实现事务的快照隔离，那么您就不需要记住太久远的值，因为只需要记住当前最早开始并且仍在运行的事务的时间戳的值，如果事务已经结束或者强制结束，假如系统设置事务的最长运行时间是1分钟，那么您只需要记住数据库中最后一分钟的值的版本。</p>
+<p>另一个问题是，这样做(MVCC)为什么不会使存储空间爆炸。答案是肯定的，这肯定使存储空间爆炸了，原因是存储系统必须保留多个副本，这些记录最近已经被修改多次，这绝对会造成磁盘存储空间和内存更大的消耗，这也想增加了一层薄记层，现在知道查找必须考虑时间戳和key。我认为存储费用并没有那么高，因为系统会丢弃旧纪录，paper没有明说丢弃旧版本记录的策略。好吧，但是它肯定会丢弃旧纪录，如果多版本记录的唯一原因是实现事务的快照隔离，那么您就不需要记住太久远的值，因为只需要记住当前最早开始并且仍在运行的事务的时间戳的值，如果事务已经结束或者强制结束，假如系统设置事务的最长运行时间是1分钟，那么您只需要记住数据库中最后一分钟的值的版本。</p>
 <p>好的，外部一致性的唯一规则是如果一笔事务已经完成，那么之后start的事务都必须能看得到其写入。那么，另一个问题又来了，T3需要从特定的时间戳读取数据，但是，您知道这样做的原因是因为它允许我们从同一个数据中心的本地副本读取数据，但是可能该副本属于minority，没有最新的数据。也许，我们的本地副本也许从未见过，T1@10的写入，然后仍然回到更早的版本去读取数据。因此，如果我们在要求最高版本的记录时没做一些聪明的事情，你知道的小于T3@15，我们可能得到一些实际上更旧的版本而不是你需要的由T1产生的数据。因此，Spanner处理这个问题的办法是 <strong>safe time</strong>。每个副本都记住一个safe time $t_{safe}$，您知道它正在从Paxos leader处获取日志，然后这些日志，paper安排leader发送日志并严格增加时间戳。因此，一个副本能查看从其leader那里获得的最新的日志记录，以了解什么是最新的。所以如果我要求时间戳15的值，但是副本仅从Paxos leader处获得时间戳为13的log，副本会让我们等待，不会回复，直到其从leader处获得时间戳为15的值。这样才能确保副本不会回复给定时间戳的请求，直到确保其知道直到通过该时间戳的leader的数据。这可能会造成读数据的延迟。</p>
 <blockquote>
 <p>这里讲一下论文关于$t_{safe}$的定义。$t_{safe} = min(t^{paxos}_{safe}, t_{safe}^{TM})$，其中$t^{paxos}_{safe}$是每个Paxos复制状态机都有的safe time，$t_{safe}^{TM}$是事务协调者的safe time。$t^{paxos}_{safe}$是最新apply的write事务的时间戳。而如果没有prepare 事务（未提交），$t_{safe}^{TM} = \infty$；此外$t_{safe}^{TM} = min_i(s_{i,g}^{prepare}) - 1$，其中$s_{i,g}^{prepare}$为事务i中参与的Paxos group g的prepare的时间戳，事务协调者会确保事务commit的时间戳大于等于$s_{i,g}^{prepare}$。</p>
@@ -445,8 +445,8 @@
 <p>好的，总会有这种不确定性，我们不能忽视，因为这些我们讨论不确定性是毫秒级别，我们会发现这些不确定性和时间直接决定了安全等待的时间，和commit阻塞（锁等待）的时间。所以，您知道毫秒级的不确定性是一个严重的问题，另一个很大的不确定性是这些服务器中的每一个每隔一段时间仅向time master请求当前时间，在这之间（每次向time master请求当前时间间隔），每个服务器运行自己的本地时钟，这些本地时钟实际上是非常糟糕的，并且在服务器和主机之间的对话之间可能会发生毫秒级的时钟漂移。所以系统必须对不确定的时间添加未知的，但是可预测的本地时钟漂移。</p>
 <p>因此为了捕获这种不确定性并对此加以考虑，Spanner使用<strong>true time scheme</strong>，在当您问现在是什么时候的时候，实际上返回的是$TTinterval = [EARLIST, LATEST]$，当您知道该应用程序访问该库请求时间的时候，它得到的消息是当前的真实时间（current time）是在EARLIST和LATEST之间，假设EARLIST可能是12点，LATEST可能是12:00:01，我们做的保证就是当前时间不会早于EARLIST，也不会晚于LATEST，我们不知道确切在两者之间的哪里。所以这就是当事务向系统询问时间的时候，$TTinterval$就是从time system实际上返回的东西。</p>
 <p>现在，让我们回到最初的问题，如果我们的时钟太慢，则只读事务可能会读到过去的数据而不会读到最近刚提交的数据。因此，我们需要知道Spanner是如何使用$TTinterval$来作为真实时间来确保尽管当前时间存在不确定性，事务仍然遵从外部一致性（只读事务保证只能看到在我们开始之前完成的写）。为此论文在4-1中讨论了两条规则。其中一项是<strong>start rule</strong>，另一项是<strong>commit wait</strong>。这些规则告诉我们事务选择了什么时间戳。</p>
-<p>基本上说事务的时间戳等于$LATEST$（对于 start rule）。使用$TT.now()$获得当前最早和最晚的时间对，事务的时间戳$TS = TT.now().latest$，这将是可以保证的尚未发生的时间，因为true time在$[EARLIST, LATEST]$之间。对于只读事务，使用$TS$作为其事务开始的时间戳，而对于读写事务将$TS$作为其开始commit的时间戳。即$r/o = start, \;\;\;r/w = commit$。所以start rule说明了Spanner是如何选择时间戳</p>
-<p>commit wait rule只用于读写事务，当您的事务协调者收集投票（vote），并且看到其能够执行commit时，事务协调者会选择一个时间戳，在选择这个时间戳之后，它被要求等待一段一定的时间，直到被允许真正地commit、写入值然后释放锁。因此，一个读写事务必须延迟，直到它（开始考虑commit时选择）的时间戳要小于当前时间的$EARLIST$，即$DELAY \;\;TS &lt; TS.now().EARLIST$。所以这里发生的是，现在在一个循环中，调用$TS.now()$，直到其在commit过程开始时选择的时间戳比当前时间的$EARLIST$小，这可以保证的是，现在最早的正确时间比当前事务的时间戳大，这意味着当该循环（commit wait）结束，该读写事务的时间戳是绝对保证是在过去的。</p>
+<p>基本上说事务的时间戳等于$LATEST$（对于<strong>start rule</strong>）。使用$TT.now()$获得当前最早和最晚的时间对，事务的时间戳$TS = TT.now().latest$，这将是可以保证的尚未发生的时间，因为true time在$[EARLIST, LATEST]$之间。对于<strong>只读事务</strong>，使用$TS$作为其事务开始的时间戳，而对于<strong>读写事务</strong>将$TS$作为其开始commit的时间戳。即$r/o = start, \;\;\;r/w = commit$。所以start rule说明了Spanner是如何选择时间戳</p>
+<p><strong>commit wait rule</strong>只用于读写事务，当您的事务协调者收集投票（vote），并且看到其能够执行commit时，事务协调者会选择一个时间戳，在选择这个时间戳之后，它被要求等待一段一定的时间，直到被允许真正地commit、写入值然后释放锁。因此，一个读写事务必须延迟，直到它（开始考虑commit时选择）的时间戳要小于当前时间的$EARLIST$，即$DELAY \;\;TS &lt; TS.now().EARLIST$。所以这里发生的是，现在在一个循环中，调用$TS.now()$，直到其在commit过程开始时选择的时间戳比当前时间的$EARLIST$小，这可以保证的是，现在最早的正确时间比当前事务的时间戳大，这意味着当该循环（commit wait）结束，该读写事务的时间戳是绝对保证是在过去的。</p>
 <p>好的，系统是如何实际利用这两个规则来实现只读事务的外部一致性。回到我们简化的场景中，为了说明这一点，我将想象读写事务只做一次写入来降低复杂性。我们有两个读写事务T0和T1写入X，一个只读事务T2读取X，我们想要确保T2使用基于时间戳快照隔离读到最新数据。想象T0写入X=1，然后commit；T1写入X=2，我们需要区分prepare和commit，因此T1先选择一个prepare的时间戳，然后之后某个时间再commit。然后我们假设T2在T1完成后读取X，我们要确保他能看到全部。描述如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">T0@1 W_X = 1 C</span><br><span class="line">                   [1, 10] [11, 20]</span><br><span class="line">T1@10            W_X = 2 P C</span><br><span class="line">                         [10, 12]        </span><br><span class="line">T2@12                        R_X</span><br></pre></td></tr></table></figure>
 <p>好的，让我们假设T0选择一个时间戳 @1 commit和写入数据库。让我们说T1 starts，在它选择一个时间戳时，它不会得到一个单一的时间数，他会得到一个时间范围。例如，它选择的时间戳范围是[1, 10]。规则说明它必须选择最后的时间戳=10作为其时间戳。因此T1的commit时间戳为@10。现在，T1还不能提交，因为commit wait规则说必须要等到@10这个时间戳保证时过去的时间。因此T1将会坐在那里，不断询问现在是什么时间，现在是什么时间，直到其得到一个$TTinterval$，不包括10，例如$TTinterval = [11, 20]$，那么现在我要说哈，现在我知道我的时间戳@10保证是过去式了，我可以commit了。因此T1实际上P-C是它的commit wait时间。现在commit之后，T2需要选择一个时间戳来读取X。我们假设T2在T1完成后开始，因为这是保持外部一致性的有趣方案。因此，假设它在@11之后请求一个时间戳，假设其得到了一个时间范围[10, 12]，T2会选择$LATEST = 12$作为其时间戳。在这个例子中，当T2读取数据时，它将询问存储系统，噢，我将从时间戳@12开始读取，由于T1在@10时写入，这意味着，假设safe wait了，safe time机制正常工作，我们将能读到正常的T1写入的值。这是怎么回事，这碰巧可以解决，但是实际上，只要T2在T1commit之后starts就可以work（读到T1的写），这是因为commit wait造成T1没有完成commit直到其时间戳保证已经是过去时，因此T1选择时间戳，它保证在此时间戳之后commit，T2在T1 commit之后starts，因此我们对其更早的值一无所知， 但是可以保证其最新值在当前时间之后，我们直到当前时间在T1的commit time之后，因此T2能看到的最新的值，T2选择的时间戳保证在T1 commit之后，因此如果T2在T1完成之后开始，T2保证获得更高的时间戳，然后快照隔离机制将引导其读取所有以前时间戳写入的值数据，这意味着T2能看到T1的写入，这基本上就是Spanner事务的外部一致性的执行方式。</p>
@@ -486,8 +486,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/11/27/interview/backend-01/" rel="next" title="后端面试题">
-                <i class="fa fa-chevron-left"></i> 后端面试题
+              <a href="/2020/11/27/interview/backend-network/" rel="next" title="后端面试题-网络">
+                <i class="fa fa-chevron-left"></i> 后端面试题-网络
               </a>
             
           </div>
@@ -495,6 +495,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/05/big_data/raft_students_guide/" rel="prev" title="Students' Guide to Raft">
+                Students' Guide to Raft <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -569,7 +573,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -580,7 +584,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">categories</span>
               </a>
             </div>
@@ -695,7 +699,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

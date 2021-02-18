@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="big data,mit6.824,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2">
+
+
+
+
+
+
+<meta name="description" content="假设我们有三台服务器，并且S0被选为领导者。S0从客户端接收一些命令，并将它们添加到其日志中（例如，Term : Commend的形式为1 : 100、1 : 101和1 : 102）。然后，在将这些条目传播到任何客户端之前，S0与其余服务器分区。接下来，S1被选为领导者。它收到两个命令，即2 : 103和2 : 104，并将它们复制到S2（因此也将这两个commend被commit）。此后立即">
+<meta name="keywords" content="big data,mit6.824">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Raft QA">
+<meta property="og:url" content="http://yoursite.com/2021/01/20/big_data/raft_qa/index.html">
+<meta property="og:site_name" content="SYJ BLOG">
+<meta property="og:description" content="假设我们有三台服务器，并且S0被选为领导者。S0从客户端接收一些命令，并将它们添加到其日志中（例如，Term : Commend的形式为1 : 100、1 : 101和1 : 102）。然后，在将这些条目传播到任何客户端之前，S0与其余服务器分区。接下来，S1被选为领导者。它收到两个命令，即2 : 103和2 : 104，并将它们复制到S2（因此也将这两个commend被commit）。此后立即">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2021-01-20T11:43:04.920Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Raft QA">
+<meta name="twitter:description" content="假设我们有三台服务器，并且S0被选为领导者。S0从客户端接收一些命令，并将它们添加到其日志中（例如，Term : Commend的形式为1 : 100、1 : 101和1 : 102）。然后，在将这些条目传播到任何客户端之前，S0与其余服务器分区。接下来，S1被选为领导者。它收到两个命令，即2 : 103和2 : 104，并将它们复制到S2（因此也将这两个commend被commit）。此后立即">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/01/20/big_data/raft_qa/">
+
+
+
+
+
+  <title>Raft QA | SYJ BLOG</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SYJ BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">War never changes</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/20/big_data/raft_qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="syj">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SYJ BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Raft QA</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T18:05:39+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/raft/" itemprop="url" rel="index">
+                    <span itemprop="name">raft</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article</span>
+                
+                <span title="Words count in article">
+                  1.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time</span>
+                
+                <span title="Reading time">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>假设我们有三台服务器，并且S0被选为领导者。S0从客户端接收一些命令，并将它们添加到其日志中（例如，Term : Commend的形式为1 : 100、1 : 101和1 : 102）。然后，在将这些条目传播到任何客户端之前，S0与其余服务器分区。<br>接下来，S1被选为领导者。它收到两个命令，即2 : 103和2 : 104，并将它们复制到S2（因此也将这两个commend被commit）。此后立即将S1分区，然后重新连接S0(即， S0,S2 | S1)。现在S2将被选为领导者，因为S0上的日志不是最新的。<br>S0将从<code>AppendEntries</code>中其得知S2的<code>commitIndex</code>为2 ，但S0不应从其日志中提交任何命令，因为其日志与S2的日志不匹配。如果没有来自客户端的新命令，我们什么时候应该擦除S0上所有冲突的日志条目？</p>
+</blockquote>
+<p>没错，S0将从S2的heartbeat中学习到新的<code>leaderCommit</code>。但是在所有follower更新其<code>commitIndex</code>之前，它需要做什么？再看一下图2中<code>AppendEntries</code> RPC的接收者实现的指令顺序。它非常具体地说明了何时应该删除follower的冲突日志条目。</p>
+<blockquote>
+<p>在raft论文的图8中：（d）似乎很糟糕，因为[2]已经被commit，但被回滚。他们怎么阻止（d）发生？是什么阻止了在步骤（d）中S5当选为leader？</p>
+</blockquote>
+<p>[2]在Term 4中无法提交，因为Raft不会commit旧的entry（根据Log Matching Property）。因此，在步骤（c）中，如果S1只有在commit 4的时候才能附带commit 2，这将把S5排除为合格候选人。</p>
+<blockquote>
+<p><code>currentTerm</code>什么时候应该增加？如果我的Raft实例处于闲置状态（即没有客户端命令），则它们最终不会就<code>currentTerm</code>达成一致。每当我开始选举时，我都会增加<code>currentTerm</code>，但我只为candidate这样做（发送选票）。这是正确的，还是应该为我发送请求的所有服务器增加<code>currentTerm</code> ？</p>
+</blockquote>
+<p>你是正确的，你应该在当前Term超时并开始新的选举时增加<code>currentTerm</code>。但是，followers还必须在某些时候更新其Term，否则您将最终获得所有server同意同一领导者但他们的Term各不相同。仅将您发送请求的所有server上的Term增加是行不通的，因为voting servers可能已经具有不同的Term，并且如果它们在相同的Term内收到相同的两个<code>RequestVotes</code>，最终可能会增加两次Term。</p>
+<p>要确定何时以及如何更新（在所有服务器上）<code>currentTerm</code>，请参阅Raft论文图2中all server的规则：“如果RPC请求或响应包含条件$T&gt; currentTerm$：设置$currentTerm = T$，并转换为follower。</p>
+<blockquote>
+<p>raft论文中的“volatile state”到底是什么意思？如果存储它的服务器崩溃，这些数据会丢失吗？如果是这样，为什么 <code>commitIndex</code>和<code>lastApplied</code>是易失的？他们不应该被persist吗？</p>
+</blockquote>
+<p>是的，“volatile”意味着如果发生崩溃，它就会丢失。</p>
+<p> <code>commitIndex</code>是易失的是因为，重新启动后，仅使用persistent state，raft就可以为其找到正确的值。leader一旦成功commit了新的日志条目，就知道该commit之前的所有信息。当当前领leader给follower发送<code>AppendEntries</code> RPC给，崩溃恢复的follower将被告知正确的<code>commitIndex</code>。</p>
+<p>重新启动后，<code>lastApplied</code>从零开始，因为图2设计假定KV Server（例如键/值数据库）没有持有任何persistent state。因此，需要通过重播所有日志条目来完全重新创建其状态。如果KV Server持有持久状态，则可以持久地记住它已在日志中执行了多远，并忽略该点之前的条目（<code>LastIncludedIndex</code>）。无论哪种方式，重启后都可以安全地从$lastApplied = 0$开始。</p>
+<blockquote>
+<p>为什么在图2的“Rules for Servers”中的“Leaders”部分中必须检查$log[N] .term == currentTerm$？为什么只有在<code>log[N].term == currentTerm</code>是才能更新<code>matchIndex</code> ？如果<code>log[N].term != currentTerm</code>会发生什么情况？</p>
+</blockquote>
+<p>Raft的leader不能确定一个不是其Term的entry是否确实已经commit（并且将来也不会更改）（论文图8所示）。一种思考的方法是，follower只通过复制leader A当前Term的日志记录来向leader A显示他们的“allegiance 忠诚”。如果他们没有，并且followers仅复制了较早Term的日志条目，则另一个候选者B可以在其日志中记录一个有冲突的条目（索引相同但Term较大），并“窃取”多数投票追随者：B的日志比followers的更新，因为在最后一个位置有一个更高Term的条目，因此追随者必须投票。然后，B（现在是领导者）用他自己的高Term的日志记录覆盖了原始日志记录。</p>
+<p>请注意，如果follower从A的当前Term复制日志条目，则不会发生这种情况。 在这种情况下，由于A的当前Term是发出命令的最高Term，如果candidate的日志包含该日志条目，则该日志只能比follower的日志更新，因此该follower投票的任何新candidate将永远不会覆盖它。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/big-data/" rel="tag"># big data</a>
+          
+            <a href="/tags/mit6-824/" rel="tag"># mit6.824</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/08/interview/interview-01/" rel="next" title="PingCAP数据库开发实习面经">
+                <i class="fa fa-chevron-left"></i> PingCAP数据库开发实习面经
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/23/interview/interview-03/" rel="prev" title="网易雷火游戏服务端开发">
+                网易雷火游戏服务端开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="syj">
+          <p class="site-author-name" itemprop="name">syj</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/BanBuDu0" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-github-square"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/189284975/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-film"></i>
+                  
+                    
+                      豆瓣
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/SYJ27783318" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.instagram.com/yuejunq/" target="_blank" title="Instagram">
+                  
+                    <i class="fa fa-fw fa-instagram"></i>
+                  
+                    
+                      Instagram
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">syj</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
