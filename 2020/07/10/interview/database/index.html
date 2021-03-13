@@ -103,7 +103,7 @@
 <meta property="og:description" content="MySQLACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isola">
 <meta property="og:locale" content="zh">
 <meta property="og:image" content="https://i.loli.net/2021/02/07/PONBYTESk1GoyUz.png">
-<meta property="og:updated_time" content="2021-02-07T11:49:45.970Z">
+<meta property="og:updated_time" content="2021-03-11T05:32:05.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库">
 <meta name="twitter:description" content="MySQLACIDA: Atomicity（原子性）事务被视为不可分割的最小单元，事务的所有操作要么全部提交成功，要么全部失败回滚。  回滚可以用undo log来实现，undo log记录着事务所执行的修改操作，在回滚时反向执行这些修改操作即可。 C: consistency（一致性）数据库在事务执行前后都保持一致性状态。在一致性状态下，所有事务对一个数据的读取结果都是相同的。 I: isola">
@@ -351,7 +351,7 @@
                   <span class="post-meta-item-text">Words count in article</span>
                 
                 <span title="Words count in article">
-                  3.8k
+                  3.9k
                 </span>
               
 
@@ -367,7 +367,7 @@
                   <span class="post-meta-item-text">Reading time</span>
                 
                 <span title="Reading time">
-                  13
+                  14
                 </span>
               
             </div>
@@ -478,6 +478,20 @@
 <li>定期删除</li>
 </ol>
 <p>Redis采用的时惰性删除和定期删除两种策略结合。定期删除是每当Redis的服务器周期性的执行<strong>serverCron</strong>函数时，会在规定的时间内从数据库的expires字典中随机检查一部分键的过期时间，并删除其中的过期键。</p>
+<h3 id="内存回收策略"><a href="#内存回收策略" class="headerlink" title="内存回收策略"></a>内存回收策略</h3><p>假如 <code>Redis</code> 当中所有的键都没有过期，而且此时内存满了，就需要执行不同的淘汰策略来处理这种场景。</p>
+<ol>
+<li><p>volatile-lru，allkeys-lru</p>
+<p>基于抽样的lru，随机抽取maxmemory_samples个样本，然后通过lru删除。<code>redisObject</code> 对象中存在一个 <code>lru</code> 属性</p>
+</li>
+<li><p>volatile-lfu，allkeys-lfu</p>
+</li>
+<li><p>volatile-random，allkeys-random</p>
+</li>
+<li><p>volatile-ttl</p>
+</li>
+<li><p>noeviction</p>
+</li>
+</ol>
 <h4 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h4><p>RDB将某个时间点上的数据库状态保存到一个RDB文件中，RDB文件是一个经过压缩的二进制文件。通过SAVE和BGSAVE两个命令来实现，其中SAVE会阻塞Redis服务器进程直到RDB文件创建完成；而BGSAVE会派生一个子进程，由子进程负责创建RDB文件，父进程继续处理请求。</p>
 <p>通过使用save配置，来定义BGSAVE的执行条件。例如<strong>save 900 1</strong>，表示900秒内至少有1次数据库的修改。<strong>serverCron</strong>每隔100毫秒执行一次，会检查saveparams中的条件是否达到，达到了就执行BGSAVE。</p>
 <h4 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h4><p>如果开启了AOF，则服务器在执行完一个写命令后，会将写命令追加到服务器的aof_buf的末尾。</p>
@@ -621,7 +635,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -724,7 +738,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL"><span class="nav-number">1.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ACID"><span class="nav-number">1.1.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-Atomicity（原子性）"><span class="nav-number">1.1.1.</span> <span class="nav-text">A: Atomicity（原子性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-consistency（一致性）"><span class="nav-number">1.1.2.</span> <span class="nav-text">C: consistency（一致性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#I-isolation（隔离性）"><span class="nav-number">1.1.3.</span> <span class="nav-text">I: isolation（隔离性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#D-durability（持久性）"><span class="nav-number">1.1.4.</span> <span class="nav-text">D: durability（持久性）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-内存管理之LRU机制"><span class="nav-number">1.2.</span> <span class="nav-text">MySQL 内存管理之LRU机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL回表优化之Multi-Range-Read-优化"><span class="nav-number">1.3.</span> <span class="nav-text">MySQL回表优化之Multi-Range Read 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL之索引下推"><span class="nav-number">1.4.</span> <span class="nav-text">MySQL之索引下推</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-number">2.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构与对象"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构与对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-SDS空间预分配策略"><span class="nav-number">2.1.1.</span> <span class="nav-text">Redis SDS空间预分配策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis链表"><span class="nav-number">2.1.2.</span> <span class="nav-text">Redis链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis字典"><span class="nav-number">2.1.3.</span> <span class="nav-text">Redis字典</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis跳表"><span class="nav-number">2.1.4.</span> <span class="nav-text">Redis跳表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#整数集合"><span class="nav-number">2.1.5.</span> <span class="nav-text">整数集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#压缩链表"><span class="nav-number">2.1.6.</span> <span class="nav-text">压缩链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象"><span class="nav-number">2.1.7.</span> <span class="nav-text">对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字符串对象-string"><span class="nav-number">2.1.7.1.</span> <span class="nav-text">字符串对象(string)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#列表对象-list"><span class="nav-number">2.1.7.2.</span> <span class="nav-text">列表对象(list)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#哈希对象-hash"><span class="nav-number">2.1.7.3.</span> <span class="nav-text">哈希对象(hash)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#集合对象-set"><span class="nav-number">2.1.7.4.</span> <span class="nav-text">集合对象(set)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#有序集合对象-zset"><span class="nav-number">2.1.7.5.</span> <span class="nav-text">有序集合对象(zset)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#内存回收"><span class="nav-number">2.1.7.6.</span> <span class="nav-text">内存回收</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单机数据库"><span class="nav-number">2.2.</span> <span class="nav-text">单机数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置键的过期时间"><span class="nav-number">2.2.1.</span> <span class="nav-text">设置键的过期时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB"><span class="nav-number">2.2.2.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF"><span class="nav-number">2.2.3.</span> <span class="nav-text">AOF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务器进程"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">服务器进程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事件"><span class="nav-number">2.2.4.</span> <span class="nav-text">事件</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL"><span class="nav-number">1.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ACID"><span class="nav-number">1.1.</span> <span class="nav-text">ACID</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-Atomicity（原子性）"><span class="nav-number">1.1.1.</span> <span class="nav-text">A: Atomicity（原子性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C-consistency（一致性）"><span class="nav-number">1.1.2.</span> <span class="nav-text">C: consistency（一致性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#I-isolation（隔离性）"><span class="nav-number">1.1.3.</span> <span class="nav-text">I: isolation（隔离性）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#D-durability（持久性）"><span class="nav-number">1.1.4.</span> <span class="nav-text">D: durability（持久性）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-内存管理之LRU机制"><span class="nav-number">1.2.</span> <span class="nav-text">MySQL 内存管理之LRU机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL回表优化之Multi-Range-Read-优化"><span class="nav-number">1.3.</span> <span class="nav-text">MySQL回表优化之Multi-Range Read 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL之索引下推"><span class="nav-number">1.4.</span> <span class="nav-text">MySQL之索引下推</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-number">2.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构与对象"><span class="nav-number">2.1.</span> <span class="nav-text">数据结构与对象</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-SDS空间预分配策略"><span class="nav-number">2.1.1.</span> <span class="nav-text">Redis SDS空间预分配策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis链表"><span class="nav-number">2.1.2.</span> <span class="nav-text">Redis链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis字典"><span class="nav-number">2.1.3.</span> <span class="nav-text">Redis字典</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis跳表"><span class="nav-number">2.1.4.</span> <span class="nav-text">Redis跳表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#整数集合"><span class="nav-number">2.1.5.</span> <span class="nav-text">整数集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#压缩链表"><span class="nav-number">2.1.6.</span> <span class="nav-text">压缩链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象"><span class="nav-number">2.1.7.</span> <span class="nav-text">对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#字符串对象-string"><span class="nav-number">2.1.7.1.</span> <span class="nav-text">字符串对象(string)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#列表对象-list"><span class="nav-number">2.1.7.2.</span> <span class="nav-text">列表对象(list)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#哈希对象-hash"><span class="nav-number">2.1.7.3.</span> <span class="nav-text">哈希对象(hash)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#集合对象-set"><span class="nav-number">2.1.7.4.</span> <span class="nav-text">集合对象(set)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#有序集合对象-zset"><span class="nav-number">2.1.7.5.</span> <span class="nav-text">有序集合对象(zset)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#内存回收"><span class="nav-number">2.1.7.6.</span> <span class="nav-text">内存回收</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单机数据库"><span class="nav-number">2.2.</span> <span class="nav-text">单机数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置键的过期时间"><span class="nav-number">2.2.1.</span> <span class="nav-text">设置键的过期时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存回收策略"><span class="nav-number">2.3.</span> <span class="nav-text">内存回收策略</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB"><span class="nav-number">2.3.1.</span> <span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF"><span class="nav-number">2.3.2.</span> <span class="nav-text">AOF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#服务器进程"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">服务器进程</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事件"><span class="nav-number">2.3.3.</span> <span class="nav-text">事件</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
